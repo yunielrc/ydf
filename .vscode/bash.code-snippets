@@ -1,0 +1,18 @@
+{
+  // Place your snippets for shellscript here. Each snippet is defined under a snippet name and has a prefix, body and
+  // description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the
+  // same ids are connected.
+  // Example:
+  "if.argument-empty": {
+    "prefix": "if argument empty",
+    "body": [
+      "if [[ -z \"\\$${1:variable}\" ]]; then",
+      "  err \"Argument '${2:variable}' must not be empty\"",
+      "  return \"\\$ERR_INVAL_ARG\"",
+      "fi",
+      "$0"
+    ],
+    "description": "Check if argument is empty"
+  }
+}

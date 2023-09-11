@@ -1,0 +1,21 @@
+{
+  "files.associations": {
+    "*.zunit": "bats"
+  },
+  "search.exclude": {
+    "dist/lib/**": true,
+  },
+  "files.exclude": {
+    "dist/lib/**": true
+  },
+  "todo-tree.tree.showBadges": true,
+  "chatgpt.promptPrefix.addTests": "Implement tests for the following bash code using the testing framework BATS, use bats assert library for assertions,  prefix all tests names with the name of function under test including the function parenthesis. use assert_success instead of '[ \"$status\" -eq 0 ]', use assert_output instead  '[ \"$output\" = \"<value...>\" ]'",
+  "spellright.language": [
+    "en-US-10-1."
+  ],
+  "spellright.documentTypes": [
+    "markdown",
+    "latex",
+    "plaintext"
+  ]
+}

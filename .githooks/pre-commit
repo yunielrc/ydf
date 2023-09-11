@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+pre-commit hook-impl --config=.pre-commit-config.yaml --hook-type=pre-commit --hook-dir "$HERE" -- "$@"
+./tools/update-readme
+
+git add README.md

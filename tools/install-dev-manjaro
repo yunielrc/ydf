@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#
+# Install manjaro dev packages
+#
+
+set -eu
+# shellcheck source=../packages.env
+. ./packages.env
+
+sudo pacman -Syu --noconfirm --needed yay
+
+yay -Sy --noconfirm --needed "${PKG_DEV_MANJARO_YAY[@]}"
+
+sudo -H npm install -g "${PKG_DEV_MANJARO_NPM[@]}"
+
+# Configure
+git config core.hooksPath .githooks

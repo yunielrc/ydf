@@ -1,0 +1,197 @@
+#!/usr/bin/env bash
+#
+# ydf
+#
+# Manage ydotfiles packages
+# Process command line and call service
+#
+
+set -eu
+
+# FOR CODE COMPLETION
+if false; then
+  # lib
+  . ./../lib/ydf/ydf-service.bash
+fi
+
+# CONSTANTS
+readonly __YDF_SCRIPT_NAME="${BASH_SOURCE[0]##*/}"
+# shellcheck disable=SC2155
+readonly __YDF_SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+readonly __YDF_LIB_PATH="${__YDF_SRC_DIR}/usr/lib/ydf"
+readonly __YDF_CONFIG_DIR="${__YDF_SRC_DIR}/etc/ydf"
+readonly __YDF_CONFIG="${__YDF_CONFIG_DIR}/ydf.env"
+
+# LOAD CONFIG
+# shellcheck source=../../etc/ydf/ydf.env
+if [[ -f "$__YDF_CONFIG" ]]; then source "$__YDF_CONFIG"; fi
+# shellcheck source=/dev/null
+if [[ "${VEDV_LOAD_HOME_CONFIG:-true}" == true && -f ~/.ydf.env ]]; then source ~/.ydf.env; fi
+# shellcheck source=/dev/null
+if [[ "$PWD" != "$HOME" && -f .ydf.env ]]; then source .ydf.env; fi
+
+# ENVIRONMENT
+# scheme:        VAR="${ENVIRONMENT_VAR:-"${CONFIG_VAR:-default}"}"
+# e.g.: readonly YDF_VAR="${YDF_VAR:-"${VAR:-default}"}"
+readonly YDF_TMP_DIR="${YDF_TMP_DIR:-"${TMP_DIR:-"/var/tmp/${USER}/ydf"}"}"
+readonly YDF_CACHE_DIR="${YDF_CACHE_DIR:-"${CACHE_DIR:-"/home/${USER}/.var/cache/ydf"}"}"
+
+# CREATE DIRECTORIES
+ydf::__create_dirs() {
+
+  local -a ydf_dirs_arr=(
+    "$YDF_TMP_DIR"
+    "$YDF_CACHE_DIR"
+  )
+
+  for dir in "${ydf_dirs_arr[@]}"; do
+    if [[ ! -d "$dir" ]]; then
+      mkdir -p "$dir" || return $?
+    fi
+  done
+}
+
+# SOURCE FILES
+ydf::__source_files() {
+  # shellcheck source=../lib/ydf/errors.bash
+  . "${__YDF_LIB_PATH}/errors.bash"
+  # shellcheck source=../lib/ydf/utils.bash
+  . "${__YDF_LIB_PATH}/utils.bash"
+  # shellcheck source=../lib/ydf/ydf-service.bash
+  . "${__YDF_LIB_PATH}/ydf-service.bash"
+}
+
+# FUNCTIONS
+
+#
+# Show help for __install command
+#
+# Output:
+#  Writes the help to the stdout
+#
+ydf::__install_help() {
+  cat <<-HELPMSG
+Usage:
+${__YDF_SCRIPT_NAME} install PACKAGE [PACKAGE...]
+
+Install ydotfile packages.
+A package is a directory with a ydf structure
+
+Flags:
+  -h, --help    Show this help
+
+HELPMSG
+}
+
+#
+# Install one or more ydotfile packages
+#
+# Flags:
+#   -h | --help   Show help
+#
+# Arguments:
+#   PACKAGE [PACKAGE...]     one or more packages
+#
+# Output:
+#   writes installed package name to stdout
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::__install() {
+  local packages=''
+
+  if [[ $# == 0 ]]; then set -- '-h'; fi
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    # flags
+    -h | --help)
+      ydf::__install_help
+      return 0
+      ;;
+    # arguments
+    *)
+      readonly packages="$*"
+      break
+      ;;
+    esac
+  done
+
+  if [[ -z "$packages" ]]; then
+    err "Missing argument 'PACKAGE'\n"
+    ydf::__install_help
+    return "$EINVAL"
+  fi
+
+  ydf::ydf_service::install "$packages"
+}
+
+ydf::__help() {
+  cat <<-HELPMSG
+Usage:
+${__YDF_SCRIPT_NAME} COMMAND
+
+A tool for managing ydotfiles
+
+Flags:
+  -h, --help    Show this help
+
+Commands:
+  install       install one or more packages
+  install-all   install all packages
+
+Run '${__YDF_SCRIPT_NAME} COMMAND --help' for more information on a command.
+HELPMSG
+}
+
+# EVENTS
+
+ydf::__on_start() {
+  :
+}
+
+ydf::__on_exit() {
+  :
+}
+
+#
+
+ydf::run_cmd() {
+  if [[ $# == 0 ]]; then set -- '-h'; fi
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    -h | --help)
+      ydf::__help
+      return 0
+      ;;
+    install)
+      shift
+      ydf::__install "$@"
+      return $?
+      ;;
+    install-all)
+      shift
+      ydf::__install_all "$@"
+      return $?
+      ;;
+    *)
+      err "Invalid command: ${1}\n"
+      ydf::__help
+      return "$EINVAL"
+      ;;
+    esac
+  done
+}
+
+ydf::main() {
+  ydf::__create_dirs
+  ydf::__source_files
+
+  ydf::run_cmd "$@"
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  ydf::main "$@"
+fi

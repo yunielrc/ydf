@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2001
+set -eu
+
+# cd to the script's directory
+cd "$(dirname "${BASH_SOURCE[0]}")/.." || exit $?
+
+readonly BASH_FILE_NAME="${1:-}"
+if [[ -z "$BASH_FILE_NAME" ]]; then
+  echo "Usage: $0 <file.bash>" >&2
+  exit 1
+fi
+
+BASH_FILE_PATH="$BASH_FILE_NAME"
+
+if [[ ! -f "$BASH_FILE_PATH" ]]; then
+  BASH_FILE_PATH="$(find . -name "$BASH_FILE_NAME" -print | head -n 1)"
+  readonly BASH_FILE_PATH
+  if [[ -z "$BASH_FILE_PATH" ]]; then
+    echo "File '$BASH_FILE_NAME' not found in the current directory" >&2
+    exit 1
+  fi
+fi
+
+BATS_FILE_NAME="${BASH_FILE_NAME##*/}"
+readonly BATS_FILE_NAME="${BATS_FILE_NAME%.bash}.bats"
+
+BATS_FILE_PATH="$(find . -name "${BATS_FILE_NAME}" -print | head -n 1)"
+readonly BATS_FILE_PATH
+
+if [[ -z "$BATS_FILE_PATH" ]]; then
+  echo "File '${BATS_FILE_NAME}' not found in the current directory" >&2
+  exit 1
+fi
+
+FUNCTION_NAMES=$(nl -b a -s '  ' -w 1 "$BASH_FILE_PATH" | grep -Po "^\d+\s*\w+(\w|\d|_|:)+\(\s*\)" | sed 's/(\s*)\s*$//')
+readonly FUNCTION_NAMES
+
+if [[ -z "$FUNCTION_NAMES" ]]; then
+  echo "No function declarations found in '$BASH_FILE_PATH'"
+  exit 0
+fi
+
+declare -p PWD BASH_FILE_PATH BATS_FILE_PATH
+echo
+# Loop through all the function declarations in file.bash
+declare -i function_counter=0
+
+while read -r function_name; do
+  # Check if the function name exists in file.bats
+  if ! grep -qP "^\s*@test\s+(\"|')\s*$(echo "$function_name" | sed 's/^[[:digit:]]\+\s*//')\s*\(\s*\).*(\"|')" "$BATS_FILE_PATH"; then
+    # If not, output the function name
+    ((function_counter += 1))
+    line_number="$(grep -Po '^\d+' <<<"$function_name")"
+    function_name_only="$(sed 's/[[:digit:]]\+\s*//' <<<"$function_name")"
+
+    echo "${function_counter} ${function_name_only}()"
+    echo "  ${BASH_FILE_PATH}:${line_number}"
+    echo
+  fi
+done <<<"$FUNCTION_NAMES"
+echo
+
+echo "${function_counter} untested functions"
