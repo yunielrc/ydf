@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+set -eu
+
+# https://git-lfs.github.com
+sudo pacman -Syu --noconfirm --needed git-lfs

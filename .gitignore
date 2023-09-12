@@ -12,6 +12,6 @@
 *.vsix
 
 /.env
-/dist/.env
+/.ydf.env
 /TODO
 /test.bash

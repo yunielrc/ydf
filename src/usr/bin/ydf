@@ -33,15 +33,15 @@ if [[ "$PWD" != "$HOME" && -f .ydf.env ]]; then source .ydf.env; fi
 # ENVIRONMENT
 # scheme:        VAR="${ENVIRONMENT_VAR:-"${CONFIG_VAR:-default}"}"
 # e.g.: readonly YDF_VAR="${YDF_VAR:-"${VAR:-default}"}"
-readonly YDF_TMP_DIR="${YDF_TMP_DIR:-"${TMP_DIR:-"/var/tmp/${USER}/ydf"}"}"
-readonly YDF_CACHE_DIR="${YDF_CACHE_DIR:-"${CACHE_DIR:-"/home/${USER}/.var/cache/ydf"}"}"
+readonly __YDF_TMP_DIR="${E_YDF_TMP_DIR:-"${YDF_TMP_DIR:-"/var/tmp/${USER}/ydf"}"}"
+readonly __YDF_CACHE_DIR="${E_YDF_CACHE_DIR:-"${YDF_CACHE_DIR:-"/home/${USER}/.var/cache/ydf"}"}"
 
 # CREATE DIRECTORIES
 ydf::__create_dirs() {
 
   local -a ydf_dirs_arr=(
-    "$YDF_TMP_DIR"
-    "$YDF_CACHE_DIR"
+    "$__YDF_TMP_DIR"
+    "$__YDF_CACHE_DIR"
   )
 
   for dir in "${ydf_dirs_arr[@]}"; do

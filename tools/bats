@@ -5,8 +5,10 @@ set -eu
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 set -o allexport
+# shellcheck source=../.env
 . ./.env
-. ./.vedv.env
+# shellcheck source=../.ydf.env
+. ./.ydf.env
 set +o allexport
 
 bats "$@"

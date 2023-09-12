@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+set -eu
+
+# Configure
+[ -d ~/.crypted ] || mkdir ~/.crypted
+[ -d ~/Decrypted ] || mkdir ~/Decrypted
+
+## add keybinding
+# Idempotent
+# if ! type -P gocryptfs >/dev/null; then
+#   bl::gnome_add_custom_keybinding 'Mount Crypted Directory' \
+#     "gnome-terminal -- sh -c 'gocryptfs ~/.crypted ~/Decrypted; sleep 1'" \
+#     "${GOCRYPTFS_MOUNT_KEYBIND}"
+# fi

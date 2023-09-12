@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+set -eu
+
+# Configure
+# https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos
+echo "${USER} ALL=NOPASSWD:$(which iftop)" | sudo tee "/etc/sudoers.d/${USER}-nopasswd-iftop"

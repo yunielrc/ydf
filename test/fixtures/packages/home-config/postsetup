@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+if [ -d ~/.gnupg ]; then
+  chmod 0700 ~/.gnupg
+fi
+if [ -f ~/.ssh/id_rsa ]; then
+  chmod 600 ~/.ssh/id_rsa
+fi
+if [ -f ~/.ssh/id_ed25519 ]; then
+  chmod 600 ~/.ssh/id_ed25519
+fi

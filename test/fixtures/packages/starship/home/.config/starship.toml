@@ -1,0 +1,22 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+# add_newline = true
+
+# [status]
+# disabled = false
+# symbol = ""
+
+# [docker_context]
+# disabled = false
+# # only_with_files = true
+
+# [directory]
+# truncation_length = 8
+
+# [aws]
+# disabled = true
+
+# [nodejs]
+# symbol = "⬢ "
