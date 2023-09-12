@@ -10,6 +10,6 @@
 
 # HELPER FUNCTIONS
 
-dotf() {
-  "${SRC_DIR}/usr/bin/dotf" "$@"
+ydf() {
+  "${SRC_DIR}/usr/bin/ydf" "$@"
 }
