@@ -24,9 +24,13 @@ fi
 #   [ubuntu]="apt"
 # )
 
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='home homeln homecp homecps homecat root rootcp rootcps rootln rootcat flatpack dconf.ini plugin_zsh docker_compose'
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="pre_install pacman yay install post_install ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="pre_install apt install post_install ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+# readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='home homeln homecp homecps homecat root rootcp rootcps rootln rootcat flatpack dconf.ini plugin_zsh docker_compose'
+# readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall pacman yay install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+# readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON=''
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 #
 # FUNCTIONS
@@ -44,8 +48,45 @@ ydf::package_service::constructor() {
   readonly __YDF_PACKAGE_SERVICE_DEFAULT_OS="$1"
 }
 
-ydf::package_service::__instruction_iname() {
-  :
+#
+# Get instructions names
+#
+# Arguments:
+#   [os_name]   string    os name
+#
+# Output:
+#  writes instructions_names (string) to the stdout
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::get_instructions_names() {
+  local -r os_name="${1:-"$__YDF_PACKAGE_SERVICE_DEFAULT_OS"}"
+
+  local instr
+  instr="__YDF_PACKAGE_SERVICE_INSTRUCTIONS_${os_name^^}"
+
+  if [[ -z "${!instr:-}" ]]; then
+    err "There is no instructions for os: ${os_name}"
+    return "$ERR_INVAL_ARG"
+  fi
+
+  echo "${!instr}"
+}
+
+#
+# Execute preinstall script
+#
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_preinstall() {
+  if [[ ! -f ./preinstall ]]; then
+    return 0
+  fi
+
+  bash ./preinstall
 }
 
 #
@@ -53,7 +94,7 @@ ydf::package_service::__instruction_iname() {
 #
 # Arguments:
 #   package_dir   string    package directory
-#   os_name       string    os name
+#   [os_name]     string    os name
 #
 # Output:
 #  writes installed package name to the stdout
@@ -63,7 +104,7 @@ ydf::package_service::__instruction_iname() {
 #
 ydf::package_service::install_one_from_dir() {
   local -r package_dir="$1"
-  local -r os_name="${2:-"$__YDF_PACKAGE_SERVICE_DEFAULT_OS"}"
+  local -r os_name="${2:-}"
 
   # validate arguments
   if [[ ! -d "$package_dir" ]]; then
@@ -71,23 +112,38 @@ ydf::package_service::install_one_from_dir() {
     return "$ERR_NO_DIR"
   fi
 
-  local inst_specific
-  inst_specific="__YDF_PACKAGE_SERVICE_INSTRUCTIONS_${os_name^^}"
-  readonly inst_specific
+  local instr
+  instr="$(ydf::package_service::get_instructions_names "$os_name")" || {
+    err "Getting instructions names for os: ${os_name}"
+    return "$ERR_YPS_GENERAL"
+  }
+  readonly instr
 
-  local -a instructions_arr
+  if [[ -z "$instr" ]]; then
+    err "There is no instructions"
+    return "$ERR_INVAL_VALUE"
+  fi
+
+  local -a instr_arr
   # shellcheck disable=SC2206,SC2317
-  instructions_arr=(${!inst_specific})
-  readonly instructions_arr
+  instr_arr=($instr)
+  readonly instr_arr
 
-  for iname in "${instructions_arr[@]}"; do
-    local ifunction="ydf::package_service::__instruction_${iname}"
-
-    "$ifunction" "$package_dir" || {
-      err "Executing instruction '${iname}' on '${package_dir}'"
-      return "$ERR_YPS_INSTRUCTION_FAIL"
+  (
+    cd "$package_dir" 2>/dev/null || {
+      err "Changing the current directory to ${package_dir}"
+      return "$ERR_CHANGING_WORKDIR"
     }
-  done
+
+    for iname in "${instr_arr[@]}"; do
+      local ifunction="ydf::package_service::__instruction_${iname}"
+
+      "$ifunction" || {
+        err "Executing instruction '${iname}' on '${package_dir}'"
+        return "$ERR_YPS_INSTRUCTION_FAIL"
+      }
+    done
+  )
 }
 
 #
@@ -95,6 +151,7 @@ ydf::package_service::install_one_from_dir() {
 #
 # Arguments:
 #   package_name   string     package name
+#   [os_name]      string     operating system
 #
 # Output:
 #  writes installed package name to the stdout
@@ -103,7 +160,7 @@ ydf::package_service::install_one_from_dir() {
 #   0 on success, non-zero on error.
 #
 ydf::package_service::install_one() {
-  :
+  ydf::package_service::install_one_from_dir "$@"
 }
 
 #
@@ -111,6 +168,7 @@ ydf::package_service::install_one() {
 #
 # Arguments:
 #   packages_names   string[]   packages names
+#   [os_name]        string     operating system
 #
 # Output:
 #  writes installed packages names to the stdout
@@ -119,5 +177,5 @@ ydf::package_service::install_one() {
 #   0 on success, non-zero on error.
 #
 ydf::package_service::install() {
-  ydf::package_service::install_one_from_dir "$@"
+  ydf::package_service::install_one "$@"
 }

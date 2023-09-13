@@ -8,6 +8,8 @@
 
 # VARIABLES
 
+readonly TEST_FIXTURES_DIR="${TESTS_DIR}/fixtures"
+
 # HELPER FUNCTIONS
 
 ydf() {

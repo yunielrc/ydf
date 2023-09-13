@@ -23,7 +23,8 @@ test-integration:
 test-functional:
 	./tools/bats-functional
 
-test-all: test-unit test-integration test-functional
+test-all:
+	./tools/bats --recursive tests
 
 # ci server does not support VT-x so we can't run integration or functional tests
 test-all-ci: test-unit

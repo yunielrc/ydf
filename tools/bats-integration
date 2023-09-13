@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2046
 cd "$(dirname "${BASH_SOURCE[0]}")/.." &&
-  tools/bats $(fd --full-path 'test/\S+\.i\.bats$')
+  tools/bats $(fd --full-path 'tests/\S+\.i\.bats$')

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+echo 'preinstall fails'
+exit 1
