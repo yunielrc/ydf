@@ -40,7 +40,7 @@ setup() {
 # Tests for ydf::package_service::__instruction_preinstall()
 @test "ydf::package_service::__instruction_preinstall() Should succeed if there is no preinstall script" {
 
-  # cd "${TEST_FIXTURES_DIR}/packages/1freedom"
+  cd "${TEST_FIXTURES_DIR}/packages/0empty"
 
   run ydf::package_service::__instruction_preinstall
 
@@ -169,4 +169,25 @@ setup() {
   assert_success
   assert_output "instruction1
 preinstall"
+}
+
+# Tests for ydf::package_service::__instruction_install()
+@test "ydf::package_service::__instruction_install() Should succeed if there is no install script" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/0empty"
+
+  run ydf::package_service::__instruction_install
+
+  assert_success
+  assert_output ''
+}
+
+@test "ydf::package_service::__instruction_install() Should succeed if install script succeed" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/3install"
+
+  run ydf::package_service::__instruction_install
+
+  assert_success
+  assert_output "3install: install succeed"
 }

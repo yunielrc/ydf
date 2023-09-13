@@ -29,8 +29,8 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON=''
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 #
 # FUNCTIONS
@@ -87,6 +87,21 @@ ydf::package_service::__instruction_preinstall() {
   fi
 
   bash ./preinstall
+}
+
+#
+# Execute preinstall script
+#
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_install() {
+  if [[ ! -f ./install ]]; then
+    return 0
+  fi
+
+  bash ./install
 }
 
 #
