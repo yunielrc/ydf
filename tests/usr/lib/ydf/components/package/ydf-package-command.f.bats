@@ -77,7 +77,7 @@ ydf package COMMAND'
 
 # Tests for ydf package install ../3install
 @test "ydf package install --os manjaro ../3install, Should succeed With no install script" {
-  local -r _package_dir="${TEST_FIXTURES_DIR}/packages"
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/0empty"
 
   run ydf package install --os manjaro "$_package_dir"
 
@@ -93,4 +93,16 @@ ydf package COMMAND'
   assert_success
   assert_output "3install: preinstall succeed
 3install: install succeed"
+}
+
+# Tests for ydf package install ../4postinstall
+@test "ydf package install ../4postinstall, Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/4postinstall"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output "4postinstall: preinstall succeed
+4postinstall: install succeed
+4postinstall: postinstall succeed"
 }

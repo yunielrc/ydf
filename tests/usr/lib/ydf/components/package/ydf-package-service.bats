@@ -191,3 +191,14 @@ preinstall"
   assert_success
   assert_output "3install: install succeed"
 }
+
+# Tests for ydf::package_service::__instruction_postinstall()
+@test "ydf::package_service::__instruction_postinstall() Should succeed" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/4postinstall"
+
+  run ydf::package_service::__instruction_postinstall
+
+  assert_success
+  assert_output "4postinstall: postinstall succeed"
+}
