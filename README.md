@@ -2,7 +2,7 @@
 
 ## About
 
-My Dotfiles
+A simple dotfiles manager
 
 <!-- ## Getting Started
 
