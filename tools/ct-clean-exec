@@ -69,7 +69,8 @@ vedv container start "$VEDV_CONTAINER_NAME" &>/dev/null
 if [[ $EXIT_STATUS -ne 0 ]]; then
   echo
   echo ">> FAILED. Command execution failed: '$*'"
+  exit $EXIT_STATUS
 fi
 
 echo ">> SUCCESS"
-exit $EXIT_STATUS
+exit 0
