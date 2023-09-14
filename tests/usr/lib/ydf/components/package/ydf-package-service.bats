@@ -215,6 +215,9 @@ preinstall"
 
 # Tests for ydf::package_service::__instruction_@pacman()
 @test "ydf::package_service::__instruction_@pacman() Should succeed Without instruction file" {
+  if ! command -v pacman &> /dev/null; then
+    skip "pacman is not installed"
+  fi
 
   cd "${TEST_FIXTURES_DIR}/packages/0empty"
 
@@ -225,6 +228,9 @@ preinstall"
 }
 
 @test "ydf::package_service::__instruction_@pacman() Should succeed" {
+  if ! command -v pacman &> /dev/null; then
+    skip "pacman is not installed"
+  fi
 
   cd "${TEST_FIXTURES_DIR}/packages/5dust@pacman"
 
@@ -236,6 +242,9 @@ preinstall"
 
 # Tests for ydf::package_service::__instruction_@yay()
 @test "ydf::package_service::__instruction_@yay() Should succeed Without instruction file" {
+  if ! command -v yay &> /dev/null; then
+    skip "yay is not installed"
+  fi
 
   cd "${TEST_FIXTURES_DIR}/packages/0empty"
 
@@ -246,6 +255,10 @@ preinstall"
 }
 
 @test "ydf::package_service::__instruction_@yay() Should succeed" {
+
+  if ! command -v yay &> /dev/null; then
+    skip "yay is not installed"
+  fi
 
   cd "${TEST_FIXTURES_DIR}/packages/6nnn@yay"
 
