@@ -155,12 +155,12 @@ setup() {
     echo 'instruction1 preinstall'
   }
   ydf::package_service::__instruction_instruction1() {
-    assert_equal "$*" ''
+    assert_equal "$*" '0freedom-fail'
     echo instruction1
   }
 
   ydf::package_service::__instruction_preinstall() {
-    assert_equal "$*" ''
+    assert_equal "$*" '0freedom-fail'
     echo preinstall
   }
 
@@ -193,6 +193,16 @@ preinstall"
 }
 
 # Tests for ydf::package_service::__instruction_postinstall()
+@test "ydf::package_service::__instruction_postinstall() Should succeed without instruction file" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/0empty"
+
+  run ydf::package_service::__instruction_postinstall
+
+  assert_success
+  assert_output ""
+}
+
 @test "ydf::package_service::__instruction_postinstall() Should succeed" {
 
   cd "${TEST_FIXTURES_DIR}/packages/4postinstall"
@@ -201,4 +211,25 @@ preinstall"
 
   assert_success
   assert_output "4postinstall: postinstall succeed"
+}
+
+# Tests for ydf::package_service::__instruction_@pacman()
+@test "ydf::package_service::__instruction_@pacman() Should succeed Without instruction file" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/0empty"
+
+  run ydf::package_service::__instruction_@pacman
+
+  assert_success
+  assert_output ""
+}
+
+@test "ydf::package_service::__instruction_@pacman() Should succeed" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/5dust@pacman"
+
+  run ydf::package_service::__instruction_@pacman '5dust@pacman'
+
+  assert_success
+  assert_output --regexp "dust"
 }
