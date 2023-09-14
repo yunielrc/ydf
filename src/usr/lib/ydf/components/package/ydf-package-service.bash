@@ -162,6 +162,27 @@ ydf::package_service::__instruction_@yay() {
 }
 
 #
+# Execute @flatpak instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_@flatpak() {
+  if [[ ! -f ./@flatpak ]]; then
+    return 0
+  fi
+
+  local -r pkg_name="$1"
+  # select the first no empty line
+  local -r flatpak_pkg_name="$(ydf::utils::print_1line <@flatpak)"
+
+  sudo -H flatpak install --assumeyes --noninteractive flathub "${flatpak_pkg_name:-"$pkg_name"}"
+}
+
+#
 # Install a ydotfile package from a directory
 #
 # Arguments:

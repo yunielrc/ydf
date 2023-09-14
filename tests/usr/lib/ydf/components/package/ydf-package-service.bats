@@ -267,3 +267,24 @@ preinstall"
   assert_success
   assert_output --regexp "nnn"
 }
+
+# Tests for ydf::package_service::__instruction_@flatpak()
+@test "ydf::package_service::__instruction_@flatpak() Should succeed Without instruction file" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/0empty"
+
+  run ydf::package_service::__instruction_@flatpak
+
+  assert_success
+  assert_output ""
+}
+
+@test "ydf::package_service::__instruction_@flatpak() Should succeed" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/7micenter@flathub"
+
+  run ydf::package_service::__instruction_@flatpak '7micenter@flathub'
+
+  assert_success
+  assert_output --partial "Installing app/io.missioncenter.MissionCenter/x86_64/stable"
+}

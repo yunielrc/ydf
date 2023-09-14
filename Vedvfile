@@ -12,5 +12,7 @@ COPY tools/install-run-manjaro tools
 COPY tools/install-dev-manjaro.vedv tools
 
 RUN tools/install-run-manjaro && tools/install-dev-manjaro.vedv
+# install gnome base system
+RUN sudo -H flatpak install --assumeyes --noninteractive io.github.andreibachim.shortcut
 
 COPY . .
