@@ -29,7 +29,7 @@ setup() {
 }
 
 @test "ydf::package_service::get_instructions_names() Should succeed" {
-  local -r _os_name='ubuntu'
+  local -r _os_name='manjaro'
 
   run ydf::package_service::get_instructions_names "$_os_name"
 
