@@ -29,7 +29,7 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON=''
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install pacman postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 #
@@ -120,6 +120,27 @@ ydf::package_service::__instruction_postinstall() {
 }
 
 #
+# Execute .pacman instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_@pacman() {
+  if [[ ! -f ./@pacman ]]; then
+    return 0
+  fi
+
+  local -r pkg_name="$1"
+  # select the first no empty line
+  local -r pacman_pkg_name="$(grep -Pom1 '(\S+\s*)+\S+' ./@pacman)"
+
+  sudo pacman -Syu --noconfirm --needed "${pacman_pkg_name:-"$pkg_name"}"
+}
+
+#
 # Install a ydotfile package from a directory
 #
 # Arguments:
@@ -159,6 +180,8 @@ ydf::package_service::install_one_from_dir() {
   instr_arr=($instr)
   readonly instr_arr
 
+  local -r pkg_name="${package_dir##*/}"
+
   (
     cd "$package_dir" 2>/dev/null || {
       err "Changing the current directory to ${package_dir}"
@@ -168,7 +191,7 @@ ydf::package_service::install_one_from_dir() {
     for iname in "${instr_arr[@]}"; do
       local ifunction="ydf::package_service::__instruction_${iname}"
 
-      "$ifunction" || {
+      "$ifunction" "$pkg_name" || {
         err "Executing instruction '${iname}' on '${package_dir}'"
         return "$ERR_YPS_INSTRUCTION_FAIL"
       }

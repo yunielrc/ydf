@@ -1,5 +1,5 @@
 # grep -Po '^\S+(?=:)' Makefile | tr '\n' ' '
-.PHONY: install install-run-manjaro install-dev-manjaro commit rebuild build create start status stop remove login test-unit test-integration test-functional test-all test-suite test-name
+.PHONY: install install-run-manjaro install-dev-manjaro commit img-rebuild img-build ct-create ct-start ct-status ct-stop ct-remove ct-login ct-copy-files prepare-test-environment test-unit test-integration test-functional test-all test-suite test-name
 
 install:
 	DESTDIR="$${DESTDIR:-}" ./install

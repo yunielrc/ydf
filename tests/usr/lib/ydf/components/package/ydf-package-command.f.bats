@@ -106,3 +106,21 @@ ydf package COMMAND'
 4postinstall: install succeed
 4postinstall: postinstall succeed"
 }
+
+# Tests for ydf package install ../4dust@pacman
+@test "ydf package install ../4dust@pacman, Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/4dust@pacman"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output --regexp "4dust@pacman: preinstall succeed
+4dust@pacman: install succeed
+.*
+4dust@pacman: postinstall succeed"
+
+  run command -v dust
+
+  assert_success
+  assert_output "/usr/bin/dust"
+}
