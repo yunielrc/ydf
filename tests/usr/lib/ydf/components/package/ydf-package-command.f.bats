@@ -39,28 +39,28 @@ ydf package COMMAND'
   assert_output --partial 'ERROR> No os name specified'
 }
 
-@test "ydf package install --os manjaro, Should fail with missing argument PACKAGE" {
+@test "ydf package install --os _OS_, Should fail with missing argument PACKAGE" {
 
-  run ydf package install --os manjaro
+  run ydf package install --os "$YDF_PACKAGE_SERVICE_DEFAULT_OS"
 
   assert_failure
   assert_output --partial "ERROR> Missing argument 'PACKAGE'"
 }
 
 # Tests for ydf package install ../2preinstall
-@test "ydf package install --os manjaro ../2preinstall, Should succeed With no preinstall script" {
+@test "ydf package install --os _OS_ ../2preinstall, Should succeed With no preinstall script" {
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages"
 
-  run ydf package install --os manjaro "$_package_dir"
+  run ydf package install --os "$YDF_PACKAGE_SERVICE_DEFAULT_OS" "$_package_dir"
 
   assert_success
   assert_output ""
 }
 
-@test "ydf package install --os manjaro ../2preinstall, Should succeed" {
+@test "ydf package install --os _OS_ ../2preinstall, Should succeed" {
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages/2preinstall"
 
-  run ydf package install --os manjaro "$_package_dir"
+  run ydf package install --os "$YDF_PACKAGE_SERVICE_DEFAULT_OS" "$_package_dir"
 
   assert_success
   assert_output "preinstall: preinstall succeed"
@@ -76,10 +76,10 @@ ydf package COMMAND'
 }
 
 # Tests for ydf package install ../3install
-@test "ydf package install --os manjaro ../3install, Should succeed With no install script" {
+@test "ydf package install --os _OS_ ../3install, Should succeed With no install script" {
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages/0empty"
 
-  run ydf package install --os manjaro "$_package_dir"
+  run ydf package install --os "$YDF_PACKAGE_SERVICE_DEFAULT_OS" "$_package_dir"
 
   assert_success
   assert_output ""
