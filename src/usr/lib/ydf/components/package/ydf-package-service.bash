@@ -29,7 +29,7 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON=''
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman @yay postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 #
@@ -135,9 +135,30 @@ ydf::package_service::__instruction_@pacman() {
 
   local -r pkg_name="$1"
   # select the first no empty line
-  local -r pacman_pkg_name="$(grep -Pom1 '(\S+\s*)+\S+' ./@pacman)"
+  local -r pacman_pkg_name="$(ydf::utils::print_1line <@pacman)"
 
   sudo pacman -Syu --noconfirm --needed "${pacman_pkg_name:-"$pkg_name"}"
+}
+
+#
+# Execute .pacman instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_@yay() {
+  if [[ ! -f ./@yay ]]; then
+    return 0
+  fi
+
+  local -r pkg_name="$1"
+  # select the first no empty line
+  local -r yay_pkg_name="$(ydf::utils::print_1line <@yay)"
+
+  sudo yay -Syu --noconfirm --needed "${yay_pkg_name:-"$pkg_name"}"
 }
 
 #

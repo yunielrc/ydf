@@ -141,3 +141,38 @@ bat: postinstall succeed"
   assert_success
   assert_output "/usr/bin/bat"
 }
+
+# Tests for ydf package install ../6nnn@yay
+@test "ydf package install ../6nnn@yay, Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/6nnn@yay"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output --regexp "6nnn@yay: preinstall succeed
+6nnn@yay: install succeed
+.*
+6nnn@yay: postinstall succeed"
+
+  run command -v nnn
+
+  assert_success
+  assert_output "/usr/bin/nnn"
+}
+
+@test "ydf package install ../rustscan, Should succeed Without package name in @yay" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/rustscan"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output --regexp "rustscan: preinstall succeed
+rustscan: install succeed
+.*
+rustscan: postinstall succeed"
+
+  run command -v rustscan
+
+  assert_success
+  assert_output "/usr/bin/rustscan"
+}

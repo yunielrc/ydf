@@ -233,3 +233,24 @@ preinstall"
   assert_success
   assert_output --regexp "dust"
 }
+
+# Tests for ydf::package_service::__instruction_@yay()
+@test "ydf::package_service::__instruction_@yay() Should succeed Without instruction file" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/0empty"
+
+  run ydf::package_service::__instruction_@yay
+
+  assert_success
+  assert_output ""
+}
+
+@test "ydf::package_service::__instruction_@yay() Should succeed" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/6nnn@yay"
+
+  run ydf::package_service::__instruction_@yay '6nnn@yay'
+
+  assert_success
+  assert_output --regexp "nnn"
+}
