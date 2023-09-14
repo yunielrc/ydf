@@ -17,6 +17,8 @@ fi
 readonly VEDV_CONTAINER_NAME='ydf-manjaro-dev'
 readonly VEDV_IMAGE_NAME='ydf-manjaro-dev'
 
+declare -i EXIT_STATUS=0
+
 if ! vedv image ls | grep -q "$VEDV_IMAGE_NAME"; then
   echo
   echo ">> Image ${VEDV_IMAGE_NAME} not found, building..."
@@ -44,7 +46,8 @@ echo ">>Files copied"
 echo
 echo ">>Executing command '$*' in container"
 echo ">>If the "
-vedv container exec "$VEDV_CONTAINER_NAME" "$@" || :
+vedv container exec "$VEDV_CONTAINER_NAME" "$@" ||
+  EXIT_STATUS=$?
 echo ">>Command executed"
 
 echo
@@ -63,4 +66,10 @@ echo
 
 vedv container start "$VEDV_CONTAINER_NAME" &>/dev/null
 
-exit 0
+if [[ $EXIT_STATUS -ne 0 ]]; then
+  echo
+  echo ">> FAILED. Command execution failed: '$*'"
+fi
+
+echo ">> SUCCESS"
+exit $EXIT_STATUS
