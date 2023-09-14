@@ -11,6 +11,10 @@ sudo pacman -Syu --noconfirm --needed yay
 
 yay -Sy --noconfirm --needed "${PKG_DEV_MANJARO_YAY[@]}"
 
+yay -Sy --noconfirm --needed vedv-git &&
+  sudo pacman -Syu --noconfirm --needed "$(mhwd-kernel -li | grep -Po '\(\Klinux\d+\S*(?=\))')-virtualbox-host-modules" &&
+  sudo vboxreload
+
 sudo -H npm install -g "${PKG_DEV_MANJARO_NPM[@]}"
 
 # Configure

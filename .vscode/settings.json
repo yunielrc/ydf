@@ -1,6 +1,9 @@
 {
   "files.associations": {
-    "*.zunit": "bats"
+    "*.zunit": "bats",
+    "Makefile.vedv": "makefile",
+    "Vedvfile": "dockerfile",
+    ".vedvfileignore": "gitignore"
   },
   "search.exclude": {
     "dist/lib/**": true,

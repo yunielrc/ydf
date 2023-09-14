@@ -1,0 +1,16 @@
+FROM admin@manjaro/manjaro-gnome-22.1.3-x86_64
+
+WORKDIR /home/vedv/ydf
+
+RUN sudo pacman-mirrors --fasttrack && \
+  sudo pacman -Syu --noconfirm --needed make
+
+COPY packages.env .
+
+RUN mkdir tools
+COPY tools/install-run-manjaro tools
+COPY tools/install-dev-manjaro.vedv tools
+
+RUN tools/install-run-manjaro && tools/install-dev-manjaro.vedv
+
+COPY . .
