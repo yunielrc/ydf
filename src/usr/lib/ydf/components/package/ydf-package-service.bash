@@ -30,7 +30,7 @@ fi
 
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON=''
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman @yay postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+# readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 #
 # FUNCTIONS
@@ -120,7 +120,7 @@ ydf::package_service::__instruction_postinstall() {
 }
 
 #
-# Execute .pacman instruction
+# Execute @pacman instruction
 #
 # Arguments:
 #   pkg_name  string    package name
@@ -141,7 +141,7 @@ ydf::package_service::__instruction_@pacman() {
 }
 
 #
-# Execute .pacman instruction
+# Execute @yay instruction
 #
 # Arguments:
 #   pkg_name  string    package name
