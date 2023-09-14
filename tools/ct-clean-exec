@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+#
+# Run commands inside a vedv container
+#
+set -eu
+
+set -o allexport
+# shellcheck source=../.env
+. .env
+set +o allexport
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: $0 <command>"
+  exit 1
+fi
+
+readonly VEDV_CONTAINER_NAME='ydf-manjaro-dev'
+readonly VEDV_IMAGE_NAME='ydf-manjaro-dev'
+
+if ! vedv image ls | grep -q "$VEDV_IMAGE_NAME"; then
+  echo
+  echo ">> Image ${VEDV_IMAGE_NAME} not found, building..."
+  vedv image build --force --name "$VEDV_IMAGE_NAME"
+  echo ">> Image built"
+fi
+
+if ! vedv container ls --all | grep -q "$VEDV_CONTAINER_NAME"; then
+  echo
+  echo ">> Container '${VEDV_CONTAINER_NAME}' not found, creating..."
+  vedv container create --name "$VEDV_CONTAINER_NAME" "$VEDV_IMAGE_NAME"
+  echo ">> Container created"
+
+  echo ">> Starting container"
+  vedv container start --wait "$VEDV_CONTAINER_NAME"
+  echo ">> Container started"
+fi
+
+echo
+echo ">>Copying files to container"
+echo "Attention: if the container is starting it can take up to 30 seconds before the files are copied"
+vedv container copy --no-vedvfileignore "$VEDV_CONTAINER_NAME" . .
+echo ">>Files copied"
+
+echo
+echo ">>Executing command '$*' in container"
+echo ">>If the "
+vedv container exec "$VEDV_CONTAINER_NAME" "$@" || :
+echo ">>Command executed"
+
+echo
+echo ">>Removing dirty container"
+vedv container remove --force "$VEDV_CONTAINER_NAME"
+echo ">>Container removed"
+
+echo
+echo ">>Creating a clean container for the next run"
+vedv container create --name "$VEDV_CONTAINER_NAME" "$VEDV_IMAGE_NAME"
+echo ">>Container created"
+
+echo
+echo ">>Starting container. It can take up to 30 seconds for container to be ready for the next use"
+echo
+
+vedv container start --wait "$VEDV_CONTAINER_NAME" &>/dev/null &
+
+exit 0
