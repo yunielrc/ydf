@@ -45,9 +45,14 @@ echo ">>Files copied"
 
 echo
 echo ">>Executing command '$*' in container"
-echo ">>If the "
+# shellcheck disable=SC2155
+readonly start_time=$(date +%s%N)
+
 vedv container exec "$VEDV_CONTAINER_NAME" "$@" ||
   EXIT_STATUS=$?
+# shellcheck disable=SC2155
+readonly end_time=$(date +%s%N)
+echo ">>>time: $(((end_time - start_time) / 1000000)) ms."
 echo ">>Command executed"
 
 echo
