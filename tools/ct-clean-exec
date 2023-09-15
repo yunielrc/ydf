@@ -32,6 +32,7 @@ if ! vedv container ls --all | grep -q "$VEDV_CONTAINER_NAME"; then
   vedv container create --name "$VEDV_CONTAINER_NAME" "$VEDV_IMAGE_NAME"
   echo ">> Container created"
 
+  echo
   echo ">> Starting container"
   vedv container start --wait "$VEDV_CONTAINER_NAME"
   echo ">> Container started"

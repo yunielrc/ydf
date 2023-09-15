@@ -29,7 +29,7 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON=''
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman @yay @flatpak postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman @yay @flatpak @snap postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 #
@@ -156,6 +156,23 @@ ydf::package_service::__instruction_@flatpak() {
   local -r flatpak_pkg_name="$(ydf::utils::print_1line <@flatpak)"
 
   sudo -H flatpak install --assumeyes --noninteractive flathub "${flatpak_pkg_name:-"$pkg_name"}"
+}
+
+#
+# Execute @snap instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_@snap() {
+  local -r pkg_name="$1"
+  # select the first no empty line
+  local -r snap_pkg_name="$(ydf::utils::print_1line <@snap)"
+  # eval allows include options along with package name
+  eval sudo -H snap install "${snap_pkg_name:-"$pkg_name"}"
 }
 
 #

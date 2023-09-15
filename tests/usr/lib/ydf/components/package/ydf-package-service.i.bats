@@ -246,3 +246,20 @@ postinstall"
   assert_success
   assert_output --partial "io.missioncenter.MissionCenter/x86_64/stable"
 }
+
+# Tests for ydf::package_service::__instruction_@snap()
+@test "ydf::package_service::__instruction_@snap() Should succeed" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/8go@snap"
+
+  run ydf::package_service::__instruction_@snap '8go@snap'
+
+  assert_success
+  assert_output --partial "go"
+
+  run command -v go
+
+  assert_success
+
+  assert_output --partial 'bin/go'
+}

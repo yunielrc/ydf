@@ -220,3 +220,35 @@ com.github.tchx84.Flatseal: postinstall succeed"
   assert_success
   assert_output --partial "com.github.tchx84.Flatseal"
 }
+
+# Tests for ydf package install ../8go@snap
+@test "ydf package install ../8go@snap, Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/8go@snap"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output --regexp "8go@snap: preinstall succeed
+8go@snap: install succeed
+.*
+8go@snap: postinstall succeed"
+
+  run command -v go
+
+  assert_success
+  assert_output --partial "/bin/go"
+}
+
+@test "ydf package install ../multipass, Should succeed Without package name in @snap" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/multipass"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output --regexp "multipass .* installed"
+
+  run command -v multipass
+
+  assert_success
+  assert_output --partial "/bin/multipass"
+}

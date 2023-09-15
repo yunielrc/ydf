@@ -10,3 +10,16 @@ set -eu
 sudo pacman -Syu --noconfirm --needed yay
 
 yay -Sy --noconfirm --needed "${PKG_RUN_MANJARO_YAY[@]}"
+
+# Install snap
+sudo pacman -S --noconfirm --needed snapd
+
+sudo systemctl enable apparmor --now
+sudo systemctl enable snapd.apparmor --now
+sudo systemctl enable snapd --now
+
+sudo ln -vs /var/lib/snapd/snap /snap
+
+echo ">>Attention: log out and back in again, or restart your system, to ensure snap’s paths are updated correctly"
+
+# sudo snap install core
