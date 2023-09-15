@@ -176,3 +176,47 @@ rustscan: postinstall succeed"
   assert_success
   assert_output "/usr/bin/rustscan"
 }
+
+# Tests for ydf package install ../7micenter@flathub
+@test "ydf package install ../7micenter@flathub, Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/7micenter@flathub"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output --regexp "7micenter@flathub: preinstall succeed
+7micenter@flathub: install succeed
+.*
+Installing app/io.missioncenter.MissionCenter/x86_64/stable
+7micenter@flathub: postinstall succeed"
+
+  __run_wrapper() {
+    flatpak list --app | grep io.missioncenter.MissionCenter
+  }
+
+  run  __run_wrapper
+
+  assert_success
+  assert_output --partial "io.missioncenter.MissionCenter"
+}
+
+@test "ydf package install ../com.github.tchx84.Flatseal, Should succeed Without package name in @flatpak" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/com.github.tchx84.Flatseal"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output "com.github.tchx84.Flatseal: preinstall succeed
+com.github.tchx84.Flatseal: install succeed
+Installing app/com.github.tchx84.Flatseal/x86_64/stable
+com.github.tchx84.Flatseal: postinstall succeed"
+
+  __run_wrapper() {
+    flatpak list --app | grep com.github.tchx84.Flatseal
+  }
+
+  run __run_wrapper
+
+  assert_success
+  assert_output --partial "com.github.tchx84.Flatseal"
+}

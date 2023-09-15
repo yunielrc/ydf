@@ -29,7 +29,7 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON=''
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman @yay postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman @yay @flatpak postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 #
