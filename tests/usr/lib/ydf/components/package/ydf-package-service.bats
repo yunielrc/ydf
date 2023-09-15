@@ -38,16 +38,6 @@ setup() {
 }
 
 # Tests for ydf::package_service::__instruction_preinstall()
-@test "ydf::package_service::__instruction_preinstall() Should succeed if there is no preinstall script" {
-
-  cd "${TEST_FIXTURES_DIR}/packages/0empty"
-
-  run ydf::package_service::__instruction_preinstall
-
-  assert_success
-  assert_output ''
-}
-
 @test "ydf::package_service::__instruction_preinstall() Should succeed if preinstall script succeed" {
 
   cd "${TEST_FIXTURES_DIR}/packages/1freedom"
@@ -146,7 +136,7 @@ setup() {
   assert_output --regexp "ERROR> Executing instruction 'preinstall' on '.*/0freedom-fail'"
 }
 
-@test "ydf::package_service::install_one_from_dir() Should succeed if all instructions are success" {
+@test "ydf::package_service::install_one_from_dir() Should execute only instructions with files" {
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages/0freedom-fail"
 
   ydf::package_service::get_instructions_names() {
@@ -167,21 +157,35 @@ setup() {
   run ydf::package_service::install_one_from_dir "$_package_dir"
 
   assert_success
-  assert_output "instruction1
-preinstall"
+  assert_output "preinstall"
+}
+
+@test "ydf::package_service::install_one_from_dir() Should succeed if all instructions are success" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/0freedom-fail"
+
+  ydf::package_service::get_instructions_names() {
+    assert_equal "$*" ''
+
+    echo 'preinstall postinstall'
+  }
+  ydf::package_service::__instruction_instruction1() {
+    assert_equal "$*" '0freedom-fail'
+    echo instruction1
+  }
+
+  ydf::package_service::__instruction_preinstall() {
+    assert_equal "$*" '0freedom-fail'
+    echo preinstall
+  }
+
+  run ydf::package_service::install_one_from_dir "$_package_dir"
+
+  assert_success
+  assert_output "preinstall
+postinstall"
 }
 
 # Tests for ydf::package_service::__instruction_install()
-@test "ydf::package_service::__instruction_install() Should succeed if there is no install script" {
-
-  cd "${TEST_FIXTURES_DIR}/packages/0empty"
-
-  run ydf::package_service::__instruction_install
-
-  assert_success
-  assert_output ''
-}
-
 @test "ydf::package_service::__instruction_install() Should succeed if install script succeed" {
 
   cd "${TEST_FIXTURES_DIR}/packages/3install"
@@ -193,16 +197,6 @@ preinstall"
 }
 
 # Tests for ydf::package_service::__instruction_postinstall()
-@test "ydf::package_service::__instruction_postinstall() Should succeed without instruction file" {
-
-  cd "${TEST_FIXTURES_DIR}/packages/0empty"
-
-  run ydf::package_service::__instruction_postinstall
-
-  assert_success
-  assert_output ""
-}
-
 @test "ydf::package_service::__instruction_postinstall() Should succeed" {
 
   cd "${TEST_FIXTURES_DIR}/packages/4postinstall"
@@ -214,19 +208,6 @@ preinstall"
 }
 
 # Tests for ydf::package_service::__instruction_@pacman()
-@test "ydf::package_service::__instruction_@pacman() Should succeed Without instruction file" {
-  if ! command -v pacman &> /dev/null; then
-    skip "pacman is not installed"
-  fi
-
-  cd "${TEST_FIXTURES_DIR}/packages/0empty"
-
-  run ydf::package_service::__instruction_@pacman
-
-  assert_success
-  assert_output ""
-}
-
 @test "ydf::package_service::__instruction_@pacman() Should succeed" {
   if ! command -v pacman &> /dev/null; then
     skip "pacman is not installed"
@@ -241,19 +222,6 @@ preinstall"
 }
 
 # Tests for ydf::package_service::__instruction_@yay()
-@test "ydf::package_service::__instruction_@yay() Should succeed Without instruction file" {
-  if ! command -v yay &> /dev/null; then
-    skip "yay is not installed"
-  fi
-
-  cd "${TEST_FIXTURES_DIR}/packages/0empty"
-
-  run ydf::package_service::__instruction_@yay
-
-  assert_success
-  assert_output ""
-}
-
 @test "ydf::package_service::__instruction_@yay() Should succeed" {
 
   if ! command -v yay &> /dev/null; then
@@ -269,16 +237,6 @@ preinstall"
 }
 
 # Tests for ydf::package_service::__instruction_@flatpak()
-@test "ydf::package_service::__instruction_@flatpak() Should succeed Without instruction file" {
-
-  cd "${TEST_FIXTURES_DIR}/packages/0empty"
-
-  run ydf::package_service::__instruction_@flatpak
-
-  assert_success
-  assert_output ""
-}
-
 @test "ydf::package_service::__instruction_@flatpak() Should succeed" {
 
   cd "${TEST_FIXTURES_DIR}/packages/7micenter@flathub"

@@ -82,10 +82,6 @@ ydf::package_service::get_instructions_names() {
 #   0 on success, non-zero on error.
 #
 ydf::package_service::__instruction_preinstall() {
-  if [[ ! -f ./preinstall ]]; then
-    return 0
-  fi
-
   bash ./preinstall
 }
 
@@ -97,10 +93,6 @@ ydf::package_service::__instruction_preinstall() {
 #   0 on success, non-zero on error.
 #
 ydf::package_service::__instruction_install() {
-  if [[ ! -f ./install ]]; then
-    return 0
-  fi
-
   bash ./install
 }
 
@@ -112,10 +104,6 @@ ydf::package_service::__instruction_install() {
 #   0 on success, non-zero on error.
 #
 ydf::package_service::__instruction_postinstall() {
-  if [[ ! -f ./postinstall ]]; then
-    return 0
-  fi
-
   bash ./postinstall
 }
 
@@ -129,10 +117,6 @@ ydf::package_service::__instruction_postinstall() {
 #   0 on success, non-zero on error.
 #
 ydf::package_service::__instruction_@pacman() {
-  if [[ ! -f ./@pacman ]]; then
-    return 0
-  fi
-
   local -r pkg_name="$1"
   # select the first no empty line
   local -r pacman_pkg_name="$(ydf::utils::print_1line <@pacman)"
@@ -150,10 +134,6 @@ ydf::package_service::__instruction_@pacman() {
 #   0 on success, non-zero on error.
 #
 ydf::package_service::__instruction_@yay() {
-  if [[ ! -f ./@yay ]]; then
-    return 0
-  fi
-
   local -r pkg_name="$1"
   # select the first no empty line
   local -r yay_pkg_name="$(ydf::utils::print_1line <@yay)"
@@ -171,10 +151,6 @@ ydf::package_service::__instruction_@yay() {
 #   0 on success, non-zero on error.
 #
 ydf::package_service::__instruction_@flatpak() {
-  if [[ ! -f ./@flatpak ]]; then
-    return 0
-  fi
-
   local -r pkg_name="$1"
   # select the first no empty line
   local -r flatpak_pkg_name="$(ydf::utils::print_1line <@flatpak)"
@@ -230,11 +206,15 @@ ydf::package_service::install_one_from_dir() {
       return "$ERR_CHANGING_WORKDIR"
     }
 
-    for iname in "${instr_arr[@]}"; do
-      local ifunction="ydf::package_service::__instruction_${iname}"
+    for _instr in "${instr_arr[@]}"; do
+      local ifunction="ydf::package_service::__instruction_${_instr}"
+
+      if [[ ! -f "./${_instr}" ]]; then
+        continue
+      fi
 
       "$ifunction" "$pkg_name" || {
-        err "Executing instruction '${iname}' on '${package_dir}'"
+        err "Executing instruction '${_instr}' on '${package_dir}'"
         return "$ERR_YPS_INSTRUCTION_FAIL"
       }
     done
