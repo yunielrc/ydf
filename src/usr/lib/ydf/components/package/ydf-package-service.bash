@@ -121,7 +121,7 @@ ydf::package_service::__instruction_@pacman() {
   # select the first no empty line
   local -r pacman_pkg_name="$(ydf::utils::print_1line <@pacman)"
 
-  sudo pacman -Syu --noconfirm --needed "${pacman_pkg_name:-"$pkg_name"}"
+  sudo -H pacman -Syu --noconfirm --needed "${pacman_pkg_name:-"$pkg_name"}"
 }
 
 #
@@ -138,7 +138,7 @@ ydf::package_service::__instruction_@yay() {
   # select the first no empty line
   local -r yay_pkg_name="$(ydf::utils::print_1line <@yay)"
 
-  sudo yay -Syu --noconfirm --needed "${yay_pkg_name:-"$pkg_name"}"
+  sudo -H yay -Syu --noconfirm --needed "${yay_pkg_name:-"$pkg_name"}"
 }
 
 #
