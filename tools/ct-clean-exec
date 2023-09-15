@@ -40,7 +40,7 @@ fi
 
 echo
 echo ">>Copying files to container"
-echo "Attention: if the container is starting it can take up to 30 seconds before the files are copied"
+echo ">>>Attention: if the container is starting it can take up to 30 seconds before the files are copied"
 vedv container copy --no-vedvfileignore "$VEDV_CONTAINER_NAME" . .
 echo ">>Files copied"
 

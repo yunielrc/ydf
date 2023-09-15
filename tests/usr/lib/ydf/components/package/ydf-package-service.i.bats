@@ -166,7 +166,7 @@ setup() {
   ydf::package_service::get_instructions_names() {
     assert_equal "$*" ''
 
-    echo 'preinstall postinstall'
+    echo 'preinstall postinstall docker_compose:docker-compose.yml'
   }
   ydf::package_service::__instruction_instruction1() {
     assert_equal "$*" '0freedom-fail'
@@ -177,12 +177,17 @@ setup() {
     assert_equal "$*" '0freedom-fail'
     echo preinstall
   }
+  ydf::package_service::__instruction_docker_compose() {
+    assert_equal "$*" '0freedom-fail'
+    echo docker_compose
+  }
 
   run ydf::package_service::install_one_from_dir "$_package_dir"
 
   assert_success
   assert_output "preinstall
-postinstall"
+postinstall
+docker_compose"
 }
 
 # Tests for ydf::package_service::__instruction_install()
@@ -262,4 +267,20 @@ postinstall"
   assert_success
 
   assert_output --partial 'bin/go'
+}
+
+# Tests for ydf::package_service::__instruction_docker_compose()
+@test "ydf::package_service::__instruction_docker_compose() Should succeed" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/9hello-world@dockercomp"
+
+  run ydf::package_service::__instruction_docker_compose '9hello-world@dockercomp'
+
+  assert_success
+  assert_output --partial "Container hello_world  Started"
+
+  run docker container ls -qaf "name=hello_world"
+
+  assert_success
+  assert [ -n "$output" ]
 }

@@ -1,0 +1,6 @@
+
+services:
+  webapp:
+    image: hello-world
+    ports:
+      - "8000:8000"

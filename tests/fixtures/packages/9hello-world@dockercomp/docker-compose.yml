@@ -1,0 +1,6 @@
+services:
+  webapp:
+    container_name: hello_world
+    image: hello-world
+    ports:
+      - "8000:8000"

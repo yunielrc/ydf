@@ -29,7 +29,7 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON=''
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman @yay @flatpak @snap postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman @yay @flatpak @snap docker_compose:docker-compose.yml postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 #
@@ -176,6 +176,19 @@ ydf::package_service::__instruction_@snap() {
 }
 
 #
+# Execute docker-compose.yml instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_docker_compose() {
+  docker compose up -d
+}
+
+#
 # Install a ydotfile package from a directory
 #
 # Arguments:
@@ -224,9 +237,11 @@ ydf::package_service::install_one_from_dir() {
     }
 
     for _instr in "${instr_arr[@]}"; do
-      local ifunction="ydf::package_service::__instruction_${_instr}"
+      local ifunc_partial_name="${_instr%%:*}"
+      local ifile_name="${_instr##*:}"
+      local ifunction="ydf::package_service::__instruction_${ifunc_partial_name}"
 
-      if [[ ! -f "./${_instr}" ]]; then
+      if [[ ! -f "./${ifile_name}" ]]; then
         continue
       fi
 

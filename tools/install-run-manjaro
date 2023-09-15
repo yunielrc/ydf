@@ -23,3 +23,9 @@ sudo ln -vs /var/lib/snapd/snap /snap
 echo ">>Attention: log out and back in again, or restart your system, to ensure snap’s paths are updated correctly"
 
 # sudo snap install core
+
+# Install docker
+sudo pacman -S --noconfirm --needed docker docker-compose
+sudo systemctl enable docker --now
+
+sudo usermod -aG docker "$USER"

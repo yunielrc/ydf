@@ -252,3 +252,18 @@ com.github.tchx84.Flatseal: postinstall succeed"
   assert_success
   assert_output --partial "/bin/multipass"
 }
+
+# Tests for ydf package install
+@test "ydf package install ./9hello-world@dockercomp Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/9hello-world@dockercomp"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output --partial "Container hello_world  Started"
+
+  run docker container ls -qaf "name=hello_world"
+
+  assert_success
+  assert [ -n "$output" ]
+}
