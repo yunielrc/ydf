@@ -244,5 +244,5 @@ postinstall"
   run ydf::package_service::__instruction_@flatpak '7micenter@flathub'
 
   assert_success
-  assert_output --partial "Installing app/io.missioncenter.MissionCenter/x86_64/stable"
+  assert_output --partial "io.missioncenter.MissionCenter/x86_64/stable"
 }

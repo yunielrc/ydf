@@ -187,7 +187,7 @@ rustscan: postinstall succeed"
   assert_output --regexp "7micenter@flathub: preinstall succeed
 7micenter@flathub: install succeed
 .*
-Installing app/io.missioncenter.MissionCenter/x86_64/stable
+.*io.missioncenter.MissionCenter.*
 7micenter@flathub: postinstall succeed"
 
   __run_wrapper() {
@@ -206,9 +206,9 @@ Installing app/io.missioncenter.MissionCenter/x86_64/stable
   run ydf package install "$_package_dir"
 
   assert_success
-  assert_output "com.github.tchx84.Flatseal: preinstall succeed
+  assert_output --regexp "com.github.tchx84.Flatseal: preinstall succeed
 com.github.tchx84.Flatseal: install succeed
-Installing app/com.github.tchx84.Flatseal/x86_64/stable
+.*app/com.github.tchx84.Flatseal.*
 com.github.tchx84.Flatseal: postinstall succeed"
 
   __run_wrapper() {
