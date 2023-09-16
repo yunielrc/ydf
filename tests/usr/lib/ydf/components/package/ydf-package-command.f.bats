@@ -381,3 +381,38 @@ com.github.tchx84.Flatseal: postinstall succeed"
 
   rm -r /home/vedv/.my /home/vedv/.my-config.env
 }
+
+# Tests for ydf package install ./14rootcp
+@test "ydf package install ./14rootcp Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/14rootcp"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output "'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my' -> '/.my'
+'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1' -> '/.my/dir1'
+'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1/file11' -> '/.my/dir1/file11'
+'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/file1' -> '/.my/file1'
+'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/file2' -> '/.my/file2'
+'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my-config.env' -> '/.my-config.env'"
+
+  assert [ ! -L '/.my' ]
+  assert [ -d '/.my' ]
+
+  assert [ ! -L '/.my/dir1' ]
+  assert [ -d '/.my/dir1' ]
+
+  assert [ ! -L '/.my/dir1/file11' ]
+  assert [ -f '/.my/dir1/file11' ]
+
+  assert [ ! -L '/.my/file1' ]
+  assert [ -f '/.my/file1' ]
+
+  assert [ ! -L '/.my/file2' ]
+  assert [ -f '/.my/file2' ]
+
+  assert [ ! -L '/.my-config.env' ]
+  assert [ -f '/.my-config.env' ]
+
+  sudo rm -r /.my /.my-config.env
+}

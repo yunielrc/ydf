@@ -437,3 +437,38 @@ Plugin '10ydfplugin' already added to /home/vedv/.yzsh-gen.env"
 
   rm -r /home/vedv/.my /home/vedv/.my-config.env
 }
+
+# Tests for ydf::package_service::__instruction_rootcp()
+@test "ydf::package_service::__instruction_rootcp() Should succeed" {
+  cd "${TEST_FIXTURES_DIR}/packages/14rootcp"
+
+  run ydf::package_service::__instruction_rootcp '14rootcp'
+
+  assert_success
+  assert_output "'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my' -> '/.my'
+'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1' -> '/.my/dir1'
+'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1/file11' -> '/.my/dir1/file11'
+'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/file1' -> '/.my/file1'
+'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/file2' -> '/.my/file2'
+'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my-config.env' -> '/.my-config.env'"
+
+  assert [ ! -L '/.my' ]
+  assert [ -d '/.my' ]
+
+  assert [ ! -L '/.my/dir1' ]
+  assert [ -d '/.my/dir1' ]
+
+  assert [ ! -L '/.my/dir1/file11' ]
+  assert [ -f '/.my/dir1/file11' ]
+
+  assert [ ! -L '/.my/file1' ]
+  assert [ -f '/.my/file1' ]
+
+  assert [ ! -L '/.my/file2' ]
+  assert [ -f '/.my/file2' ]
+
+  assert [ ! -L '/.my-config.env' ]
+  assert [ -f '/.my-config.env' ]
+
+  sudo rm -r /.my /.my-config.env
+}
