@@ -313,7 +313,7 @@ com.github.tchx84.Flatseal: postinstall succeed"
 }
 
 # Tests for ydf package install ./12homelnr
-@test "ydf::package_service::__instruction_homelnr() Should succeed" {
+@test "ydf package install ./12homelnr Should succeed" {
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages/12homelnr"
 
   run ydf package install "$_package_dir"
@@ -342,6 +342,41 @@ com.github.tchx84.Flatseal: postinstall succeed"
   assert [ -f '/home/vedv/.my/file2' ]
 
   assert [ -L '/home/vedv/.my-config.env' ]
+  assert [ -f '/home/vedv/.my-config.env' ]
+
+  rm -r /home/vedv/.my /home/vedv/.my-config.env
+}
+
+# Tests for ydf package install ./13homecp
+@test "ydf package install ./13homecp Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/13homecp"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output "'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my' -> '/home/vedv/.my'
+'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1' -> '/home/vedv/.my/dir1'
+'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1/file11' -> '/home/vedv/.my/dir1/file11'
+'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/file1' -> '/home/vedv/.my/file1'
+'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/file2' -> '/home/vedv/.my/file2'
+'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my-config.env' -> '/home/vedv/.my-config.env'"
+
+  assert [ ! -L '/home/vedv/.my' ]
+  assert [ -d '/home/vedv/.my' ]
+
+  assert [ ! -L '/home/vedv/.my/dir1' ]
+  assert [ -d '/home/vedv/.my/dir1' ]
+
+  assert [ ! -L '/home/vedv/.my/dir1/file11' ]
+  assert [ -f '/home/vedv/.my/dir1/file11' ]
+
+  assert [ ! -L '/home/vedv/.my/file1' ]
+  assert [ -f '/home/vedv/.my/file1' ]
+
+  assert [ ! -L '/home/vedv/.my/file2' ]
+  assert [ -f '/home/vedv/.my/file2' ]
+
+  assert [ ! -L '/home/vedv/.my-config.env' ]
   assert [ -f '/home/vedv/.my-config.env' ]
 
   rm -r /home/vedv/.my /home/vedv/.my-config.env

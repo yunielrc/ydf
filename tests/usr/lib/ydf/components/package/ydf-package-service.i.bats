@@ -402,3 +402,38 @@ Plugin '10ydfplugin' already added to /home/vedv/.yzsh-gen.env"
 
   rm -r /home/vedv/.my /home/vedv/.my-config.env
 }
+
+# Tests for ydf::package_service::__instruction_homecp()
+@test "ydf::package_service::__instruction_homecp() Should succeed" {
+  cd "${TEST_FIXTURES_DIR}/packages/13homecp"
+
+  run ydf::package_service::__instruction_homecp '13homecp'
+
+  assert_success
+  assert_output "'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my' -> '/home/vedv/.my'
+'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1' -> '/home/vedv/.my/dir1'
+'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1/file11' -> '/home/vedv/.my/dir1/file11'
+'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/file1' -> '/home/vedv/.my/file1'
+'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/file2' -> '/home/vedv/.my/file2'
+'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my-config.env' -> '/home/vedv/.my-config.env'"
+
+  assert [ ! -L '/home/vedv/.my' ]
+  assert [ -d '/home/vedv/.my' ]
+
+  assert [ ! -L '/home/vedv/.my/dir1' ]
+  assert [ -d '/home/vedv/.my/dir1' ]
+
+  assert [ ! -L '/home/vedv/.my/dir1/file11' ]
+  assert [ -f '/home/vedv/.my/dir1/file11' ]
+
+  assert [ ! -L '/home/vedv/.my/file1' ]
+  assert [ -f '/home/vedv/.my/file1' ]
+
+  assert [ ! -L '/home/vedv/.my/file2' ]
+  assert [ -f '/home/vedv/.my/file2' ]
+
+  assert [ ! -L '/home/vedv/.my-config.env' ]
+  assert [ -f '/home/vedv/.my-config.env' ]
+
+  rm -r /home/vedv/.my /home/vedv/.my-config.env
+}
