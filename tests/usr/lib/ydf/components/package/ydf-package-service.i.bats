@@ -1,12 +1,28 @@
 load test_helper
 
 setup() {
-  ydf::package_service::constructor "$YDF_PACKAGE_SERVICE_DEFAULT_OS"
-  export __YDF_PACKAGE_SERVICE_DEFAULT_OS
+  ydf::package_service::constructor \
+    "$YDF_PACKAGE_SERVICE_DEFAULT_OS" \
+    "$YDF_YZSH_DATA_DIR" \
+    "$YDF_YZSH_GEN_CONFIG_FILE"
+
+  export __YDF_PACKAGE_SERVICE_DEFAULT_OS \
+    __YDF_YZSH_DATA_DIR \
+    __YDF_YZSH_GEN_CONFIG_FILE
+
+
+  if [[ -f /home/vedv/.yzsh-gen.env ]]; then
+    rm -f /home/vedv/.yzsh-gen.env
+  fi
+
+  if [[ -d /home/vedv/.yzsh/plugins/local ]]; then
+    rm -rf /home/vedv/.yzsh/plugins/local
+  fi
+  mkdir /home/vedv/.yzsh/plugins/local
 }
 
 # teardown() {
-#
+
 # }
 
 
@@ -283,4 +299,42 @@ docker_compose"
 
   assert_success
   assert [ -n "$output" ]
+}
+
+# Tests for ydf::package_service::__instruction_plugin_zsh()
+@test "ydf::package_service::__instruction_plugin_zsh() Should fail if ln fails" {
+  cd "${TEST_FIXTURES_DIR}/packages/10ydfplugin"
+
+  ln() {
+    assert_equal "$*" "-vsf /home/vedv/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh /home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh"
+    return 1
+  }
+
+  run ydf::package_service::__instruction_plugin_zsh '10ydfplugin'
+
+  assert_failure
+  assert_output "ERROR> Creating plugin symlink: /home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh"
+}
+
+@test "ydf::package_service::__instruction_plugin_zsh() Should add plugin" {
+  cd "${TEST_FIXTURES_DIR}/packages/10ydfplugin"
+
+  run ydf::package_service::__instruction_plugin_zsh '10ydfplugin'
+
+  assert_success
+  assert_output "'/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'"
+
+  assert [ -L '/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' ]
+  assert [ -f '/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' ]
+
+  run grep "YZSH_PLUGINS+=(10ydfplugin)" "$YDF_YZSH_GEN_CONFIG_FILE"
+
+  assert_success
+  assert_output "YZSH_PLUGINS+=(10ydfplugin)"
+
+  run ydf::package_service::__instruction_plugin_zsh '10ydfplugin'
+
+  assert_success
+  assert_output "'/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'
+Plugin '10ydfplugin' already added to /home/vedv/.yzsh-gen.env"
 }

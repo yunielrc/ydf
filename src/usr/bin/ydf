@@ -37,6 +37,8 @@ readonly _YDF_LIB_DIR="${E_YDF_TMP_DIR:-"${YDF_TMP_DIR:-"/var/tmp/${USER}/ydf"}"
 readonly _YDF_CACHE_DIR="${E_YDF_CACHE_DIR:-"${YDF_CACHE_DIR:-"/home/${USER}/.var/cache/ydf"}"}"
 readonly _YDF_PACKAGE_SERVICE_DEFAULT_OS="${E_YDF_PACKAGE_SERVICE_DEFAULT_OS:-"$YDF_PACKAGE_SERVICE_DEFAULT_OS"}"
 
+readonly _YDF_YZSH_DATA_DIR="${E_YDF_YZSH_DATA_DIR:-"${YDF_YZSH_DATA_DIR:-~/.yzsh}"}"
+readonly _YDF_YZSH_GEN_CONFIG_FILE="${E_YDF_YZSH_GEN_CONFIG_FILE:-"${YDF_YZSH_GEN_CONFIG_FILE:-~/.yzsh-gen.env}"}"
 # CREATE DIRECTORIES
 ydf::__create_dirs() {
 
@@ -63,7 +65,11 @@ ydf::__source_files() {
 }
 
 ydf::__init_components() {
-  ydf::package_service::constructor "$_YDF_PACKAGE_SERVICE_DEFAULT_OS"
+  ydf::package_service::constructor \
+    "$_YDF_PACKAGE_SERVICE_DEFAULT_OS" \
+    "$_YDF_YZSH_DATA_DIR" \
+    "$_YDF_YZSH_GEN_CONFIG_FILE"
+
 }
 
 # FUNCTIONS

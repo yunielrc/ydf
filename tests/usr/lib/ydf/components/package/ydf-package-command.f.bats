@@ -1,11 +1,19 @@
 load test_helper
 
-# setup() {
-#
-# }
+setup() {
+
+  if [[ -f /home/vedv/.yzsh-gen.env ]]; then
+    rm -f /home/vedv/.yzsh-gen.env
+  fi
+
+  if [[ -d /home/vedv/.yzsh/plugins/local ]]; then
+    rm -rf /home/vedv/.yzsh/plugins/local
+  fi
+  mkdir /home/vedv/.yzsh/plugins/local
+}
 
 # teardown() {
-#
+
 # }
 
 # Tests for ydf package
@@ -266,4 +274,22 @@ com.github.tchx84.Flatseal: postinstall succeed"
 
   assert_success
   assert [ -n "$output" ]
+}
+
+# Tests for ydf package install
+@test "ydf package install ./10ydfplugin Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/10ydfplugin"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output "'/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'"
+
+  assert [ -L '/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' ]
+  assert [ -f '/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' ]
+
+  run grep "YZSH_PLUGINS+=(10ydfplugin)" "$YDF_YZSH_GEN_CONFIG_FILE"
+
+  assert_success
+  assert_output "YZSH_PLUGINS+=(10ydfplugin)"
 }

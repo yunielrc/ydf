@@ -30,3 +30,7 @@ RUN sudo pacman -S --noconfirm --needed snapd && \
 RUN sudo pacman -S --noconfirm --needed docker docker-compose && \
   sudo systemctl enable docker && \
   sudo usermod -aG docker "\$USER"
+## YZSH
+RUN cd "\$(mktemp -d)" && \
+  git clone https://github.com/yunielrc/yzsh.git && cd yzsh && \
+  make install

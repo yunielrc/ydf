@@ -27,8 +27,8 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='home homeln homecp homecps homecat root rootcp rootcps rootln rootcat flatpack dconf.ini plugin_zsh docker_compose'
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall pacman yay install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
-
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON=''
+# shellcheck disable=SC2016
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='plugin_zsh:${pkg_name}.plugin.zsh'
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman @yay @flatpak @snap docker_compose:docker-compose.yml postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
@@ -39,13 +39,17 @@ readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman 
 #
 # Constructor
 #
-# default_os  string  default os
+# default_os            string  default os
+# yzsh_data_dir         string  yzsh data dir
+# yzsh_gen_config_file  string  yzsh gen config file
 #
 # Returns:
 #   0 on success, non-zero on error.
 #
 ydf::package_service::constructor() {
   readonly __YDF_PACKAGE_SERVICE_DEFAULT_OS="$1"
+  readonly __YDF_YZSH_DATA_DIR="$2"
+  readonly __YDF_YZSH_GEN_CONFIG_FILE="$3"
 }
 
 #
@@ -176,7 +180,7 @@ ydf::package_service::__instruction_@snap() {
 }
 
 #
-# Execute docker-compose.yml instruction
+# Execute docker_compose instruction
 #
 # Arguments:
 #   pkg_name  string    package name
@@ -186,6 +190,35 @@ ydf::package_service::__instruction_@snap() {
 #
 ydf::package_service::__instruction_docker_compose() {
   docker compose up -d
+}
+
+#
+# Execute plugin_zsh instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_plugin_zsh() {
+  local -r package_name="$1"
+
+  local -r plugin_name="${package_name}.plugin.zsh"
+  local -r plugin_file="${PWD}/${plugin_name}"
+  local -r plugin_dest_file="${__YDF_YZSH_DATA_DIR}/plugins/local/${plugin_name}"
+
+  ln -vsf "$plugin_file" "$plugin_dest_file" || {
+    err "Creating plugin symlink: ${plugin_dest_file}"
+    return "$ERR_FILE_CREATION"
+  }
+
+  if [[ ! -f "$__YDF_YZSH_GEN_CONFIG_FILE" ]] ||
+    ! grep -q "YZSH_PLUGINS+=($package_name)" "$__YDF_YZSH_GEN_CONFIG_FILE"; then
+    echo "YZSH_PLUGINS+=($package_name)" >>"$__YDF_YZSH_GEN_CONFIG_FILE"
+  else
+    ech "Plugin '${package_name}' already added to ${__YDF_YZSH_GEN_CONFIG_FILE}"
+  fi
 }
 
 #
@@ -237,10 +270,11 @@ ydf::package_service::install_one_from_dir() {
     }
 
     for _instr in "${instr_arr[@]}"; do
-      local ifunc_partial_name="${_instr%%:*}"
-      local ifile_name="${_instr##*:}"
-      local ifunction="ydf::package_service::__instruction_${ifunc_partial_name}"
 
+      local ifunc_partial_name="${_instr%%:*}"
+      eval local ifile_name="${_instr##*:}"
+      local ifunction="ydf::package_service::__instruction_${ifunc_partial_name}"
+      # shellcheck disable=SC2154
       if [[ ! -f "./${ifile_name}" ]]; then
         continue
       fi

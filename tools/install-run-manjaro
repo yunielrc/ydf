@@ -6,6 +6,8 @@
 set -eu
 # shellcheck source=../packages.env
 . ./packages.env
+# shellcheck source=../.ydf.env
+. ./.ydf.env
 
 sudo pacman -Syu --noconfirm --needed yay
 
@@ -29,3 +31,11 @@ sudo pacman -S --noconfirm --needed docker docker-compose
 sudo systemctl enable docker --now
 
 sudo usermod -aG docker "$USER"
+
+# Install YZSH
+## DATA
+git clone "$YDF_YZSH_DATA_REPOSITORY_URL" "$YDF_YZSH_DATA_DIR"
+##
+cd "$(mktemp -d)"
+git clone https://github.com/yunielrc/yzsh.git && cd yzsh
+make install
