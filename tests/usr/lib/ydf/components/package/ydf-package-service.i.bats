@@ -351,7 +351,7 @@ Plugin '10ydfplugin' already added to /home/vedv/.yzsh-gen.env"
 }
 
 # Tests for ydf::package_service::__instruction_homeln()
-@test "ydf::package_service::__instruction_homeln() Should add plugin" {
+@test "ydf::package_service::__instruction_homeln() Should succeed" {
   cd "${TEST_FIXTURES_DIR}/packages/11homeln"
 
   run ydf::package_service::__instruction_homeln '11homeln'
@@ -366,4 +366,39 @@ Plugin '10ydfplugin' already added to /home/vedv/.yzsh-gen.env"
   assert [ -f '/home/vedv/.my-config.env' ]
 
   rm /home/vedv/.my /home/vedv/.my-config.env
+}
+
+# Tests for ydf::package_service::__instruction_homelnr()
+@test "ydf::package_service::__instruction_homelnr() Should succeed" {
+  cd "${TEST_FIXTURES_DIR}/packages/12homelnr"
+
+  run ydf::package_service::__instruction_homelnr '12homelnr'
+
+  assert_success
+  assert_output "'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my' -> '/home/vedv/.my'
+'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/dir1' -> '/home/vedv/.my/dir1'
+'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/dir1/file11' -> '/home/vedv/.my/dir1/file11'
+'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/file1' -> '/home/vedv/.my/file1'
+'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/file2' -> '/home/vedv/.my/file2'
+'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my-config.env' -> '/home/vedv/.my-config.env'"
+
+  assert [ ! -L '/home/vedv/.my' ]
+  assert [ -d '/home/vedv/.my' ]
+
+  assert [ ! -L '/home/vedv/.my/dir1' ]
+  assert [ -d '/home/vedv/.my/dir1' ]
+
+  assert [ -L '/home/vedv/.my/dir1/file11' ]
+  assert [ -f '/home/vedv/.my/dir1/file11' ]
+
+  assert [ -L '/home/vedv/.my/file1' ]
+  assert [ -f '/home/vedv/.my/file1' ]
+
+  assert [ -L '/home/vedv/.my/file2' ]
+  assert [ -f '/home/vedv/.my/file2' ]
+
+  assert [ -L '/home/vedv/.my-config.env' ]
+  assert [ -f '/home/vedv/.my-config.env' ]
+
+  rm -r /home/vedv/.my /home/vedv/.my-config.env
 }
