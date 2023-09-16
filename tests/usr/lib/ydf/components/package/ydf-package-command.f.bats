@@ -123,8 +123,8 @@ ydf package COMMAND'
 
   assert_success
   assert_output --regexp "5dust@pacman: preinstall succeed
-5dust@pacman: install succeed
 .*
+5dust@pacman: install succeed
 5dust@pacman: postinstall succeed"
 
   run command -v dust
@@ -140,8 +140,8 @@ ydf package COMMAND'
 
   assert_success
   assert_output --regexp "bat: preinstall succeed
-bat: install succeed
 .*
+bat: install succeed
 bat: postinstall succeed"
 
   run command -v bat
@@ -158,8 +158,8 @@ bat: postinstall succeed"
 
   assert_success
   assert_output --regexp "6nnn@yay: preinstall succeed
-6nnn@yay: install succeed
 .*
+6nnn@yay: install succeed
 6nnn@yay: postinstall succeed"
 
   run command -v nnn
@@ -175,8 +175,8 @@ bat: postinstall succeed"
 
   assert_success
   assert_output --regexp "rustscan: preinstall succeed
-rustscan: install succeed
 .*
+rustscan: install succeed
 rustscan: postinstall succeed"
 
   run command -v rustscan

@@ -338,3 +338,18 @@ docker_compose"
   assert_output "'/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'
 Plugin '10ydfplugin' already added to /home/vedv/.yzsh-gen.env"
 }
+
+@test "ydf::package_service::__instruction_homeln() Should add plugin" {
+  cd "${TEST_FIXTURES_DIR}/packages/11homeln"
+
+  run ydf::package_service::__instruction_homeln '11homeln'
+
+  assert_success
+  assert_output "'/home/vedv/.my' -> '/home/vedv/ydf/tests/fixtures/packages/11homeln/homeln/.my'
+'/home/vedv/.my-config.env' -> '/home/vedv/ydf/tests/fixtures/packages/11homeln/homeln/.my-config.env'"
+
+  assert [ -L '/home/vedv/.my' ]
+  assert [ -d '/home/vedv/.my' ]
+  assert [ -L '/home/vedv/.my-config.env' ]
+  assert [ -f '/home/vedv/.my-config.env' ]
+}

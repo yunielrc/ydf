@@ -4,6 +4,8 @@
 # Manage packages
 #
 
+shopt -s dotglob
+
 #
 # FOR CODE COMPLETION
 #
@@ -19,17 +21,17 @@ fi
 #
 
 # declare -rA __YDF_PACKAGE_SERVICE_INSTRUCTIONS=(
-#   [common]="pre_install install post_install home homeln homecp homecps homecat root rootcp rootcps rootln rootcat flatpack dconf.ini plugin_zsh docker_compose"
+#   [common]="preinstall install postinstall flatpack dconf.ini plugin_zsh docker_compose homeln homelnr homecp homecps homecat rootln rootlnr rootcp rootcps rootcat"
 #   [manjaro]="pacman yay"
 #   [ubuntu]="apt"
 # )
 
-# readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='home homeln homecp homecps homecat root rootcp rootcps rootln rootcat flatpack dconf.ini plugin_zsh docker_compose'
+# readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='preinstall install postinstall flatpack dconf.ini plugin_zsh docker_compose homeln homelnr homecp homecps homecat rootln rootlnr rootcp rootcps rootcat'
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall pacman yay install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # shellcheck disable=SC2016
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='plugin_zsh:${pkg_name}.plugin.zsh'
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall install @pacman @yay @flatpak @snap docker_compose:docker-compose.yml postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln postinstall'
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall @pacman @yay ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 #
@@ -219,6 +221,19 @@ ydf::package_service::__instruction_plugin_zsh() {
   else
     ech "Plugin '${package_name}' already added to ${__YDF_YZSH_GEN_CONFIG_FILE}"
   fi
+}
+
+#
+# Execute homeln instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_homeln() {
+  ln -vsf --backup "${PWD}/homeln/"* ~/
 }
 
 #

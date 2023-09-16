@@ -53,8 +53,7 @@ vedv container exec "$VEDV_CONTAINER_NAME" "$@" ||
   EXIT_STATUS=$?
 # shellcheck disable=SC2155
 readonly end_time=$(date +%s%N)
-echo ">>>time: $(((end_time - start_time) / 1000000)) ms."
-echo ">>Command executed"
+echo ">>Command executed, time: $(((end_time - start_time) / 1000000)) ms."
 
 echo
 echo ">>Removing dirty container"
@@ -67,7 +66,7 @@ vedv container create --name "$VEDV_CONTAINER_NAME" "$VEDV_IMAGE_NAME"
 echo ">>Container created"
 
 echo
-echo ">>Starting container for the next run in background. It can take up to 30 seconds for container to be ready"
+echo ">>Starting container in background for the next run. It can take up to 30 seconds for container to be ready"
 echo
 
 vedv container start "$VEDV_CONTAINER_NAME" &>/dev/null
