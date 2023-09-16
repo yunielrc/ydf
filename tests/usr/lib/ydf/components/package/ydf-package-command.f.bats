@@ -276,7 +276,7 @@ com.github.tchx84.Flatseal: postinstall succeed"
   assert [ -n "$output" ]
 }
 
-# Tests for ydf package install
+# Tests for ydf package install ./10ydfplugin
 @test "ydf package install ./10ydfplugin Should succeed" {
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages/10ydfplugin"
 
@@ -292,4 +292,22 @@ com.github.tchx84.Flatseal: postinstall succeed"
 
   assert_success
   assert_output "YZSH_PLUGINS+=(10ydfplugin)"
+}
+
+# Tests for ydf package install ./11homeln
+@test "ydf package install ./11homeln Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/11homeln"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output "'/home/vedv/.my' -> '/home/vedv/ydf/tests/fixtures/packages/11homeln/homeln/.my'
+'/home/vedv/.my-config.env' -> '/home/vedv/ydf/tests/fixtures/packages/11homeln/homeln/.my-config.env'"
+
+  assert [ -L '/home/vedv/.my' ]
+  assert [ -d '/home/vedv/.my' ]
+  assert [ -L '/home/vedv/.my-config.env' ]
+  assert [ -f '/home/vedv/.my-config.env' ]
+
+  rm /home/vedv/.my /home/vedv/.my-config.env
 }

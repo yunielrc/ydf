@@ -158,22 +158,33 @@ setup() {
   ydf::package_service::get_instructions_names() {
     assert_equal "$*" ''
 
-    echo 'instruction1 preinstall'
+    echo 'docker_compose:docker-compose.yml instruction1 preinstall homeln/ install'
+  }
+  ydf::package_service::__instruction_docker_compose() {
+    assert_equal "$*" '0freedom-fail'
+    echo docker_compose
   }
   ydf::package_service::__instruction_instruction1() {
     assert_equal "$*" '0freedom-fail'
     echo instruction1
   }
-
   ydf::package_service::__instruction_preinstall() {
     assert_equal "$*" '0freedom-fail'
     echo preinstall
   }
-
+  ydf::package_service::__instruction_homeln() {
+    assert_equal "$*" '0freedom-fail'
+    echo homeln
+  }
+  ydf::package_service::__instruction_install() {
+    assert_equal "$*" '0freedom-fail'
+    echo install
+  }
   run ydf::package_service::install_one_from_dir "$_package_dir"
 
   assert_success
-  assert_output "preinstall"
+  assert_output "docker_compose
+preinstall"
 }
 
 @test "ydf::package_service::install_one_from_dir() Should succeed if all instructions are success" {
@@ -339,6 +350,7 @@ docker_compose"
 Plugin '10ydfplugin' already added to /home/vedv/.yzsh-gen.env"
 }
 
+# Tests for ydf::package_service::__instruction_homeln()
 @test "ydf::package_service::__instruction_homeln() Should add plugin" {
   cd "${TEST_FIXTURES_DIR}/packages/11homeln"
 
@@ -352,4 +364,6 @@ Plugin '10ydfplugin' already added to /home/vedv/.yzsh-gen.env"
   assert [ -d '/home/vedv/.my' ]
   assert [ -L '/home/vedv/.my-config.env' ]
   assert [ -f '/home/vedv/.my-config.env' ]
+
+  rm /home/vedv/.my /home/vedv/.my-config.env
 }

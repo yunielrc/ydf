@@ -30,7 +30,8 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall pacman yay install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # shellcheck disable=SC2016
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln postinstall'
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln/ postinstall'
+
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall @pacman @yay ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
@@ -287,10 +288,17 @@ ydf::package_service::install_one_from_dir() {
     for _instr in "${instr_arr[@]}"; do
 
       local ifunc_partial_name="${_instr%%:*}"
+      ifunc_partial_name="${ifunc_partial_name%/}"
       eval local ifile_name="${_instr##*:}"
+
       local ifunction="ydf::package_service::__instruction_${ifunc_partial_name}"
+
       # shellcheck disable=SC2154
-      if [[ ! -f "./${ifile_name}" ]]; then
+      if [[ "$ifile_name" == */ ]]; then
+        if [[ ! -d "./${ifile_name}" ]]; then
+          continue
+        fi
+      elif [[ ! -f "./${ifile_name}" ]]; then
         continue
       fi
 
