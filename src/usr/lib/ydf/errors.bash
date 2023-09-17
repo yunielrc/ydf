@@ -12,5 +12,4 @@ readonly ERR_FILE_CREATION=70
 readonly ERR_FAILED=71
 
 ## package-service
-readonly ERR_YPS_GENERAL=80
 readonly ERR_YPS_INSTRUCTION_FAIL=81

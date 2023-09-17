@@ -30,7 +30,7 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall pacman yay install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # shellcheck disable=SC2016
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln/ homelnr/ homecp/ rootcp/ homecat/ rootcat/ postinstall'
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln/ homelnr/ homecp/ rootcp/ homecat/ rootcat/ homecps/ postinstall'
 
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall @pacman @yay ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
@@ -45,6 +45,7 @@ readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall @pacman @yay ${_
 # default_os            string  default os
 # yzsh_data_dir         string  yzsh data dir
 # yzsh_gen_config_file  string  yzsh gen config file
+# envsubst_file         string  envsubst file
 #
 # Returns:
 #   0 on success, non-zero on error.
@@ -53,6 +54,7 @@ ydf::package_service::constructor() {
   readonly __YDF_PACKAGE_SERVICE_DEFAULT_OS="$1"
   readonly __YDF_YZSH_DATA_DIR="$2"
   readonly __YDF_YZSH_GEN_CONFIG_FILE="$3"
+  readonly __YDF_PACKAGE_SERVICE_ENVSUBST_FILE="$4"
 }
 
 #
@@ -330,6 +332,65 @@ ydf::package_service::__instruction_rootcat() {
     }
 
   done < <(find rootcat/ -type f)
+}
+
+#
+# Execute <root|home>cps instruction
+#
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__recursive_copy_with_envsubst() {
+  local -r package_name="$1"
+  local -r instruction="$2"
+  # validate arguments
+  if [[ -z "$package_name" ]]; then
+    err "Package name must not be empty"
+    return "$ERR_INVAL_ARG"
+  fi
+  if [[ "$instruction" != @(homecps|rootcps) ]]; then
+    err "Instruction must be 'homecps' or 'rootcps'"
+    return "$ERR_INVAL_ARG"
+  fi
+
+  local dest_dir=~
+
+  if [[ "$instruction" == rootcps ]]; then
+    dest_dir=''
+  fi
+  readonly dest_dir
+
+  while read -r src_file; do
+    local dest_file="${dest_dir}/${src_file#*/}"
+
+    ydf::utils::copy_with_envar_sub \
+      "$src_file" "$dest_file" "$__YDF_PACKAGE_SERVICE_ENVSUBST_FILE" >/dev/null || {
+      err "Copying with envar substitution file '${src_file}' to '${dest_file}'"
+      return "$ERR_FAILED"
+    }
+
+  done < <(find "$instruction"/ -type f)
+}
+
+#
+# Execute homecps instruction
+#
+# Globals:
+#  HOME
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_homecps() {
+  ydf::package_service::__recursive_copy_with_envsubst \
+    "$1" homecps
 }
 
 #

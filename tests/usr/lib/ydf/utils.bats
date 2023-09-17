@@ -282,3 +282,149 @@ added line1 to file1
 
 added line2 to file1"
 }
+
+
+# Tests for ydf::utils::copy_with_envar_sub()
+@test "ydf::utils::copy_with_envar_sub() Should fail If src_file doesn't exist" {
+  local -r _src_file=""
+  local -r _dest_file=""
+  local -r env_file=""
+
+  run ydf::utils::copy_with_envar_sub \
+    "$_src_file" "$_dest_file" "$env_file"
+
+  assert_failure
+  assert_output "ERROR> File src '' doesn't exist"
+}
+
+@test "ydf::utils::copy_with_envar_sub() Should fail If src_file is not a text file" {
+  local -r _src_file="$(mktemp)"
+  local -r _dest_file=""
+  local -r env_file=""
+
+  run ydf::utils::copy_with_envar_sub \
+    "$_src_file" "$_dest_file" "$env_file"
+
+  assert_failure
+  assert_output --regexp "ERROR> File src '.*' is not a text file"
+}
+
+@test "ydf::utils::copy_with_envar_sub() Should fail If dest_file is empty" {
+  local -r _src_file="$(mktemp)"
+  local -r _dest_file=""
+  local -r env_file=""
+
+  echo "line 1" >"$_src_file"
+
+  run ydf::utils::copy_with_envar_sub \
+    "$_src_file" "$_dest_file" "$env_file"
+
+  assert_failure
+  assert_output "ERROR> Argument dest_file '' can't be empty"
+}
+
+@test "ydf::utils::copy_with_envar_sub() Should fail If env_file doesn't exist" {
+  local -r _src_file="$(mktemp)"
+  local -r _dest_file="/tmp/dest_file"
+  local -r env_file=""
+
+  echo "line 1" >"$_src_file"
+
+  run ydf::utils::copy_with_envar_sub \
+    "$_src_file" "$_dest_file" "$env_file"
+
+  assert_failure
+  assert_output "ERROR> File env '' doesn't exist"
+}
+
+@test "ydf::utils::copy_with_envar_sub() Should fail If mkdir fails" {
+  local -r _src_file="${TEST_FIXTURES_DIR}/packages/17homecps/homecps/.my-config.env"
+  local -r _dest_file="/.my/.my-config.env"
+  local -r env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+
+  sudo() {
+    case "$*" in
+      mkdir* )
+        return 1
+        ;;
+      * )
+        command sudo "$@"
+        ;;
+    esac
+  }
+
+  run ydf::utils::copy_with_envar_sub \
+    "$_src_file" "$_dest_file" "$env_file"
+
+  assert_failure
+  assert_output "ERROR> Failed to create directory '/.my'"
+}
+
+@test "ydf::utils::copy_with_envar_sub() Should succeed with root user" {
+  local -r _src_file="${TEST_FIXTURES_DIR}/packages/17homecps/homecps/.my-config.env"
+  local -r _dest_file="/.my/.my-config.env"
+  local -r env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+
+  run ydf::utils::copy_with_envar_sub \
+    "$_src_file" "$_dest_file" "$env_file"
+
+  assert_success
+  assert_output ""
+
+  run cat "$_dest_file"
+
+  assert_success
+  assert_output 'line 1
+
+my_config1: "my_config1"
+
+my_config2: my config2
+
+
+
+
+
+line 11'
+
+  run ls -la "$_dest_file"
+
+  assert_success
+  assert_output --partial "root root"
+}
+
+@test "ydf::utils::copy_with_envar_sub() Should succeed" {
+  local -r _src_file="${TEST_FIXTURES_DIR}/packages/17homecps/homecps/.my-config.env"
+  local -r _dest_file=~/.my-config.env
+  local -r env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+
+  sudo() {
+    assert_equal "$*" '-u vedv tee /home/vedv/.my-config.env'
+    command sudo "$@"
+  }
+
+  run ydf::utils::copy_with_envar_sub \
+    "$_src_file" "$_dest_file" "$env_file"
+
+  assert_success
+  assert_output ""
+
+  run cat "$_dest_file"
+
+  assert_success
+  assert_output 'line 1
+
+my_config1: "my_config1"
+
+my_config2: my config2
+
+
+
+
+
+line 11'
+
+  run ls -la "$_dest_file"
+
+  assert_success
+  assert_output --partial "vedv vedv"
+}

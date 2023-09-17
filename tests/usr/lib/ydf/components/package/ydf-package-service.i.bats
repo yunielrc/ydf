@@ -4,11 +4,13 @@ setup() {
   ydf::package_service::constructor \
     "$YDF_PACKAGE_SERVICE_DEFAULT_OS" \
     "$YDF_YZSH_DATA_DIR" \
-    "$YDF_YZSH_GEN_CONFIG_FILE"
+    "$YDF_YZSH_GEN_CONFIG_FILE" \
+    "${TEST_FIXTURES_DIR}/.envsubst.env"
 
   export __YDF_PACKAGE_SERVICE_DEFAULT_OS \
     __YDF_YZSH_DATA_DIR \
-    __YDF_YZSH_GEN_CONFIG_FILE
+    __YDF_YZSH_GEN_CONFIG_FILE \
+    __YDF_PACKAGE_SERVICE_ENVSUBST_FILE
 
 
   if [[ -f /home/vedv/.yzsh-gen.env ]]; then
@@ -619,4 +621,193 @@ added line2 to file11
 
   assert_success
   assert_output "file2"
+}
+
+# Tests for ydf::package_service::__recursive_copy_with_envsubst()
+@test "ydf::package_service::__recursive_copy_with_envsubst() Should fail Without package_name" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/17homecps"
+
+  local -r _package_name=''
+  local -r _instruction=''
+
+
+  run ydf::package_service::__recursive_copy_with_envsubst \
+    "$_package_name" "$_instruction"
+
+  assert_failure
+  assert_output "ERROR> Package name must not be empty"
+}
+
+@test "ydf::package_service::__recursive_copy_with_envsubst() Should fail With invalid instruction" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/17homecps"
+
+  local -r _package_name='17homecps'
+  local -r _instruction='invalid'
+
+  run ydf::package_service::__recursive_copy_with_envsubst \
+    "$_package_name" "$_instruction"
+
+  assert_failure
+  assert_output "ERROR> Instruction must be 'homecps' or 'rootcps'"
+
+}
+
+@test "ydf::package_service::__recursive_copy_with_envsubst() Should fail If copy_with_envar_sub fails" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/17homecps"
+
+  local -r _package_name='17homecps'
+  local -r _instruction='homecps'
+
+  ydf::utils::copy_with_envar_sub() {
+    assert_equal "$*" "homecps/.my/file1 /home/vedv/.my/file1 /home/vedv/ydf/tests/fixtures/.envsubst.env"
+    return 1
+  }
+
+  run ydf::package_service::__recursive_copy_with_envsubst \
+    "$_package_name" "$_instruction"
+
+  assert_failure
+  assert_output "ERROR> Copying with envar substitution file 'homecps/.my/file1' to '/home/vedv/.my/file1'"
+}
+
+@test "ydf::package_service::__recursive_copy_with_envsubst() Should succeed" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/17homecps"
+
+  local -r _package_name='17homecps'
+  local -r _instruction='homecps'
+
+  run ydf::package_service::__recursive_copy_with_envsubst \
+    "$_package_name" "$_instruction"
+
+  assert_success
+  assert_output ""
+
+  run cat /home/vedv/.my/file1
+
+  assert_success
+  assert_output "line 1
+
+line 3"
+
+  run cat /home/vedv/.my/dir1/file11
+
+  assert_success
+  assert_output 'line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11'
+
+  run cat /home/vedv/.my-config.env
+
+  assert_success
+  assert_output 'line 1
+
+my_config1: "my_config1"
+
+my_config2: my config2
+
+
+
+
+
+line 11'
+
+  run ls -la /home/vedv/.my
+
+  assert_success
+  assert_output --regexp ".* vedv vedv .* \.
+.* vedv vedv .* \.\.
+.* vedv vedv .* dir1
+.* vedv vedv  .* file1"
+
+  run ls -la /home/vedv/.my/file1 \
+    /home/vedv/.my/dir1/file11 /home/vedv/.my-config.env
+
+  assert_success
+  assert_output --regexp ".* vedv vedv .* /home/vedv/.my-config.env
+.* vedv vedv .* /home/vedv/.my/dir1/file11
+.* vedv vedv .* /home/vedv/.my/file1"
+}
+
+@test "ydf::package_service::__recursive_copy_with_envsubst() Should succeed With user root" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/18rootcps"
+
+  local -r _package_name='18rootcps'
+  local -r _instruction='rootcps'
+
+  run ydf::package_service::__recursive_copy_with_envsubst \
+    "$_package_name" "$_instruction"
+
+  assert_success
+  assert_output ""
+
+  run cat /.my/file1
+
+  assert_success
+  assert_output "line 1
+
+line 3"
+
+  run cat /.my/dir1/file11
+
+  assert_success
+  assert_output 'line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11'
+
+  run cat /.my-config.env
+
+  assert_success
+  assert_output 'line 1
+
+my_config1: "my_config1"
+
+my_config2: my config2
+
+
+
+
+
+line 11'
+
+  run ls -la /.my
+
+  assert_success
+  assert_output --regexp ".* root root .* \.
+.* root root .* \.\.
+.* root root .* dir1
+.* root root  .* file1"
+
+  run ls -la /.my/file1 \
+    /.my/dir1/file11 /.my-config.env
+
+  assert_success
+  assert_output --regexp ".* root root .* /.my-config.env
+.* root root .* /.my/dir1/file11
+.* root root .* /.my/file1"
+}
+
+# Tests for ydf::package_service::__instruction_homecps()
+@test "ydf::package_service::__instruction_homecps() DUMMY" {
+  :
 }

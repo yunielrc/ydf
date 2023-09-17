@@ -502,3 +502,67 @@ added line2 to file11
   assert_success
   assert_output "file2"
 }
+
+
+# Tests for ydf package install ./17homecps
+@test "ydf package install ./17homecps Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/17homecps"
+
+  run ydf package install "$_package_dir"
+
+    assert_success
+  assert_output ""
+
+  run cat /home/vedv/.my/file1
+
+  assert_success
+  assert_output "line 1
+
+line 3"
+
+  run cat /home/vedv/.my/dir1/file11
+
+  assert_success
+  assert_output 'line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11'
+
+  run cat /home/vedv/.my-config.env
+
+  assert_success
+  assert_output 'line 1
+
+my_config1: "my_config1"
+
+my_config2: my config2
+
+
+
+
+
+line 11'
+
+  run ls -la /home/vedv/.my
+
+  assert_success
+  assert_output --regexp ".* vedv vedv .* \.
+.* vedv vedv .* \.\.
+.* vedv vedv .* dir1
+.* vedv vedv  .* file1"
+
+  run ls -la /home/vedv/.my/file1 \
+    /home/vedv/.my/dir1/file11 /home/vedv/.my-config.env
+
+  assert_success
+  assert_output --regexp ".* vedv vedv .* /home/vedv/.my-config.env
+.* vedv vedv .* /home/vedv/.my/dir1/file11
+.* vedv vedv .* /home/vedv/.my/file1"
+}
