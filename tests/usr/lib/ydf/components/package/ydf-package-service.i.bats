@@ -554,3 +554,69 @@ added line2 to file11
   assert_success
   assert_output "file2"
 }
+
+# Tests for ydf::package_service::__instruction_rootcat()
+@test "ydf::package_service::__instruction_rootcat() Should skip if dest_file doesn't exist" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/16rootcat"
+
+  run ydf::package_service::__instruction_rootcat '16rootcat'
+
+  assert_success
+  assert_output "WARNING> Skipped rootcat, file '/.my/file1' doesn't exist
+WARNING> Skipped rootcat, file '/.my/dir1/file11' doesn't exist
+WARNING> Skipped rootcat, file '/.my-config.env' doesn't exist"
+}
+
+@test "ydf::package_service::__instruction_rootcat() Should fail if mark_concat fail" {
+
+  sudo cp -r "${TEST_FIXTURES_DIR}/dirs/.my" /
+
+  cd "${TEST_FIXTURES_DIR}/packages/16rootcat"
+
+  ydf::utils::mark_concat() {
+    assert_equal "$*" "rootcat/.my/file1 /.my/file1"
+    return 1
+  }
+
+  run ydf::package_service::__instruction_rootcat '16rootcat'
+
+  assert_failure
+  assert_output "ERROR> Marking concat for 'rootcat/.my/file1' to '/.my/file1'"
+}
+
+@test "ydf::package_service::__instruction_rootcat() Should succeed" {
+
+  sudo cp -r "${TEST_FIXTURES_DIR}/dirs/.my" /
+
+  cd "${TEST_FIXTURES_DIR}/packages/16rootcat"
+
+  run ydf::package_service::__instruction_rootcat '16rootcat'
+
+  assert_success
+  assert_output "WARNING> Skipped rootcat, file '/.my-config.env' doesn't exist"
+
+  run cat /.my/file1
+
+  assert_success
+  assert_output "file1
+added line1 to file1
+
+added line2 to file1"
+
+  run cat /.my/dir1/file11
+
+  assert_success
+  assert_output "file11
+# @CAT_SECTION_HOME_CAT
+
+added line1 to file11
+added line2 to file11
+
+# :@CAT_SECTION_HOME_CAT"
+
+  run cat /.my/file2
+
+  assert_success
+  assert_output "file2"
+}

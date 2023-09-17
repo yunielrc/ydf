@@ -467,3 +467,38 @@ added line2 to file11
   assert_success
   assert_output "file2"
 }
+
+# Tests for ydf package install ./16rootcat
+@test "ydf package install ./16rootcat Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/16rootcat"
+  sudo cp -r "${TEST_FIXTURES_DIR}/dirs/.my" /
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output "WARNING> Skipped rootcat, file '/.my-config.env' doesn't exist"
+
+  run cat /.my/file1
+
+  assert_success
+  assert_output "file1
+added line1 to file1
+
+added line2 to file1"
+
+  run cat /.my/dir1/file11
+
+  assert_success
+  assert_output "file11
+# @CAT_SECTION_HOME_CAT
+
+added line1 to file11
+added line2 to file11
+
+# :@CAT_SECTION_HOME_CAT"
+
+  run cat /.my/file2
+
+  assert_success
+  assert_output "file2"
+}
