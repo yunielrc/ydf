@@ -19,6 +19,22 @@ setup() {
     rm -rf /home/vedv/.yzsh/plugins/local
   fi
   mkdir /home/vedv/.yzsh/plugins/local
+
+  if [[ -d /.my ]]; then
+    sudo rm -r /.my
+  fi
+
+  if [[ -f /.my-config.env ]]; then
+    sudo rm /.my-config.env
+  fi
+
+  if [[ -d ~/.my ]]; then
+    rm -r ~/.my
+  fi
+
+  if [[ -f ~/.my-config.env ]]; then
+    rm ~/.my-config.env
+  fi
 }
 
 # teardown() {
@@ -471,4 +487,70 @@ Plugin '10ydfplugin' already added to /home/vedv/.yzsh-gen.env"
   assert [ -f '/.my-config.env' ]
 
   sudo rm -r /.my /.my-config.env
+}
+
+# Tests for ydf::package_service::__instruction_homecat()
+@test "ydf::package_service::__instruction_homecat() Should skip if dest_file doesn't exist" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/15homecat"
+
+  run ydf::package_service::__instruction_homecat '15homecat'
+
+  assert_success
+  assert_output "WARNING> Skipped homecat, file '/home/vedv/.my/file1' doesn't exist
+WARNING> Skipped homecat, file '/home/vedv/.my/dir1/file11' doesn't exist
+WARNING> Skipped homecat, file '/home/vedv/.my-config.env' doesn't exist"
+}
+
+@test "ydf::package_service::__instruction_homecat() Should fail if mark_concat fail" {
+
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+
+  cd "${TEST_FIXTURES_DIR}/packages/15homecat"
+
+  ydf::utils::mark_concat() {
+    assert_equal "$*" "homecat/.my/file1 /home/vedv/.my/file1"
+    return 1
+  }
+
+  run ydf::package_service::__instruction_homecat '15homecat'
+
+  assert_failure
+  assert_output "ERROR> Marking concat for 'homecat/.my/file1' to '/home/vedv/.my/file1'"
+}
+
+@test "ydf::package_service::__instruction_homecat() Should succeed" {
+
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+
+  cd "${TEST_FIXTURES_DIR}/packages/15homecat"
+
+  run ydf::package_service::__instruction_homecat '15homecat'
+
+  assert_success
+  assert_output "WARNING> Skipped homecat, file '/home/vedv/.my-config.env' doesn't exist"
+
+  run cat /home/vedv/.my/file1
+
+  assert_success
+  assert_output "file1
+added line1 to file1
+
+added line2 to file1"
+
+  run cat /home/vedv/.my/dir1/file11
+
+  assert_success
+  assert_output "file11
+# @CAT_SECTION_HOME_CAT
+
+added line1 to file11
+added line2 to file11
+
+# :@CAT_SECTION_HOME_CAT"
+
+  run cat /home/vedv/.my/file2
+
+  assert_success
+  assert_output "file2"
 }

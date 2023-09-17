@@ -10,6 +10,22 @@ setup() {
     rm -rf /home/vedv/.yzsh/plugins/local
   fi
   mkdir /home/vedv/.yzsh/plugins/local
+
+  if [[ -d /.my ]]; then
+    sudo rm -r /.my
+  fi
+
+  if [[ -f /.my-config.env ]]; then
+    sudo rm /.my-config.env
+  fi
+
+  if [[ -d ~/.my ]]; then
+    rm -r ~/.my
+  fi
+
+  if [[ -f ~/.my-config.env ]]; then
+    rm ~/.my-config.env
+  fi
 }
 
 # teardown() {
@@ -415,4 +431,39 @@ com.github.tchx84.Flatseal: postinstall succeed"
   assert [ -f '/.my-config.env' ]
 
   sudo rm -r /.my /.my-config.env
+}
+
+# Tests for ydf package install ./15homecat
+@test "ydf package install ./15homecat Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/15homecat"
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output "WARNING> Skipped homecat, file '/home/vedv/.my-config.env' doesn't exist"
+
+  run cat /home/vedv/.my/file1
+
+  assert_success
+  assert_output "file1
+added line1 to file1
+
+added line2 to file1"
+
+  run cat /home/vedv/.my/dir1/file11
+
+  assert_success
+  assert_output "file11
+# @CAT_SECTION_HOME_CAT
+
+added line1 to file11
+added line2 to file11
+
+# :@CAT_SECTION_HOME_CAT"
+
+  run cat /home/vedv/.my/file2
+
+  assert_success
+  assert_output "file2"
 }

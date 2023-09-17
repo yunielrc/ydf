@@ -1,8 +1,8 @@
 # see rsync option --exclude-from=FILE
-.env
-.ydf.env
+/.env
+/.ydf.env
 
-Vedvfile
-Makefile
-TODO
-test.bash
+/Vedvfile
+/Makefile
+/TODO
+/test.bash

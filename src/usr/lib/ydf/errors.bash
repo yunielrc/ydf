@@ -9,6 +9,7 @@ readonly ERR_MISSING_ARG=68
 readonly ERR_NO_DIR=69
 readonly ERR_CHANGING_WORKDIR=69
 readonly ERR_FILE_CREATION=70
+readonly ERR_FAILED=71
 
 ## package-service
 readonly ERR_YPS_GENERAL=80

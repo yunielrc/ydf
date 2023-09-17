@@ -30,7 +30,7 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall pacman yay install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # shellcheck disable=SC2016
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln/ homelnr/ homecp/ rootcp/ postinstall'
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln/ homelnr/ homecp/ rootcp/ homecat/ postinstall'
 
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall @pacman @yay ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
@@ -277,6 +277,34 @@ ydf::package_service::__instruction_rootcp() {
 }
 
 #
+# Execute homecat instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_homecat() {
+  local -r package_name="$1"
+
+  while read -r src_file; do
+    local dest_file="${HOME}/${src_file#*/}"
+
+    if [[ ! -f "$dest_file" ]]; then
+      warn "Skipped homecat, file '${dest_file}' doesn't exist"
+      continue
+    fi
+
+    ydf::utils::mark_concat "$src_file" "$dest_file" >/dev/null || {
+      err "Marking concat for '${src_file}' to '${dest_file}'"
+      return "$ERR_FAILED"
+    }
+
+  done < <(find homecat/ -type f)
+}
+
+#
 # Install a ydotfile package from a directory
 #
 # Arguments:
@@ -302,7 +330,7 @@ ydf::package_service::install_one_from_dir() {
   local instr
   instr="$(ydf::package_service::get_instructions_names "$os_name")" || {
     err "Getting instructions names for os: ${os_name}"
-    return "$ERR_YPS_GENERAL"
+    return "$ERR_FAILED"
   }
   readonly instr
 
