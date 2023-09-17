@@ -811,3 +811,8 @@ line 11'
 @test "ydf::package_service::__instruction_homecps() DUMMY" {
   :
 }
+
+# Tests for ydf::package_service::__instruction_rootcps()
+@test "ydf::package_service::__instruction_rootcps() DUMMY" {
+  :
+}

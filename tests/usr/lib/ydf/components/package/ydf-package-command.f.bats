@@ -566,3 +566,66 @@ line 11'
 .* vedv vedv .* /home/vedv/.my/dir1/file11
 .* vedv vedv .* /home/vedv/.my/file1"
 }
+
+# Tests for ydf package install ./18rootcps
+@test "ydf package install ./18rootcps Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/18rootcps"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output ""
+
+  run cat /.my/file1
+
+  assert_success
+  assert_output "line 1
+
+line 3"
+
+  run cat /.my/dir1/file11
+
+  assert_success
+  assert_output 'line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11'
+
+  run cat /.my-config.env
+
+  assert_success
+  assert_output 'line 1
+
+my_config1: "my_config1"
+
+my_config2: my config2
+
+
+
+
+
+line 11'
+
+  run ls -la /.my
+
+  assert_success
+  assert_output --regexp ".* root root .* \.
+.* root root .* \.\.
+.* root root .* dir1
+.* root root  .* file1"
+
+  run ls -la /.my/file1 \
+    /.my/dir1/file11 /.my-config.env
+
+  assert_success
+  assert_output --regexp ".* root root .* /.my-config.env
+.* root root .* /.my/dir1/file11
+.* root root .* /.my/file1"
+}
