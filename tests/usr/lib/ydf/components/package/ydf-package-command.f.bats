@@ -754,3 +754,29 @@ line 11
   assert_output --regexp ".* root root .* /.my/dir1/file11
 .* root root .* /.my/file1"
 }
+
+# Tests for ydf package install bat rustscan
+@test "ydf package install bat rustscan, Should install multiple packages" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages"
+
+  cd "$_package_dir"
+
+  run ydf package install bat rustscan
+
+  assert_success
+  assert_output --regexp "bat: install succeed
+bat: postinstall succeed
+.*
+rustscan: install succeed
+rustscan: postinstall succeed"
+
+  run command -v bat
+
+  assert_success
+  assert_output "/usr/bin/bat"
+
+  run command -v rustscan
+
+  assert_success
+  assert_output "/usr/bin/rustscan"
+}

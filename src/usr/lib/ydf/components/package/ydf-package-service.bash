@@ -587,6 +587,27 @@ ydf::package_service::install_one() {
 }
 
 #
+# Install a ydotfile package
+#
+# Arguments:
+#   os_name        string     operating system
+#   package_name   string     package name
+#
+# Output:
+#  writes installed package name to the stdout
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__install_one_batch() {
+  local -r os_name="$1"
+  local -r package_name="$2"
+
+  ydf::package_service::install_one \
+    "$package_name" "$os_name"
+}
+
+#
 # Install one or many ydotfile packages
 #
 # Arguments:
@@ -600,5 +621,15 @@ ydf::package_service::install_one() {
 #   0 on success, non-zero on error.
 #
 ydf::package_service::install() {
-  ydf::package_service::install_one "$@"
+  local -r packages_names="$1"
+  local -r os_name="${2:-}"
+  # validate arguments
+  if [[ -z "$packages_names" ]]; then
+    err "Packages names must not be empty"
+    return "$ERR_INVAL_ARG"
+  fi
+
+  ydf::utils::for_each \
+    "$packages_names" \
+    "ydf::package_service::__install_one_batch '${os_name}'"
 }

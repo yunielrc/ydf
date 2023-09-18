@@ -727,3 +727,72 @@ added line1 to file1
 
 added line2 to file1"
 }
+
+# Tests for ydf::utils::for_each()
+@test "ydf::utils::for_each() Should succed Without elements" {
+  local -r _elements=""
+  local -r _func=""
+
+  run ydf::utils::for_each "$_elements" "$_func"
+
+  assert_success
+  assert_output ""
+}
+
+@test "ydf::utils::for_each() Should fail Without function" {
+  local -r _elements="e1 e2"
+  local -r _func=""
+
+  run ydf::utils::for_each "$_elements" "$_func"
+
+  assert_failure
+  assert_output "ERROR> Argument function can't be empty"
+}
+
+@test "ydf::utils::for_each() Should fail If one execution fails" {
+  local -r _elements="e1 e2 e3"
+  local -r _func="func1"
+
+  func1() {
+    case "$*" in
+      e1 )
+        return 0
+      ;;
+      e2 )
+        return 1
+      ;;
+      e3 )
+        return 0
+      ;;
+      * )
+        return 0
+      ;;
+    esac
+  }
+
+  run ydf::utils::for_each "$_elements" "$_func"
+
+  assert_failure
+  assert_output "ERROR> Executing function for element 'e2'"
+}
+
+@test "ydf::utils::for_each() Should succeed" {
+  local -r _elements="e1 e2 e3"
+  local -r _func="func1"
+
+  func1() {
+    case "$*" in
+      e1 | e2 | e3 )
+        return 0
+      ;;
+      * )
+        return 1
+      ;;
+    esac
+  }
+
+  run ydf::utils::for_each "$_elements" "$_func"
+
+  assert_success
+  assert_output ""
+}

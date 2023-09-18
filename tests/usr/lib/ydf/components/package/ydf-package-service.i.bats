@@ -1019,3 +1019,40 @@ line 11
 @test "ydf::package_service::__instruction_rootcats() DUMMY" {
   :
 }
+
+# Tests for ydf::package_service::install_one()
+@test "ydf::package_service::install_one() DUMMY" {
+  :
+}
+
+# Tests for ydf::package_service::install_one_batch()
+@test "ydf::package_service::install_one_batch() DUMMY" {
+  :
+}
+
+# Tests for ydf::package_service::install()
+@test "ydf::package_service::install() Should fail without packages_names" {
+  local -r _packages_names=""
+  local -r _os_name=""
+
+  run ydf::package_service::install \
+    "$_packages_names" "$_os_name"
+
+  assert_failure
+  assert_output "ERROR> Packages names must not be empty"
+}
+
+@test "ydf::package_service::install() Should succeed" {
+  local -r _packages_names="p1 p2 p3"
+  local -r _os_name=""
+
+  ydf::utils::for_each() {
+    assert_equal "$*" "p1 p2 p3 ydf::package_service::__install_one_batch ''"
+  }
+
+  run ydf::package_service::install \
+    "$_packages_names" "$_os_name"
+
+  assert_success
+  assert_output ""
+}

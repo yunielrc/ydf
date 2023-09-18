@@ -194,3 +194,43 @@ ydf::utils::mark_concat_with_envar_sub() {
     sudo -u "$_user" tee --append "$dest_file" >/dev/null
 
 }
+
+#
+# Execute a function for each element
+#
+# Arguments:
+#   elements  string  elements
+#   func      string  function name
+#
+# Output:
+#   Writes function output to stdout
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::utils::for_each() {
+  local -r elements="$1"
+  local -r func="$2"
+  # validate arguments
+  if [[ -z "$elements" ]]; then
+    return 0
+  fi
+  if [[ -z "$func" ]]; then
+    err "Argument function can't be empty"
+    return "$ERR_INVAL_ARG"
+  fi
+
+  local -a elements_arr
+  # shellcheck disable=SC2206,SC2317
+  elements_arr=($elements)
+  readonly elements_arr
+
+  local el
+
+  for el in "${elements_arr[@]}"; do
+    eval "$func" "'${el}'" || {
+      err "Executing function for element '${el}'"
+      return "$ERR_FAILED"
+    }
+  done
+}
