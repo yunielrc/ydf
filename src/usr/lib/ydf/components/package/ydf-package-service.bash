@@ -30,7 +30,7 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall pacman yay install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # shellcheck disable=SC2016
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln/ homelnr/ homecp/ rootcp/ homecat/ rootcat/ homecps/ rootcps/ postinstall'
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln/ homelnr/ homecp/ rootcp/ homecat/ rootcat/ homecps/ rootcps/ dconf_ini:dconf.ini/ postinstall'
 
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall @pacman @yay ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
@@ -408,6 +408,19 @@ ydf::package_service::__instruction_homecps() {
 ydf::package_service::__instruction_rootcps() {
   ydf::package_service::__recursive_copy_with_envsubst \
     "$1" rootcps
+}
+
+#
+# Execute dconf_ini instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_dconf_ini() {
+  dconf load / <dconf.ini
 }
 
 #

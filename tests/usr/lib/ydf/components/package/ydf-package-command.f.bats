@@ -629,3 +629,18 @@ line 11'
 .* root root .* /.my/dir1/file11
 .* root root .* /.my/file1"
 }
+
+# Tests for ydf package install ./19dconf
+@test "ydf package install ./19dconf Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/19dconf"
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output ""
+
+  # run dconf dump /org/gnome/desktop/peripherals/mouse/
+
+  # assert_success
+  # assert_output  ""
+}

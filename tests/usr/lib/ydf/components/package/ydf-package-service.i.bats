@@ -816,3 +816,8 @@ line 11'
 @test "ydf::package_service::__instruction_rootcps() DUMMY" {
   :
 }
+
+# Tests for ydf::package_service::__instruction_dconf_ini()
+@test "ydf::package_service::__instruction_dconf_ini() DUMMY" {
+  :
+}
