@@ -1013,3 +1013,8 @@ line 11
 @test "ydf::package_service::__instruction_homecats() DUMMY" {
   :
 }
+
+# Tests for ydf::package_service::__instruction_rootcats()
+@test "ydf::package_service::__instruction_rootcats() DUMMY" {
+  :
+}

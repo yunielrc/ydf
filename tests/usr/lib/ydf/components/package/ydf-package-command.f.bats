@@ -645,7 +645,7 @@ line 11'
   # assert_output  ""
 }
 
-# Tests for ydf package install ./18rootcps
+# Tests for ydf package install ./20homecats
 @test "ydf package install ./20homecats Should succeed" {
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages/20homecats"
   cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
@@ -697,4 +697,58 @@ line 11
   assert_success
   assert_output --regexp ".* vedv vedv .* /home/vedv/.my/dir1/file11
 .* vedv vedv .* /home/vedv/.my/file1"
+}
+
+# Tests for ydf package install ./21rootcats
+@test "ydf package install ./21rootcats Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/21rootcats"
+  sudo cp -r "${TEST_FIXTURES_DIR}/dirs/.my" /
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output "WARNING> Skipped rootcats, file '/.my-config.env' doesn't exist"
+
+  run cat /.my/file1
+
+  assert_success
+  assert_output "file1
+added line1 to file1
+
+added line2 to file1"
+
+  run cat /.my/dir1/file11
+
+  assert_success
+  assert_output 'file11
+# @CAT_SECTION_HOME_CAT
+
+line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11
+
+# :@CAT_SECTION_HOME_CAT'
+
+  run ls -la /.my
+
+  assert_success
+  assert_output --regexp ".* root root .* \.
+.* root root .* \.\.
+.* root root .* dir1
+.* root root  .* file1"
+
+  run ls -la /.my/file1 \
+    /.my/dir1/file11
+
+  assert_success
+  assert_output --regexp ".* root root .* /.my/dir1/file11
+.* root root .* /.my/file1"
 }
