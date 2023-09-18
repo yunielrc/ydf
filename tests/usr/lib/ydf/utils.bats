@@ -428,3 +428,302 @@ line 11'
   assert_success
   assert_output --partial "vedv vedv"
 }
+
+# Tests for ydf::utils::mark_concat_with_envar_sub()
+@test "ydf::utils::mark_concat_with_envar_sub() Should fail If src_file doesn't exist" {
+  local -r _src_file=""
+  local -r _dest_file=""
+  local -r _env_file=""
+
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_failure
+  assert_output "ERROR> File src '' doesn't exist"
+}
+
+@test "ydf::utils::mark_concat_with_envar_sub() Should fail If src_file is not a text file" {
+  local -r _src_file="$(mktemp)"
+  local -r _dest_file=""
+  local -r _env_file=""
+
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_failure
+  assert_output --regexp "ERROR> File src '.*' is not a text file"
+}
+
+@test "ydf::utils::mark_concat_with_envar_sub() Should fail If dest_file doesn't exist" {
+  local -r _src_file="$(mktemp)"
+  local -r _dest_file=""
+  local -r _env_file=""
+  echo "line 1" >"$_src_file"
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_failure
+  assert_output "ERROR> File dest '' doesn't exist"
+}
+
+@test "ydf::utils::mark_concat_with_envar_sub() Should fail If env_file doesn't exist" {
+  local -r _src_file="$(mktemp)"
+  local -r _dest_file="$(mktemp)"
+  local -r _env_file=""
+  echo "line 1" >"$_src_file"
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_failure
+  assert_output "ERROR> File env '' doesn't exist"
+}
+
+@test "ydf::utils::mark_concat_with_envar_sub() Should succeed With user root and without mark" {
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" "$BATS_TEST_TMPDIR"
+
+  local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/file1"
+  local -r _dest_file="${BATS_TEST_TMPDIR}/.my/file1"
+  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+
+  chmod -w "$_dest_file"
+
+  sudo() {
+    # sed can not be called without mark
+    if [[ "$*" == *"sed -i /\s*$/,/:\s*$/d"* ]]; then
+      return 1
+    fi
+    command sudo "$@"
+  }
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_success
+  assert_output ""
+
+  run cat "$_dest_file"
+
+  assert_success
+  assert_output "file1
+added line1 to file1
+
+added line2 to file1"
+}
+
+@test "ydf::utils::mark_concat_with_envar_sub() Should fail if sed fails" {
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" "$BATS_TEST_TMPDIR"
+
+  local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/dir1/file11"
+  local -r _dest_file="${BATS_TEST_TMPDIR}/.my/dir1/file11"
+  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+
+
+  chmod -w "$_dest_file"
+
+  sudo() {
+    # sed must be called with mark
+    if [[ "$*" == *"sed -i /@CAT_SECTION_HOME_CAT\s*$/,/:@CAT_SECTION_HOME_CAT\s*$/d"* ]]; then
+      return 1
+    fi
+    command sudo "$@"
+  }
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_failure
+  assert_output "ERROR> Failed to remove previous added section"
+}
+
+@test "ydf::utils::mark_concat_with_envar_sub() Should succeed With user root and with mark" {
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" "$BATS_TEST_TMPDIR"
+
+  local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/dir1/file11"
+  local -r _dest_file="${BATS_TEST_TMPDIR}/.my/dir1/file11"
+  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+
+  chmod -w "$_dest_file"
+
+  sudo() {
+    # sed must be called with mark
+    if [[ "$*" != *"-u root"* ]]; then
+      return 1
+    fi
+    command sudo "$@"
+  }
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_success
+  assert_output ""
+
+  run cat "$_dest_file"
+
+  assert_success
+  assert_output 'file11
+# @CAT_SECTION_HOME_CAT
+
+line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11
+
+# :@CAT_SECTION_HOME_CAT'
+}
+
+@test "ydf::utils::mark_concat_with_envar_sub() Should succeed With mark" {
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" "$BATS_TEST_TMPDIR"
+
+  local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/dir1/file11"
+  local -r _dest_file="${BATS_TEST_TMPDIR}/.my/dir1/file11"
+  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+
+  sudo() {
+    # sed must be called with mark
+    if [[ "$*" != *"-u vedv"* ]]; then
+      return 1
+    fi
+    command sudo "$@"
+  }
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_success
+  assert_output ""
+
+  run cat "$_dest_file"
+
+  assert_success
+  assert_output 'file11
+# @CAT_SECTION_HOME_CAT
+
+line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11
+
+# :@CAT_SECTION_HOME_CAT'
+}
+
+@test "ydf::utils::mark_concat_with_envar_sub() Should not duplicate file content When mark is present" {
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" "$BATS_TEST_TMPDIR"
+
+  local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/dir1/file11"
+  local -r _dest_file="${BATS_TEST_TMPDIR}/.my/dir1/file11"
+  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+
+  sudo() {
+    # sed must be called with mark
+    if [[ "$*" != *"-u vedv"* ]]; then
+      return 1
+    fi
+    command sudo "$@"
+  }
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_success
+  assert_output ""
+
+  run cat "$_dest_file"
+
+  assert_success
+  assert_output 'file11
+# @CAT_SECTION_HOME_CAT
+
+line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11
+
+# :@CAT_SECTION_HOME_CAT'
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_success
+  assert_output ""
+
+  run cat "$_dest_file"
+
+  assert_success
+  assert_output 'file11
+# @CAT_SECTION_HOME_CAT
+
+line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11
+
+# :@CAT_SECTION_HOME_CAT'
+}
+
+@test "ydf::utils::mark_concat_with_envar_sub() Should duplicate file content When no mark" {
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" "$BATS_TEST_TMPDIR"
+
+  local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/file1"
+  local -r _dest_file="${BATS_TEST_TMPDIR}/.my/file1"
+  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+
+  sudo() {
+    # sed must be called with mark
+    if [[ "$*" != *"-u vedv"* ]]; then
+      return 1
+    fi
+    command sudo "$@"
+  }
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_success
+  assert_output ""
+
+  run cat "$_dest_file"
+
+  assert_success
+  assert_output "file1
+added line1 to file1
+
+added line2 to file1"
+
+  run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
+
+  assert_success
+  assert_output ""
+
+  run cat "$_dest_file"
+
+  assert_success
+  assert_output "file1
+added line1 to file1
+
+added line2 to file1
+added line1 to file1
+
+added line2 to file1"
+}

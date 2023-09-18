@@ -30,7 +30,7 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall pacman yay install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # shellcheck disable=SC2016
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln/ homelnr/ homecp/ rootcp/ homecat/ rootcat/ homecps/ rootcps/ dconf_ini:dconf.ini/ postinstall'
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln/ homelnr/ homecp/ rootcp/ homecat/ rootcat/ homecps/ rootcps/ homecats/ dconf_ini:dconf.ini/ postinstall'
 
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall @pacman @yay ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
@@ -337,9 +337,9 @@ ydf::package_service::__instruction_rootcat() {
 #
 # Execute <root|home>cps instruction
 #
-#
 # Arguments:
-#   pkg_name  string    package name
+#   pkg_name     string    package name
+#   instruction  string    instruction name
 #
 # Returns:
 #   0 on success, non-zero on error.
@@ -408,6 +408,70 @@ ydf::package_service::__instruction_homecps() {
 ydf::package_service::__instruction_rootcps() {
   ydf::package_service::__recursive_copy_with_envsubst \
     "$1" rootcps
+}
+
+#
+# Execute <root|home>cps instruction
+#
+# Arguments:
+#   pkg_name     string    package name
+#   instruction  string    instruction name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__recursive_mark_concat_with_envsubst() {
+  local -r package_name="$1"
+  local -r instruction="$2"
+  # validate arguments
+  if [[ -z "$package_name" ]]; then
+    err "Package name must not be empty"
+    return "$ERR_INVAL_ARG"
+  fi
+  if [[ "$instruction" != @(homecats|rootcats) ]]; then
+    err "Instruction must be: homecats or rootcats"
+    return "$ERR_INVAL_ARG"
+  fi
+
+  local dest_dir=~
+
+  if [[ "$instruction" == rootcats ]]; then
+    dest_dir=''
+  fi
+  readonly dest_dir
+
+  while read -r src_file; do
+    local dest_file="${dest_dir}/${src_file#*/}"
+
+    if [[ ! -f "$dest_file" ]]; then
+      warn "Skipped ${instruction}, file '${dest_file}' doesn't exist"
+      continue
+    fi
+
+    ydf::utils::mark_concat_with_envar_sub \
+      "$src_file" "$dest_file" "$__YDF_PACKAGE_SERVICE_ENVSUBST_FILE" >/dev/null || {
+      err "Concat with envar substitution file '${src_file}' to '${dest_file}'"
+      return "$ERR_FAILED"
+    }
+
+  done < <(find "$instruction"/ -type f)
+}
+
+#
+# Execute homecats instruction
+#
+# Globals:
+#  HOME
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_homecats() {
+  ydf::package_service::__recursive_mark_concat_with_envsubst \
+    "$1" homecats
 }
 
 #

@@ -644,3 +644,57 @@ line 11'
   # assert_success
   # assert_output  ""
 }
+
+# Tests for ydf package install ./18rootcps
+@test "ydf package install ./20homecats Should succeed" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/20homecats"
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+
+  run ydf package install "$_package_dir"
+
+  assert_success
+  assert_output "WARNING> Skipped homecats, file '/home/vedv/.my-config.env' doesn't exist"
+
+  run cat /home/vedv/.my/file1
+
+  assert_success
+  assert_output "file1
+added line1 to file1
+
+added line2 to file1"
+
+  run cat /home/vedv/.my/dir1/file11
+
+  assert_success
+  assert_output 'file11
+# @CAT_SECTION_HOME_CAT
+
+line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11
+
+# :@CAT_SECTION_HOME_CAT'
+
+  run ls -la /home/vedv/.my
+
+  assert_success
+  assert_output --regexp ".* vedv vedv .* \.
+.* vedv vedv .* \.\.
+.* vedv vedv .* dir1
+.* vedv vedv  .* file1"
+
+  run ls -la /home/vedv/.my/file1 \
+    /home/vedv/.my/dir1/file11
+
+  assert_success
+  assert_output --regexp ".* vedv vedv .* /home/vedv/.my/dir1/file11
+.* vedv vedv .* /home/vedv/.my/file1"
+}

@@ -821,3 +821,195 @@ line 11'
 @test "ydf::package_service::__instruction_dconf_ini() DUMMY" {
   :
 }
+
+# Tests for ydf::package_service::__recursive_mark_concat_with_envsubst()
+@test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should fail Without package_name" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/20homecats"
+
+  local -r _package_name=''
+  local -r _instruction=''
+
+  run ydf::package_service::__recursive_mark_concat_with_envsubst \
+    "$_package_name" "$_instruction"
+
+  assert_failure
+  assert_output "ERROR> Package name must not be empty"
+}
+
+@test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should fail With invalid instruction" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/20homecats"
+
+  local -r _package_name='20homecats'
+  local -r _instruction='invalid'
+
+  run ydf::package_service::__recursive_mark_concat_with_envsubst \
+    "$_package_name" "$_instruction"
+
+  assert_failure
+  assert_output "ERROR> Instruction must be: homecats or rootcats"
+
+}
+
+@test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should skip if dest_file doesn't exist" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/20homecats"
+
+  local -r _package_name='20homecats'
+  local -r _instruction='homecats'
+
+  ydf::utils::mark_concat_with_envar_sub() {
+    assert_equal "$*" "homecats/.my/file1 /home/vedv/.my/file1 /home/vedv/ydf/tests/fixtures/.envsubst.env"
+    return 1
+  }
+
+  run ydf::package_service::__recursive_mark_concat_with_envsubst \
+    "$_package_name" "$_instruction"
+
+  assert_success
+  assert_output "WARNING> Skipped homecats, file '/home/vedv/.my/file1' doesn't exist
+WARNING> Skipped homecats, file '/home/vedv/.my/dir1/file11' doesn't exist
+WARNING> Skipped homecats, file '/home/vedv/.my-config.env' doesn't exist"
+}
+
+@test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should fail If mark_concat_with_envar_sub fails" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/20homecats"
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+
+  local -r _package_name='20homecats'
+  local -r _instruction='homecats'
+
+  ydf::utils::mark_concat_with_envar_sub() {
+    assert_equal "$*" "homecats/.my/file1 /home/vedv/.my/file1 /home/vedv/ydf/tests/fixtures/.envsubst.env"
+    return 1
+  }
+
+  run ydf::package_service::__recursive_mark_concat_with_envsubst \
+    "$_package_name" "$_instruction"
+
+  assert_failure
+  assert_output "ERROR> Concat with envar substitution file 'homecats/.my/file1' to '/home/vedv/.my/file1'"
+}
+
+@test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should succeed" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/20homecats"
+  cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+
+  local -r _package_name='20homecats'
+  local -r _instruction='homecats'
+
+  run ydf::package_service::__recursive_mark_concat_with_envsubst \
+    "$_package_name" "$_instruction"
+
+  assert_success
+  assert_output "WARNING> Skipped homecats, file '/home/vedv/.my-config.env' doesn't exist"
+
+  run cat /home/vedv/.my/file1
+
+  assert_success
+  assert_output "file1
+added line1 to file1
+
+added line2 to file1"
+
+  run cat /home/vedv/.my/dir1/file11
+
+  assert_success
+  assert_output 'file11
+# @CAT_SECTION_HOME_CAT
+
+line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11
+
+# :@CAT_SECTION_HOME_CAT'
+
+  run ls -la /home/vedv/.my
+
+  assert_success
+  assert_output --regexp ".* vedv vedv .* \.
+.* vedv vedv .* \.\.
+.* vedv vedv .* dir1
+.* vedv vedv  .* file1"
+
+  run ls -la /home/vedv/.my/file1 \
+    /home/vedv/.my/dir1/file11
+
+  assert_success
+  assert_output --regexp ".* vedv vedv .* /home/vedv/.my/dir1/file11
+.* vedv vedv .* /home/vedv/.my/file1"
+}
+
+@test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should succeed With user root" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/21rootcats"
+  sudo cp -r "${TEST_FIXTURES_DIR}/dirs/.my" /
+
+  local -r _package_name='21rootcats'
+  local -r _instruction='rootcats'
+
+  run ydf::package_service::__recursive_mark_concat_with_envsubst \
+    "$_package_name" "$_instruction"
+
+  assert_success
+  assert_output "WARNING> Skipped rootcats, file '/.my-config.env' doesn't exist"
+
+  run cat /.my/file1
+
+  assert_success
+  assert_output "file1
+added line1 to file1
+
+added line2 to file1"
+
+  run cat /.my/dir1/file11
+
+  assert_success
+  assert_output 'file11
+# @CAT_SECTION_HOME_CAT
+
+line 1
+
+file11_1: "file11_1"
+
+file11_2: file11 2
+
+
+
+
+
+line 11
+
+# :@CAT_SECTION_HOME_CAT'
+
+  run ls -la /.my
+
+  assert_success
+  assert_output --regexp ".* root root .* \.
+.* root root .* \.\.
+.* root root .* dir1
+.* root root  .* file1"
+
+  run ls -la /.my/file1 \
+    /.my/dir1/file11
+
+  assert_success
+  assert_output --regexp ".* root root .* /.my/dir1/file11
+.* root root .* /.my/file1"
+}
+
+# Tests for ydf::package_service::__instruction_homecats()
+@test "ydf::package_service::__instruction_homecats() DUMMY" {
+  :
+}

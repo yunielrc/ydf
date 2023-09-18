@@ -1,0 +1,15 @@
+# @CAT_SECTION_HOME_CAT
+
+line 1
+
+file11_1: "${FILE11_1}"
+
+file11_2: $FILE11_2
+
+$HOME
+
+$USER
+
+line 11
+
+# :@CAT_SECTION_HOME_CAT
