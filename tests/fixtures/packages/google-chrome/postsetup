@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-sudo pacman -Syu --noconfirm --needed gnome-browser-connector

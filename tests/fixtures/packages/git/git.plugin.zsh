@@ -1,2 +1,0 @@
-# Aliases
-alias g='git'
