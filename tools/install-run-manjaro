@@ -34,7 +34,9 @@ sudo usermod -aG docker "$USER"
 
 # Install YZSH
 ## DATA
-git clone "$YDF_YZSH_DATA_REPOSITORY_URL" "$YDF_YZSH_DATA_DIR"
+if [[ -n "${YDF_YZSH_DATA_REPOSITORY_URL:-}" ]]; then
+  git clone "$YDF_YZSH_DATA_REPOSITORY_URL" "$YDF_YZSH_DATA_DIR"
+fi
 ##
 cd "$(mktemp -d)"
 git clone https://github.com/yunielrc/yzsh.git && cd yzsh

@@ -48,8 +48,15 @@ Copy the config to your home directory
 cp ~/.root/etc/skel/.ydf.env ~/
 ```
 
-Edit the config file and set the variable `YDF_PACKAGE_SERVICE_DEFAULT_OS` to
-the name of your OS, currently only `manjaro` is supported.
+Edit the config file:
+
+- If your OS is manjaro set the variable `YDF_PACKAGE_SERVICE_DEFAULT_OS` to manjaro. If you have other OS  don't set this variable.
+
+- If you are using yzsh framework:
+
+  - If you have a yzsh data repository but is not downloaded, set the variable `YDF_YZSH_DATA_REPOSITORY_URL`.
+
+  - Or If you have your yzsh data repository already downloaded set the variable `YDF_YZSH_DATA_DIR`.
 
 ```sh
 vim ~/.ydf.env
@@ -57,4 +64,4 @@ vim ~/.ydf.env
 
 ## Usage
 
-.....
+....
