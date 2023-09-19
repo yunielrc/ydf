@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# List manjaro prod dependencies
+#
+
+set -eu
+
+# shellcheck source=../packages.env
+. ./packages.env
+
+echo "# SYSTEM: $(uname -a)"
+
+echo '# YAY'
+pacman --color never -Q bash "${PKG_RUN_MANJARO_YAY[@]}"

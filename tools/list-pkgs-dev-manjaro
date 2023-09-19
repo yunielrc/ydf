@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#
+# List manjaro dev dependencies
+#
+
+set -eu
+
+# shellcheck source=../packages.env
+. ./packages.env
+
+echo "# SYSTEM: $(uname -a)"
+
+echo '# YAY'
+pacman --color never -Q "${PKG_DEV_MANJARO_YAY[@]}"
+
+echo '# NPM'
+npm list -g |
+  grep -Po '\s\K.*' |
+  grep -E "$(tr ' ' '|' <<<"${PKG_DEV_MANJARO_NPM[*]}")"

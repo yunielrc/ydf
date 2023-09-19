@@ -1,0 +1,10 @@
+##
+## All tests must succeed before updating these files in order to answer
+## the question
+##
+## What are the packages with which the application worked well?
+##
+
+# SYSTEM: Linux yuniel-pc 6.1.51-1-MANJARO #1 SMP PREEMPT_DYNAMIC Sat Sep  2 23:22:36 UTC 2023 x86_64 GNU/Linux
+# YAY
+bash 5.1.016-3

@@ -52,7 +52,9 @@ test-functional:
 	tools/ct-clean-exec make -f Makefile.vedv test-functional
 
 test-all:
-	tools/ct-clean-exec make -f Makefile.vedv test-all
+	# # MANDATORY ENVARS: OS
+	tools/ct-clean-exec make -f Makefile.vedv test-all && \
+	./tools/update-pkgs-versions
 
 test-suite:
 	tools/ct-clean-exec make -f Makefile.vedv test-suite u='$(u)'
