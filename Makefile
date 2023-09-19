@@ -1,8 +1,40 @@
 # grep -Po '^\S+(?=:)' Makefile | tr '\n' ' '
-.PHONY: install-run-manjaro install-dev-manjaro commit img-rebuild img-build ct-create ct-start ct-status ct-stop ct-remove ct-login ct-copy-files test-unit test-integration test-functional test-all test-suite test-name
+.PHONY: install install-tohome install-run-manjaro install-dev-manjaro test-unit test-integration test-functional test-all test-suite test-name commit img-rebuild img-build ct-create ct-start ct-status ct-stop ct-remove ct-login ct-copy-files
 
-# install:
-# 	DESTDIR="$${DESTDIR:-}" ./install
+define _script
+if [ -f ~/.zshrc ] && ! grep -q '.root/usr/bin' ~/.zshrc; then
+	cat <<'EOF' >>~/.zshrc
+
+export PATH="${HOME}/.root/usr/bin:${PATH}"
+
+EOF
+
+	echo
+	echo 'Added ~/.root/usr/bin to PATH in ~/.zshrc'
+fi
+
+if [ -f ~/.bashrc ] && ! grep -q '.root/usr/bin' ~/.bashrc; then
+	cat <<'EOF' >>~/.bashrc
+
+export PATH="${HOME}/.root/usr/bin:${PATH}"
+EOF
+
+	echo
+	echo 'Added ~/.root/usr/bin to PATH in ~/.bashrc'
+fi
+endef
+
+export script = $(value _script)
+
+install:
+	# ENV VARS: DESTDIR
+	./install
+
+install-tohome:
+	# ENVARS: DESTDIR
+	DESTDIR=~/.root ./install
+	@eval "$$script"
+
 
 install-run-manjaro:
 	./tools/install-run-manjaro
