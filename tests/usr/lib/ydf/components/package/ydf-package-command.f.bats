@@ -133,6 +133,10 @@ ydf package COMMAND'
 
 # Tests for ydf package install ../5dust@pacman
 @test "ydf package install ../5dust@pacman, Should succeed" {
+  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" != manjaro ]]; then
+    skip "Only for manjaro"
+  fi
+
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages/5dust@pacman"
 
   run ydf package install "$_package_dir"
@@ -150,6 +154,9 @@ ydf package COMMAND'
 }
 
 @test "ydf package install ../bat, Should succeed Without package name in @pacman" {
+  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" != manjaro ]]; then
+    skip "Only for manjaro"
+  fi
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages/bat"
 
   run ydf package install "$_package_dir"
@@ -168,6 +175,9 @@ bat: postinstall succeed"
 
 # Tests for ydf package install ../6nnn@yay
 @test "ydf package install ../6nnn@yay, Should succeed" {
+  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" != manjaro ]]; then
+    skip "Only for manjaro"
+  fi
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages/6nnn@yay"
 
   run ydf package install "$_package_dir"
@@ -185,6 +195,9 @@ bat: postinstall succeed"
 }
 
 @test "ydf package install ../rustscan, Should succeed Without package name in @yay" {
+  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" != manjaro ]]; then
+    skip "Only for manjaro"
+  fi
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages/rustscan"
 
   run ydf package install "$_package_dir"

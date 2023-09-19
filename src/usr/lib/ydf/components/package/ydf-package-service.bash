@@ -31,7 +31,9 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # shellcheck disable=SC2016
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln/ homelnr/ homecp/ rootcp/ homecat/ rootcat/ homecps/ rootcps/ homecats/ rootcats/ dconf_ini:dconf.ini/ postinstall'
-
+# ANY OS
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_ANY="preinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+# MANJARO
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall @pacman @yay ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
