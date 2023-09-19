@@ -42,9 +42,12 @@ ydf::package_command::constructor() {
 ydf::package_command::__install_help() {
   cat <<-HELPMSG
 Usage:
-${__YDF_SCRIPT_NAME} package install [OPTIONS] PACKAGE [PACKAGE...]
+${__YDF_SCRIPT_NAME} package install [OPTIONS] <PACKAGES_FILE | PACKAGE [PACKAGE...]>
 
-Install packages
+Install packages from a packages file or packages names.
+A packages file is a text file with one package name per line.
+A package name is a directory with instructions to install
+and configure the package.
 
 Flags:
   -h, --help    Show this help
@@ -99,7 +102,13 @@ ydf::package_command::__install() {
       ;;
     # arguments
     *)
-      readonly packages="$*"
+      packages="$*"
+
+      if [[ -f "$packages" && "$(file --brief --mime-type "$packages")" == text/* ]]; then
+        # remove comments and empty lines, then replace newlines with spaces
+        packages="$(sed -e '/^\s*#/d' -e '/^\s*$/d' "$packages" | tr '\n' ' ')"
+      fi
+      readonly packages
       break
       ;;
     esac

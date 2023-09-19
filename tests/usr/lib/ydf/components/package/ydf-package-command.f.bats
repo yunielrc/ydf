@@ -51,7 +51,7 @@ ydf package COMMAND'
     run ydf package install $p
 
     assert_success
-    assert_output --partial 'ydf package install [OPTIONS] PACKAGE [PACKAGE...]'
+    assert_output --partial 'ydf package install [OPTIONS] <PACKAGES_FILE | PACKAGE [PACKAGE...]>'
   done
 }
 
@@ -756,27 +756,29 @@ line 11
 }
 
 # Tests for ydf package install bat rustscan
-@test "ydf package install bat rustscan, Should install multiple packages" {
+@test "ydf package install 1freedom 2preinstall, Should install multiple packages" {
   local -r _package_dir="${TEST_FIXTURES_DIR}/packages"
 
   cd "$_package_dir"
 
-  run ydf package install bat rustscan
+  run ydf package install 1freedom 2preinstall
 
   assert_success
-  assert_output --regexp "bat: install succeed
-bat: postinstall succeed
-.*
-rustscan: install succeed
-rustscan: postinstall succeed"
+  assert_output "preinstall succeed
+postinstall
+preinstall: preinstall succeed"
+}
 
-  run command -v bat
+# Tests for ydf package install bat rustscan
+@test "ydf package install ./selection, Should install multiple packages" {
+  local -r _package_dir="${TEST_FIXTURES_DIR}/packages"
+
+  cd "$_package_dir"
+
+  run ydf package install ./selection
 
   assert_success
-  assert_output "/usr/bin/bat"
-
-  run command -v rustscan
-
-  assert_success
-  assert_output "/usr/bin/rustscan"
+  assert_output "preinstall succeed
+postinstall
+preinstall: preinstall succeed"
 }
