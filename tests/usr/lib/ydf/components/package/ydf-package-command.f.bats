@@ -1,6 +1,7 @@
 load test_helper
 
 setup() {
+  export E_YDF_UTILS_NO_MSG=true
 
   if [[ -f /home/vedv/.yzsh-gen.env ]]; then
     rm -f /home/vedv/.yzsh-gen.env

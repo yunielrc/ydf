@@ -224,7 +224,7 @@ ydf::package_service::__instruction_plugin_zsh() {
     ! grep -q "YZSH_PLUGINS+=($package_name)" "$__YDF_YZSH_GEN_CONFIG_FILE"; then
     echo "YZSH_PLUGINS+=($package_name)" >>"$__YDF_YZSH_GEN_CONFIG_FILE"
   else
-    ech "Plugin '${package_name}' already added to ${__YDF_YZSH_GEN_CONFIG_FILE}"
+    msg "Plugin '${package_name}' already added to ${__YDF_YZSH_GEN_CONFIG_FILE}"
   fi
 }
 
@@ -540,8 +540,11 @@ ydf::package_service::install_one_from_dir() {
 
   local -r pkg_name="${package_dir##*/}"
 
+  msg ">> INSTALLING: ${pkg_name}"
+
   (
     cd "$package_dir" 2>/dev/null || {
+      msg ">> FAILED. NOT INSTALLED: ${pkg_name}"
       err "Changing the current directory to ${package_dir}"
       return "$ERR_CHANGING_WORKDIR"
     }
@@ -564,10 +567,13 @@ ydf::package_service::install_one_from_dir() {
       fi
 
       "$ifunction" "$pkg_name" || {
+        msg ">> FAILED. NOT INSTALLED: ${pkg_name}"
         err "Executing instruction '${_instr}' on '${package_dir}'"
         return "$ERR_YPS_INSTRUCTION_FAIL"
       }
     done
+
+    msg ">> DONE. INSTALLED: ${pkg_name}"
   )
 }
 
@@ -631,7 +637,20 @@ ydf::package_service::install() {
     return "$ERR_INVAL_ARG"
   fi
 
+  local -a _elements_arr
+  # shellcheck disable=SC2206,SC2317
+  _elements_arr=($packages_names)
+  readonly _elements_arr
+
+  msg "> INSTALLING ${#_elements_arr[*]} packages"
+
   ydf::utils::for_each \
     "$packages_names" \
-    "ydf::package_service::__install_one_batch '${os_name}'"
+    "ydf::package_service::__install_one_batch '${os_name}'" || {
+    msg "> FAILED. INSTALLING packages"
+    err "Installing packages"
+    return "$ERR_FAILED"
+  }
+
+  msg "> DONE. INSTALLED ${#_elements_arr[*]} packages"
 }

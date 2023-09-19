@@ -2,6 +2,18 @@ if false; then
   source ./errors.bash
 fi
 
+__YDF_UTILS_NO_MSG=false
+
+#
+# Constructor
+#
+# Arguments:
+#   no_msg  bool  don't print msg messages
+#
+ydf::utils::constructor() {
+  readonly __YDF_UTILS_NO_MSG="${1:-false}"
+}
+
 err() {
   echo -e "ERROR> $*" >&2
 }
@@ -10,7 +22,10 @@ warn() {
   echo -e "WARNING> $*" >&2
 }
 
-ech() {
+msg() {
+  if [[ "$__YDF_UTILS_NO_MSG" == true ]]; then
+    return 0
+  fi
   echo -e "$*"
 }
 

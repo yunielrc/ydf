@@ -1,6 +1,7 @@
 load test_helper
 
 setup() {
+
   ydf::package_service::constructor \
     "$YDF_PACKAGE_SERVICE_DEFAULT_OS" \
     "$YDF_YZSH_DATA_DIR" \
@@ -131,7 +132,9 @@ setup() {
 }
 
 @test "ydf::package_service::install_one_from_dir() Should fail if changing dir fails" {
-  local -r _package_dir="$BATS_TEST_TMPDIR"
+  mkdir "${BATS_TEST_TMPDIR}/pkg1"
+
+  local -r _package_dir="${BATS_TEST_TMPDIR}/pkg1"
   chmod 000 "$_package_dir"
 
   ydf::package_service::get_instructions_names() {
@@ -143,7 +146,9 @@ setup() {
   run ydf::package_service::install_one_from_dir "$_package_dir"
 
   assert_failure
-  assert_output --partial "ERROR> Changing the current directory to "
+  assert_output --partial ">> INSTALLING: pkg1
+>> FAILED. NOT INSTALLED: pkg1
+ERROR> Changing the current directory to "
 }
 
 @test "ydf::package_service::install_one_from_dir() Should fail if at least one instruction fails" {
@@ -160,14 +165,16 @@ setup() {
   }
 
   ydf::package_service::__instruction_preinstall() {
-    assert_equal "$*" ''
+    assert_equal "$*" '0freedom-fail'
     return 1
   }
 
   run ydf::package_service::install_one_from_dir "$_package_dir"
 
   assert_failure
-  assert_output --regexp "ERROR> Executing instruction 'preinstall' on '.*/0freedom-fail'"
+  assert_output ">> INSTALLING: 0freedom-fail
+>> FAILED. NOT INSTALLED: 0freedom-fail
+ERROR> Executing instruction 'preinstall' on '/home/vedv/ydf/tests/fixtures/packages/0freedom-fail'"
 }
 
 @test "ydf::package_service::install_one_from_dir() Should execute only instructions with files" {
@@ -201,8 +208,10 @@ setup() {
   run ydf::package_service::install_one_from_dir "$_package_dir"
 
   assert_success
-  assert_output "docker_compose
-preinstall"
+  assert_output ">> INSTALLING: 0freedom-fail
+docker_compose
+preinstall
+>> DONE. INSTALLED: 0freedom-fail"
 }
 
 @test "ydf::package_service::install_one_from_dir() Should succeed if all instructions are success" {
@@ -230,9 +239,11 @@ preinstall"
   run ydf::package_service::install_one_from_dir "$_package_dir"
 
   assert_success
-  assert_output "preinstall
+  assert_output ">> INSTALLING: 0freedom-fail
+preinstall
 postinstall
-docker_compose"
+docker_compose
+>> DONE. INSTALLED: 0freedom-fail"
 }
 
 # Tests for ydf::package_service::__instruction_install()
@@ -1054,5 +1065,24 @@ line 11
     "$_packages_names" "$_os_name"
 
   assert_success
-  assert_output ""
+  assert_output "> INSTALLING 3 packages
+> DONE. INSTALLED 3 packages"
+}
+
+@test "ydf::package_service::install() Should fail If at least one package fails" {
+  local -r _packages_names="p1 p2 p3"
+  local -r _os_name=""
+
+  ydf::utils::for_each() {
+    assert_equal "$*" "p1 p2 p3 ydf::package_service::__install_one_batch ''"
+    return 1
+  }
+
+  run ydf::package_service::install \
+    "$_packages_names" "$_os_name"
+
+  assert_failure
+  assert_output "> INSTALLING 3 packages
+> FAILED. INSTALLING packages
+ERROR> Installing packages"
 }
