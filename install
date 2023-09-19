@@ -35,7 +35,7 @@ cat <<MSG
 # Add "${DESTDIR}/usr/bin to your PATH if needed
 
 # Copy the config to your home directory
-cp /etc/skel/.ydf.env ~/
+cp ${DESTDIR}/etc/skel/.ydf.env ~/
 
 # Edit it
 vim ~/.ydf.env
