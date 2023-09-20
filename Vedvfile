@@ -3,7 +3,8 @@ FROM admin@manjaro/manjaro-gnome-22.1.3-x86_64
 WORKDIR /home/vedv/ydf
 
 # update the system
-RUN sudo pacman-mirrors --fasttrack && sudo pacman -Syu --noconfirm --needed
+RUN sudo pacman-mirrors --country United_States && \
+  sudo pacman -Syyu --noconfirm --needed
 
 # install gnome base system
 RUN sudo -H flatpak install --assumeyes --noninteractive io.github.andreibachim.shortcut
