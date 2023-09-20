@@ -54,10 +54,10 @@ vim ~/.ydf.env
 
 ### What is a YDF Package (YP)?
 
-A YP is a directory that contains directories and files which some of then has
-a special meaning for the YP interpreter (ydf in this case).
+A `YP` is a directory that contains directories and files which some of then has
+a special meaning for the `YP` interpreter (ydf in this case).
 
-### What are the directories and files with special meaning?
+### Which are the directories and files with special meaning?
 
 These is an example of a package with 18 directories and files with special meaning,
 those are instructions that work on any linux distribution:
@@ -90,7 +90,7 @@ The instructions can be grouped in 4 categories:
   These instructions are shell scripts that are executed by bash.
 
 - Package manager instructions: `@flatpak`, `@snap`.
-  These instrucions are plain text files, the file can have inside in one line
+  These instrucions are plain text files, the file can have inside one line with
   the package name or a list of packages names that are going to be installed.
   The file can be empty, in this case the package name (`package1`) is going to be used.
 
@@ -98,8 +98,8 @@ The instructions can be grouped in 4 categories:
   `rootcat`, `homecps`, `rootcps`, `homecats`, `rootcats`.
   These instructions are directories that contains files that are going to be
   copied, concatenated or symlinked to the home or root directory. For those
-  that end with `s` all the variables inside are substituted with the values
-  defined in the `envsubst.env` file that is inside the YDF Package Directory.
+  that end with `s` all the variables inside each file are substituted with the
+  values defined in the `envsubst.env` file that is inside the YDF Package Directory.
 
 - Tool files instructions: `docker-compose.yml`, `dconf.ini`, `package1.plugin.zsh`.
   These instructions are files that are going to be used by a tool. For example
@@ -107,7 +107,7 @@ The instructions can be grouped in 4 categories:
   The `package1.plugin.zsh` is a plugin that is going to be installed inside the
   YZSH data directory and used by YZSH.
 
-There are 2 more instructions that only work manjaro linux:
+There are 2 more instructions that only work for manjaro linux:
 
 ```sh
 package2
@@ -115,11 +115,14 @@ package2
 └── @yay
 ```
 
-You can check out some examples of YP at: `tests/fixtures/packages`
+You can check out some examples of `YP` at: `tests/fixtures/packages`
 
 ## What is a YDF Package Directory (YPD)
 
-A YPD is a directory that contains a list of `YP` and and an `envsubst.env` file
+A `YPD` is a directory that contains a list of `YP` and an `envsubst.env` file
+that is used to substitute variables in the files inside of Directory
+instructions that end with `s`. This directory is where the `interpreter` is going to
+look for YDF packages to execute.
 
 ## Usage
 
@@ -128,3 +131,5 @@ Reload your shell to load the new PATH.
 ```sh
 exec $SHELL
 ```
+
+....
