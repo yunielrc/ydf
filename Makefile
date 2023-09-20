@@ -2,6 +2,13 @@
 .PHONY: install install-tohome install-run-manjaro install-dev-manjaro test-unit test-integration test-functional test-all test-suite test-name commit img-rebuild img-build ct-create ct-start ct-status ct-stop ct-remove ct-login ct-copy-files
 
 define _script
+#
+# Configure ydf on home
+#
+
+
+# Add ~/.root/usr/bin to PATH in ~/.zshrc and ~/.bashrc
+
 if [ -f ~/.zshrc ] && ! grep -q '.root/usr/bin' ~/.zshrc; then
 	cat <<'EOF' >>~/.zshrc
 
@@ -22,6 +29,20 @@ EOF
 	echo
 	echo 'Added ~/.root/usr/bin to PATH in ~/.bashrc'
 fi
+
+# Copy configuration file from skel
+if [ ! -f ~/.ydf.env ]; then
+  cp -v ~/.root/etc/skel/.ydf.env ~/
+
+	echo
+	echo 'Copied configuration file ~/.ydf.env from skel'
+fi
+
+echo
+echo "It's recomended to create a git repository of ~/.ydf-packages"
+
+echo
+echo 'DONE'
 endef
 
 export script = $(value _script)

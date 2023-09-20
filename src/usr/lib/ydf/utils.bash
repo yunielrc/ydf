@@ -249,3 +249,19 @@ ydf::utils::for_each() {
     }
   done
 }
+
+#
+# Print all words from a text file in one line
+#
+# Arguments:
+#   file  string  text file
+#
+# Output:
+#   Writes words to stdout
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::utils::text_file_to_words() {
+  sed -e '/^\s*#/d' -e '/^\s*$/d' "$1" | tr '\n' ' '
+}

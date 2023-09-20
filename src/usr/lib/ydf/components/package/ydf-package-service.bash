@@ -44,10 +44,12 @@ readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall @pacman @yay ${_
 #
 # Constructor
 #
-# default_os            string  default os
-# yzsh_data_dir         string  yzsh data dir
-# yzsh_gen_config_file  string  yzsh gen config file
-# envsubst_file         string  envsubst file
+# Arguments:
+#   default_os            string  default os
+#   yzsh_data_dir         string  yzsh data dir
+#   yzsh_gen_config_file  string  yzsh gen config file
+#   envsubst_file         string  envsubst file
+#   packages_dir          string  packages dir
 #
 # Returns:
 #   0 on success, non-zero on error.
@@ -57,6 +59,20 @@ ydf::package_service::constructor() {
   readonly __YDF_YZSH_DATA_DIR="$2"
   readonly __YDF_YZSH_GEN_CONFIG_FILE="$3"
   readonly __YDF_PACKAGE_SERVICE_ENVSUBST_FILE="$4"
+  readonly __YDF_PACKAGE_SERVICE_PACKAGES_DIR="$5"
+}
+
+#
+# Get packages dir
+#
+# Output:
+#  writes packages dir (string) to the stdout
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::get_packages_dir() {
+  echo "$__YDF_PACKAGE_SERVICE_PACKAGES_DIR"
 }
 
 #
@@ -502,8 +518,9 @@ ydf::package_service::__instruction_dconf_ini() {
 # Install a ydotfile package from a directory
 #
 # Arguments:
-#   package_dir   string    package directory
-#   [os_name]     string    os name
+#   pkg_name         string    package name
+#   [os_name]        string    os name
+#   [packages_dir]   string     packages dir
 #
 # Output:
 #  writes installed package name to the stdout
@@ -512,12 +529,15 @@ ydf::package_service::__instruction_dconf_ini() {
 #   0 on success, non-zero on error.
 #
 ydf::package_service::install_one_from_dir() {
-  local -r package_dir="$1"
+  local -r pkg_name="$1"
   local -r os_name="${2:-}"
+  local -r packages_dir="${3:-"$(ydf::package_service::get_packages_dir)"}"
+
+  local -r package_dir="${packages_dir}/${pkg_name}"
 
   # validate arguments
   if [[ ! -d "$package_dir" ]]; then
-    err "Directory '${package_dir}' doesn't exist"
+    err "Package '${pkg_name}' doesn't exist in '${packages_dir}'"
     return "$ERR_NO_DIR"
   fi
 
@@ -538,14 +558,12 @@ ydf::package_service::install_one_from_dir() {
   instr_arr=($instr)
   readonly instr_arr
 
-  local -r pkg_name="${package_dir##*/}"
-
   msg ">> INSTALLING: ${pkg_name}"
 
   (
     cd "$package_dir" 2>/dev/null || {
       msg ">> FAILED. NOT INSTALLED: ${pkg_name}"
-      err "Changing the current directory to ${package_dir}"
+      err "Changing current directory to ${package_dir}"
       return "$ERR_CHANGING_WORKDIR"
     }
 
@@ -583,6 +601,7 @@ ydf::package_service::install_one_from_dir() {
 # Arguments:
 #   package_name   string     package name
 #   [os_name]      string     operating system
+#   [packages_dir] string     packages dir
 #
 # Output:
 #  writes installed package name to the stdout
@@ -600,6 +619,7 @@ ydf::package_service::install_one() {
 # Arguments:
 #   os_name        string     operating system
 #   package_name   string     package name
+#   packages_dir   string     packages dir
 #
 # Output:
 #  writes installed package name to the stdout
@@ -609,10 +629,11 @@ ydf::package_service::install_one() {
 #
 ydf::package_service::__install_one_batch() {
   local -r os_name="$1"
-  local -r package_name="$2"
+  local -r packages_dir="$2"
+  local -r package_name="$3"
 
   ydf::package_service::install_one \
-    "$package_name" "$os_name"
+    "$package_name" "$os_name" "$packages_dir"
 }
 
 #
@@ -621,6 +642,7 @@ ydf::package_service::__install_one_batch() {
 # Arguments:
 #   packages_names   string[]   packages names
 #   [os_name]        string     operating system
+#   [packages_dir]   string     packages dir
 #
 # Output:
 #  writes installed packages names to the stdout
@@ -631,6 +653,7 @@ ydf::package_service::__install_one_batch() {
 ydf::package_service::install() {
   local -r packages_names="$1"
   local -r os_name="${2:-}"
+  local -r packages_dir="${3:-}"
   # validate arguments
   if [[ -z "$packages_names" ]]; then
     err "Packages names must not be empty"
@@ -646,7 +669,7 @@ ydf::package_service::install() {
 
   ydf::utils::for_each \
     "$packages_names" \
-    "ydf::package_service::__install_one_batch '${os_name}'" || {
+    "ydf::package_service::__install_one_batch '${os_name}' '${packages_dir}'" || {
     msg "> FAILED. INSTALLING packages"
     err "Installing packages"
     return "$ERR_FAILED"

@@ -63,5 +63,3 @@ vim ~/.ydf.env
 ```
 
 ## Usage
-
-....

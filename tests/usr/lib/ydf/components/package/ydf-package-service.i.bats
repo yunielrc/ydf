@@ -6,12 +6,14 @@ setup() {
     "$YDF_PACKAGE_SERVICE_DEFAULT_OS" \
     "$YDF_YZSH_DATA_DIR" \
     "$YDF_YZSH_GEN_CONFIG_FILE" \
-    "${TEST_FIXTURES_DIR}/.envsubst.env"
+    "${TEST_FIXTURES_DIR}/packages/envsubst.env" \
+    "${TEST_FIXTURES_DIR}/packages"
 
   export __YDF_PACKAGE_SERVICE_DEFAULT_OS \
     __YDF_YZSH_DATA_DIR \
     __YDF_YZSH_GEN_CONFIG_FILE \
-    __YDF_PACKAGE_SERVICE_ENVSUBST_FILE
+    __YDF_PACKAGE_SERVICE_ENVSUBST_FILE \
+    __YDF_PACKAGE_SERVICE_PACKAGES_DIR
 
 
   if [[ -f /home/vedv/.yzsh-gen.env ]]; then
@@ -94,17 +96,17 @@ setup() {
 }
 
 # Tests for ydf::package_service::install_one_from_dir()
-@test "ydf::package_service::install_one_from_dir() Should fail if package_dir directory doesn't exist" {
-  local -r _package_dir='asdjflk3408rgsjl'
+@test "ydf::package_service::install_one_from_dir() Should fail if package doesn't exist" {
+  local -r _package_name='asdjflk3408rgsjl'
 
-  run ydf::package_service::install_one_from_dir "$_package_dir"
+  run ydf::package_service::install_one_from_dir "$_package_name"
 
   assert_failure
-  assert_output "ERROR> Directory 'asdjflk3408rgsjl' doesn't exist"
+  assert_output "ERROR> Package 'asdjflk3408rgsjl' doesn't exist in '/home/vedv/ydf/tests/fixtures/packages'"
 }
 
 @test "ydf::package_service::install_one_from_dir() Should fail if get_instructions_names fails" {
-  local -r _package_dir="$BATS_TEST_TMPDIR"
+  local -r _package_name="0freedom-fail"
 
   ydf::package_service::get_instructions_names() {
     assert_equal "$*" ''
@@ -112,30 +114,36 @@ setup() {
     return 1
   }
 
-  run ydf::package_service::install_one_from_dir "$_package_dir"
+  run ydf::package_service::install_one_from_dir "$_package_name"
 
   assert_failure
   assert_output "ERROR> Getting instructions names for os: "
 }
 
 @test "ydf::package_service::install_one_from_dir() Should fail if there is no instructions" {
-  local -r _package_dir="$BATS_TEST_TMPDIR"
+  local -r _package_name="0freedom-fail"
 
   ydf::package_service::get_instructions_names() {
     assert_equal "$*" ''
   }
 
-  run ydf::package_service::install_one_from_dir "$_package_dir"
+  run ydf::package_service::install_one_from_dir "$_package_name"
 
   assert_failure
   assert_output "ERROR> There is no instructions"
 }
 
 @test "ydf::package_service::install_one_from_dir() Should fail if changing dir fails" {
-  mkdir "${BATS_TEST_TMPDIR}/pkg1"
 
-  local -r _package_dir="${BATS_TEST_TMPDIR}/pkg1"
-  chmod 000 "$_package_dir"
+  local -r _package_name="pkg1"
+
+  mkdir "${BATS_TEST_TMPDIR}/pkg1"
+  chmod 000 "${BATS_TEST_TMPDIR}/pkg1"
+
+
+  ydf::package_service::get_packages_dir() {
+    echo "$BATS_TEST_TMPDIR"
+  }
 
   ydf::package_service::get_instructions_names() {
     assert_equal "$*" ''
@@ -143,16 +151,16 @@ setup() {
     echo preinstall
   }
 
-  run ydf::package_service::install_one_from_dir "$_package_dir"
+  run ydf::package_service::install_one_from_dir "$_package_name"
 
   assert_failure
   assert_output --partial ">> INSTALLING: pkg1
 >> FAILED. NOT INSTALLED: pkg1
-ERROR> Changing the current directory to "
+ERROR> Changing current directory to "
 }
 
 @test "ydf::package_service::install_one_from_dir() Should fail if at least one instruction fails" {
-  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/0freedom-fail"
+  local -r _package_name="0freedom-fail"
 
   ydf::package_service::get_instructions_names() {
     assert_equal "$*" ''
@@ -169,7 +177,7 @@ ERROR> Changing the current directory to "
     return 1
   }
 
-  run ydf::package_service::install_one_from_dir "$_package_dir"
+  run ydf::package_service::install_one_from_dir "$_package_name"
 
   assert_failure
   assert_output ">> INSTALLING: 0freedom-fail
@@ -178,7 +186,7 @@ ERROR> Executing instruction 'preinstall' on '/home/vedv/ydf/tests/fixtures/pack
 }
 
 @test "ydf::package_service::install_one_from_dir() Should execute only instructions with files" {
-  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/0freedom-fail"
+  local -r _package_name="0freedom-fail"
 
   ydf::package_service::get_instructions_names() {
     assert_equal "$*" ''
@@ -205,7 +213,7 @@ ERROR> Executing instruction 'preinstall' on '/home/vedv/ydf/tests/fixtures/pack
     assert_equal "$*" '0freedom-fail'
     echo install
   }
-  run ydf::package_service::install_one_from_dir "$_package_dir"
+  run ydf::package_service::install_one_from_dir "$_package_name"
 
   assert_success
   assert_output ">> INSTALLING: 0freedom-fail
@@ -215,7 +223,7 @@ preinstall
 }
 
 @test "ydf::package_service::install_one_from_dir() Should succeed if all instructions are success" {
-  local -r _package_dir="${TEST_FIXTURES_DIR}/packages/0freedom-fail"
+  local -r _package_name="0freedom-fail"
 
   ydf::package_service::get_instructions_names() {
     assert_equal "$*" ''
@@ -236,7 +244,7 @@ preinstall
     echo docker_compose
   }
 
-  run ydf::package_service::install_one_from_dir "$_package_dir"
+  run ydf::package_service::install_one_from_dir "$_package_name"
 
   assert_success
   assert_output ">> INSTALLING: 0freedom-fail
@@ -244,6 +252,35 @@ preinstall
 postinstall
 docker_compose
 >> DONE. INSTALLED: 0freedom-fail"
+}
+
+@test "ydf::package_service::install_one_from_dir() Should succeed With a defined packages dir" {
+  local -r _package_name="1liberty"
+  local -r _os_name='manjaro'
+  local -r _packages_dir="${TEST_FIXTURES_DIR}/packages2"
+
+  ydf::package_service::get_instructions_names() {
+    assert_equal "$*" 'manjaro'
+
+    echo 'preinstall postinstall docker_compose:docker-compose.yml'
+  }
+  ydf::package_service::__instruction_instruction1() {
+    assert_equal "$*" 'INVALID_CALL'
+    return 1
+  }
+  ydf::package_service::__instruction_docker_compose() {
+    assert_equal "$*" 'INVALID_CALL'
+    return 1
+  }
+
+  run ydf::package_service::install_one_from_dir \
+    "$_package_name" "$_os_name" "$_packages_dir"
+
+  assert_success
+  assert_output ">> INSTALLING: 1liberty
+1liberty: preinstall succeed
+1liberty: postinstall
+>> DONE. INSTALLED: 1liberty"
 }
 
 # Tests for ydf::package_service::__instruction_install()
@@ -674,7 +711,7 @@ added line2 to file11
   local -r _instruction='homecps'
 
   ydf::utils::copy_with_envar_sub() {
-    assert_equal "$*" "homecps/.my/file1 /home/vedv/.my/file1 /home/vedv/ydf/tests/fixtures/.envsubst.env"
+    assert_equal "$*" "homecps/.my/file1 /home/vedv/.my/file1 /home/vedv/ydf/tests/fixtures/packages/envsubst.env"
     return 1
   }
 
@@ -872,7 +909,7 @@ line 11'
   local -r _instruction='homecats'
 
   ydf::utils::mark_concat_with_envar_sub() {
-    assert_equal "$*" "homecats/.my/file1 /home/vedv/.my/file1 /home/vedv/ydf/tests/fixtures/.envsubst.env"
+    assert_equal "$*" "homecats/.my/file1 /home/vedv/.my/file1 /home/vedv/ydf/tests/fixtures/packages/envsubst.env"
     return 1
   }
 
@@ -894,7 +931,7 @@ WARNING> Skipped homecats, file '/home/vedv/.my-config.env' doesn't exist"
   local -r _instruction='homecats'
 
   ydf::utils::mark_concat_with_envar_sub() {
-    assert_equal "$*" "homecats/.my/file1 /home/vedv/.my/file1 /home/vedv/ydf/tests/fixtures/.envsubst.env"
+    assert_equal "$*" "homecats/.my/file1 /home/vedv/.my/file1 /home/vedv/ydf/tests/fixtures/packages/envsubst.env"
     return 1
   }
 
@@ -1036,8 +1073,8 @@ line 11
   :
 }
 
-# Tests for ydf::package_service::install_one_batch()
-@test "ydf::package_service::install_one_batch() DUMMY" {
+# Tests for ydf::package_service::__install_one_batch()
+@test "ydf::package_service::__install_one_batch() DUMMY" {
   :
 }
 
@@ -1045,9 +1082,10 @@ line 11
 @test "ydf::package_service::install() Should fail without packages_names" {
   local -r _packages_names=""
   local -r _os_name=""
+  local -r _packages_dir=""
 
   run ydf::package_service::install \
-    "$_packages_names" "$_os_name"
+    "$_packages_names" "$_os_name" "$_packages_dir"
 
   assert_failure
   assert_output "ERROR> Packages names must not be empty"
@@ -1056,13 +1094,14 @@ line 11
 @test "ydf::package_service::install() Should succeed" {
   local -r _packages_names="p1 p2 p3"
   local -r _os_name=""
+  local -r _packages_dir=""
 
   ydf::utils::for_each() {
-    assert_equal "$*" "p1 p2 p3 ydf::package_service::__install_one_batch ''"
+    assert_equal "$*" "p1 p2 p3 ydf::package_service::__install_one_batch '' ''"
   }
 
   run ydf::package_service::install \
-    "$_packages_names" "$_os_name"
+    "$_packages_names" "$_os_name" "$_packages_dir"
 
   assert_success
   assert_output "> INSTALLING 3 packages
@@ -1071,15 +1110,16 @@ line 11
 
 @test "ydf::package_service::install() Should fail If at least one package fails" {
   local -r _packages_names="p1 p2 p3"
-  local -r _os_name=""
+  local -r _os_name="manjaro"
+  local -r _packages_dir="../packages2"
 
   ydf::utils::for_each() {
-    assert_equal "$*" "p1 p2 p3 ydf::package_service::__install_one_batch ''"
+    assert_equal "$*" "p1 p2 p3 ydf::package_service::__install_one_batch 'manjaro' '../packages2'"
     return 1
   }
 
   run ydf::package_service::install \
-    "$_packages_names" "$_os_name"
+    "$_packages_names" "$_os_name" "$_packages_dir"
 
   assert_failure
   assert_output "> INSTALLING 3 packages

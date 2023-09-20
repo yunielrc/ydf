@@ -340,7 +340,7 @@ added line2 to file1"
 @test "ydf::utils::copy_with_envar_sub() Should fail If mkdir fails" {
   local -r _src_file="${TEST_FIXTURES_DIR}/packages/17homecps/homecps/.my-config.env"
   local -r _dest_file="/.my/.my-config.env"
-  local -r env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+  local -r env_file="${TEST_FIXTURES_DIR}/packages/envsubst.env"
 
   sudo() {
     case "$*" in
@@ -363,7 +363,7 @@ added line2 to file1"
 @test "ydf::utils::copy_with_envar_sub() Should succeed with root user" {
   local -r _src_file="${TEST_FIXTURES_DIR}/packages/17homecps/homecps/.my-config.env"
   local -r _dest_file="/.my/.my-config.env"
-  local -r env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+  local -r env_file="${TEST_FIXTURES_DIR}/packages/envsubst.env"
 
   run ydf::utils::copy_with_envar_sub \
     "$_src_file" "$_dest_file" "$env_file"
@@ -395,7 +395,7 @@ line 11'
 @test "ydf::utils::copy_with_envar_sub() Should succeed" {
   local -r _src_file="${TEST_FIXTURES_DIR}/packages/17homecps/homecps/.my-config.env"
   local -r _dest_file=~/.my-config.env
-  local -r env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+  local -r env_file="${TEST_FIXTURES_DIR}/packages/envsubst.env"
 
   sudo() {
     assert_equal "$*" '-u vedv tee /home/vedv/.my-config.env'
@@ -483,7 +483,7 @@ line 11'
 
   local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/file1"
   local -r _dest_file="${BATS_TEST_TMPDIR}/.my/file1"
-  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+  local -r _env_file="${TEST_FIXTURES_DIR}/packages/envsubst.env"
 
   chmod -w "$_dest_file"
 
@@ -514,7 +514,7 @@ added line2 to file1"
 
   local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/dir1/file11"
   local -r _dest_file="${BATS_TEST_TMPDIR}/.my/dir1/file11"
-  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+  local -r _env_file="${TEST_FIXTURES_DIR}/packages/envsubst.env"
 
 
   chmod -w "$_dest_file"
@@ -538,7 +538,7 @@ added line2 to file1"
 
   local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/dir1/file11"
   local -r _dest_file="${BATS_TEST_TMPDIR}/.my/dir1/file11"
-  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+  local -r _env_file="${TEST_FIXTURES_DIR}/packages/envsubst.env"
 
   chmod -w "$_dest_file"
 
@@ -581,7 +581,7 @@ line 11
 
   local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/dir1/file11"
   local -r _dest_file="${BATS_TEST_TMPDIR}/.my/dir1/file11"
-  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+  local -r _env_file="${TEST_FIXTURES_DIR}/packages/envsubst.env"
 
   sudo() {
     # sed must be called with mark
@@ -622,7 +622,7 @@ line 11
 
   local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/dir1/file11"
   local -r _dest_file="${BATS_TEST_TMPDIR}/.my/dir1/file11"
-  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+  local -r _env_file="${TEST_FIXTURES_DIR}/packages/envsubst.env"
 
   sudo() {
     # sed must be called with mark
@@ -688,7 +688,7 @@ line 11
 
   local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/file1"
   local -r _dest_file="${BATS_TEST_TMPDIR}/.my/file1"
-  local -r _env_file="${TEST_FIXTURES_DIR}/.envsubst.env"
+  local -r _env_file="${TEST_FIXTURES_DIR}/packages/envsubst.env"
 
   sudo() {
     # sed must be called with mark
@@ -795,4 +795,14 @@ added line2 to file1"
 
   assert_success
   assert_output ""
+}
+
+# Tests for ydf::utils::text_file_to_words()
+@test "ydf::utils::text_file_to_words() Should fail If file doesn't exist" {
+  local -r _file="${TEST_FIXTURES_DIR}/packages/selection2"
+
+  run ydf::utils::text_file_to_words "$_file"
+
+  assert_success
+  assert_output "1freedom 2preinstall "
 }
