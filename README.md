@@ -4,7 +4,7 @@
 
 ## About
 
-A dotfiles manager+
+The disruptive dotfiles manager+
 
 ## Tested OS
 
@@ -38,7 +38,8 @@ Install runtime dependencies and ydf on home directory
 make install-run-manjaro && make install-tohome
 ```
 
-For any other linux distribution install runtime dependencies manually and execute the following command
+For any other linux distribution check out the script `tools/install-run-manjaro`
+and install the runtime dependencies manually then execute the following command:
 
 ```sh
 make install-tohome
@@ -48,7 +49,8 @@ make install-tohome
 
 Edit the config file:
 
-- If your OS is manjaro set the variable `YDF_PACKAGE_SERVICE_DEFAULT_OS` to manjaro. If you have any other distro OS don't set this variable.
+- If your distro is manjaro set the variable `YDF_PACKAGE_SERVICE_DEFAULT_OS` to
+  manjaro. If you have any other distro don't set this variable.
 
 ```sh
 vim ~/.ydf.env
@@ -80,14 +82,14 @@ package1
 |                        # directory
 ├── homecp/              # Copy all files to home directory
 ├── rootcp/              # Copy all files to root directory
-├── homecat/             # Concatenate all files to the existing one in home
-├── rootcat/             # Concatenate all files to the existing one in root
+├── homecat/             # Concatenate all files with those existing in home
+├── rootcat/             # Concatenate all files with those existing in root
 ├── homecps/             # Evaluate variables in files and copy them to home
-├── rootcps/             # Evaluate variables in files and copy them to roo
-├── homecats/            # Evaluate variables in files and concatenate them to
-|                        # the existing ones in home
-├── rootcats/            # Evaluate variables in files and concatenate them to
-|                        # the existing ones in root directory
+├── rootcps/             # Evaluate variables in files and copy them to root
+├── homecats/            # Evaluate variables in files and concatenates them with
+|                        # those existing in root
+├── rootcats/            # Evaluate variables in files and concatenates them with
+|                        # those existing in root
 ├── dconf.ini            # Load dconf settings
 └── postinstall          # Script executed after all instructions
 ```
@@ -239,8 +241,11 @@ packages with:
 ydf packages install <packages-selection>
 ```
 
-⚠️ Attention: It's highly recommended to test the installation of the packages on a
-virtual machine before install them.
+⚠️ Attention: It's highly recommended to test the installation of the packages
+on a virtual machine before install them.
+
+It's recommended to check out `vedv` at <https://github.com/yunielrc/vedv>
+for working with virtual machines.
 
 ## Contributing
 

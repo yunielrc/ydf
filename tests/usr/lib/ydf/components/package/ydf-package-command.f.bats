@@ -97,7 +97,7 @@ ydf package COMMAND'
     1liberty
 
   assert_success
-  assert_output  "1liberty: preinstall succeed
+  assert_output "1liberty: preinstall succeed
 1liberty: postinstall"
 }
 
@@ -258,10 +258,11 @@ rustscan: postinstall succeed"
 7micenter@flathub: postinstall succeed"
 
   __run_wrapper() {
+    # shellcheck disable=SC2317
     flatpak list --app | grep io.missioncenter.MissionCenter
   }
 
-  run  __run_wrapper
+  run __run_wrapper
 
   assert_success
   assert_output --partial "io.missioncenter.MissionCenter"
@@ -548,14 +549,13 @@ added line2 to file11
   assert_output "file2"
 }
 
-
 # Tests for ydf package install ./17homecps
 @test "ydf package install ./17homecps Should succeed" {
   local -r _package_name="17homecps"
 
   run ydf package install "$_package_name"
 
-    assert_success
+  assert_success
   assert_output ""
 
   run cat /home/vedv/.my/file1
