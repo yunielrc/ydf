@@ -52,7 +52,7 @@ ydf package COMMAND'
     run ydf package install $p
 
     assert_success
-    assert_output --partial 'ydf package install [OPTIONS] <PACKAGES_FILE | PACKAGE [PACKAGE...]>'
+    assert_output --partial 'ydf package install [OPTIONS] <PKGS_SELECTION_FILE | PACKAGE [PACKAGE...]>'
   done
 }
 

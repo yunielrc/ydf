@@ -42,12 +42,12 @@ ydf::package_command::constructor() {
 ydf::package_command::__install_help() {
   cat <<-HELPMSG
 Usage:
-${__YDF_SCRIPT_NAME} package install [OPTIONS] <PACKAGES_FILE | PACKAGE [PACKAGE...]>
+${__YDF_SCRIPT_NAME} package install [OPTIONS] <PKGS_SELECTION_FILE | PACKAGE [PACKAGE...]>
 
-Install packages from a packages file or packages names.
-A packages file is a text file with one package name per line
-inside the packages dir.
-A package name is a directory inside the packages dir.
+Install packages from a packages selection file or packages names.
+
+A packages selection file is a text file with one package name per line.
+A package name is a first level directory inside the packages dir.
 
 Flags:
   -h, --help    Show this help
@@ -70,7 +70,7 @@ HELPMSG
 #   --packages-dir    Packages directory
 #
 # Arguments:
-#   PACKAGE [PACKAGE...]     one or more packages
+#   <PKGS_SELECTION_FILE | PACKAGE [PACKAGE...]>  pkgs selection file or one or more packages
 #
 # Output:
 #   writes installed package name to stdout
