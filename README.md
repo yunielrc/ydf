@@ -4,30 +4,31 @@
 
 A disruptive dotfiles manager and more.
 
-
 ## Table of Contents
 
 Click on the menu right before `README.md` as shown in the image below.
 
-<img width=300px src="media/toc.png" alt="toc">
+<img width=300px src="media/toc.png" alt="toc"/>
 
 ## About
 
-This tool brings you a simple way
-to declare the software you use along with its configuration, following the
-principles of high cohesion and low coupling, so no more dotfiles of tools
-you are not using, no more installing a bunch of configs and executing an
-elephant script, if you install the configuration, you install the software
+Are you tired of dealing with dotfiles of tools you are not using, are you tired
+of installing a bunch of messy, dirty, and unnecessary configs and executing an
+elephant script.
+
+This solution brings you a simple way to declare and install the tools you need along
+with its configurations, following the principles of high cohesion and low coupling.
+No more disorder or chaos, if you install the configuration, you install the tool
 because those belong to the same `package`.
 
-You can create multiple selections of packages for your different needs, for
-example, you can create a `packages selection` for your laptop, desktop, servers,
-different operating systems, etc.
+With this solution you can create multiple selections of packages for your different
+needs, for example, you can create a `packages selection` for your laptop, desktop,
+servers, different operating systems, etc.
 
 Declaring your working environment give you transparency and control over it,
-allow you to easily reproduce it on a new machine or fresh OS, besides you can
+allowing you to easily reproduce it on a new machine or fresh OS, besides you can
 share it with others, so they can reproduce your working environment, and very
-important, you can version it with git.
+important, you can versioning it with git.
 
 > What you write you can read, share, save and reproduce, it is simply there, it exists.
 
