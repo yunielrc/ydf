@@ -40,6 +40,7 @@ fi
 
 if [ ! -f ~/.ydf-packages ]; then
 	mkdir -v ~/.ydf-packages
+	echo '/envsubst.env' >~/.ydf-packages/.gitignore
 
 	echo
 	echo 'Created ~/.ydf-packages'
