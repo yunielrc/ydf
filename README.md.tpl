@@ -1,33 +1,7 @@
 # ydf
 
-<style type="text/css">
-  @font-face {
-    font-family: 'Flix Normal';
-    src: url('media/flix-font/Flix-Normal.eot');
-    src: url('media/flix-font/Flix-Normal.eot?#iefix') format('embedded-opentype'),
-      url('media/flix-font/Flix-Normal.woff2') format('woff2'),
-      url('media/flix-font/Flix-Normal.woff') format('woff'),
-      url('media/flix-font/Flix-Normal.ttf') format('truetype'),
-      url('media/flix-font/Flix-Normal.svg#Flix-Normal') format('svg');
-    font-weight: normal;
-    font-style: normal;
-  }
+A disruptive dotfiles manager and more.
 
-  h1 {
-    font-family: 'Flix Normal';
-    color: rgb(18, 109, 178);
-  }
-</style>
-
-<div align="center">
-  <h1>
-    YDF
-    <a href="" rel="noopener"></a>
-  </h1>
-
-  <p>A disruptive dotfiles manager and more.</p>
-
-</div>
 
 ## Table of Contents
 
