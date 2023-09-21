@@ -684,10 +684,11 @@ line 11'
   assert_success
   assert_output ""
 
-  # run dconf dump /org/gnome/desktop/peripherals/mouse/
+  run dconf dump /org/gnome/desktop/peripherals/mouse/
 
-  # assert_success
-  # assert_output  ""
+  assert_success
+  assert_output "[/]
+speed=0.5"
 }
 
 # Tests for ydf package install ./20homecats
