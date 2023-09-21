@@ -2,11 +2,44 @@
 <!-- EDIT README.md.tpl INSTEAD -->
 # ydf
 
-A disruptive dotfiles manager and more.
+<style type="text/css">
+  @font-face {
+    font-family: 'Flix Normal';
+    src: url('media/flix-font/Flix-Normal.eot');
+    src: url('media/flix-font/Flix-Normal.eot?#iefix') format('embedded-opentype'),
+      url('media/flix-font/Flix-Normal.woff2') format('woff2'),
+      url('media/flix-font/Flix-Normal.woff') format('woff'),
+      url('media/flix-font/Flix-Normal.ttf') format('truetype'),
+      url('media/flix-font/Flix-Normal.svg#Flix-Normal') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  h1 {
+    font-family: 'Flix Normal';
+    color: rgb(18, 109, 178);
+  }
+</style>
+
+<div align="center">
+  <h1>
+    YDF
+    <a href="" rel="noopener"></a>
+  </h1>
+
+  <p>A disruptive dotfiles manager and more.</p>
+
+</div>
+
+## Table of Contents
+
+Click on the menu right before `README.md` as shown in the image below.
+
+<img width=300px src="media/toc.png" alt="toc">
 
 ## About
 
- This tool brings you a simple way
+This tool brings you a simple way
 to declare the software you use along with its configuration, following the
 principles of high cohesion and low coupling, so no more dotfiles of tools
 you are not using, no more installing a bunch of configs and executing an
@@ -61,8 +94,8 @@ Install runtime dependencies and ydf on home directory
 make install-run-manjaro && make install-tohome
 ```
 
-For any other linux distribution check out the script `tools/install-run-manjaro`
-and install the runtime dependencies manually then execute the following command:
+For any other linux distribution install the runtime dependencies manually,
+then execute the following command:
 
 ```sh
 make install-tohome
@@ -73,7 +106,7 @@ make install-tohome
 Edit the config file:
 
 - If your distro is manjaro set the variable `YDF_PACKAGE_SERVICE_DEFAULT_OS` to
-  manjaro. If you have any other distro don't set this variable.
+manjaro. If you have any other distro don't set this variable.
 
 ```sh
 vim ~/.ydf.env
@@ -93,115 +126,115 @@ meaning, those are `instructions` that work on any linux distribution:
 
 ```sh
 package1
-├── preinstall           # Script executed before install
-├── install              # Script executed on install
-├── @flatpak             # Install <package1> with flatpak
-├── @snap                # Install <package1> with snap
-├── docker-compose.yml   # Run docker compose up -d
-├── package1.plugin.zsh  # Install yzsh plugin
-├── homeln/              # Create symlinks on home for the first level files and
-|                        # directories inside this directory
-├── homelnr/             # Create symlinks on home for all files inside this
-|                        # directory
-├── homecp/              # Copy all files to home directory
-├── rootcp/              # Copy all files to root directory
-├── homecat/             # Concatenate all files with those existing in home
-├── rootcat/             # Concatenate all files with those existing in root
-├── homecps/             # Evaluate variables in files and copy them to home
-├── rootcps/             # Evaluate variables in files and copy them to root
-├── homecats/            # Evaluate variables in files and concatenates them with
-|                        # those existing in home
-├── rootcats/            # Evaluate variables in files and concatenates them with
-|                        # those existing in root
-├── dconf.ini            # Load dconf settings
-└── postinstall          # Script executed after all instructions
-```
+├── preinstall # Script executed before install
+├── install # Script executed on install
+├── @flatpak # Install <package1> with flatpak
+  ├── @snap # Install <package1> with snap
+    ├── docker-compose.yml # Run docker compose up -d
+    ├── package1.plugin.zsh # Install yzsh plugin
+    ├── homeln/ # Create symlinks on home for the first level files and
+    | # directories inside this directory
+    ├── homelnr/ # Create symlinks on home for all files inside this
+    | # directory
+    ├── homecp/ # Copy all files to home directory
+    ├── rootcp/ # Copy all files to root directory
+    ├── homecat/ # Concatenate all files with those existing in home
+    ├── rootcat/ # Concatenate all files with those existing in root
+    ├── homecps/ # Evaluate variables in files and copy them to home
+    ├── rootcps/ # Evaluate variables in files and copy them to root
+    ├── homecats/ # Evaluate variables in files and concatenates them with
+    | # those existing in home
+    ├── rootcats/ # Evaluate variables in files and concatenates them with
+    | # those existing in root
+    ├── dconf.ini # Load dconf settings
+    └── postinstall # Script executed after all instructions
+    ```
 
-The `instructions` can be grouped in 4 categories:
+    The `instructions` can be grouped in 4 categories:
 
-- Scripts instructions: `preinstall`, `install`, `postinstall`.
-  These instructions are shell scripts that are executed by bash.
+    - Scripts instructions: `preinstall`, `install`, `postinstall`.
+    These instructions are shell scripts that are executed by bash.
 
-- Package manager instructions: `@flatpak`, `@snap`.
-  These instrucions are plain text files, the file can have inside one line with
-  the package name or a list of packages names that are going to be installed.
-  The file can be empty, in this case the package name (`package1`) is going to
-  be used.
+    - Package manager instructions: `@flatpak`, `@snap`.
+    These instrucions are plain text files, the file can have inside one line with
+    the package name or a list of packages names that are going to be installed.
+    The file can be empty, in this case the package name (`package1`) is going to
+    be used.
 
-- Directory instructions: `homeln`, `homelnr`, `homecp`, `rootcp`, `homecat`,
-  `rootcat`, `homecps`, `rootcps`, `homecats`, `rootcats`.
-  These instructions are directories that contains files that are going to be
-  copied, concatenated or symlinked to the home or root directory. For those
-  that end with `s` all the variables inside each file are substituted with the
-  values defined in the `envsubst.env` file that is inside the `package directory`.
+    - Directory instructions: `homeln`, `homelnr`, `homecp`, `rootcp`, `homecat`,
+    `rootcat`, `homecps`, `rootcps`, `homecats`, `rootcats`.
+    These instructions are directories that contains files that are going to be
+    copied, concatenated or symlinked to the home or root directory. For those
+    that end with `s` all the variables inside each file are substituted with the
+    values defined in the `envsubst.env` file that is inside the `package directory`.
 
-- Tool files instructions: `docker-compose.yml`, `dconf.ini`, `package1.plugin.zsh`.
-  These instructions are files that are going to be used by a tool. For example
-  `docker-compose.yml` is going to be used by docker compose.
-  The `package1.plugin.zsh` is a plugin that is going to be installed inside the
-  YZSH data directory and used by YZSH.
+    - Tool files instructions: `docker-compose.yml`, `dconf.ini`, `package1.plugin.zsh`.
+    These instructions are files that are going to be used by a tool. For example
+    `docker-compose.yml` is going to be used by docker compose.
+    The `package1.plugin.zsh` is a plugin that is going to be installed inside the
+    YZSH data directory and used by YZSH.
 
-There are 2 more `instructions` that only work for manjaro linux:
+    There are 2 more `instructions` that only work for manjaro linux:
 
-```sh
-package2
-├── @pacman
-└── @yay
-```
+    ```sh
+    package2
+    ├── @pacman
+    └── @yay
+    ```
 
-👉 If you want support for other package managers you can create a pull request.
+    👉 If you want support for other package managers you can create a pull request.
 
-You can check out some examples of `packages` at: `tests/fixtures/packages`
+    You can check out some examples of `packages` at: `tests/fixtures/packages`
 
-## What is a YDF Packages Directory
+    ## What is a YDF Packages Directory
 
-A `packages directory` is a directory that contains a list of `packages` and the
-`envsubst.env` file, besides it can have one or more `packages selection` files.
+    A `packages directory` is a directory that contains a list of `packages` and the
+    `envsubst.env` file, besides it can have one or more `packages selection` files.
 
-For example of a `packages directory`:
+    For example of a `packages directory`:
 
-```sh
-~/.ydf-packages          # packages directory
-├── bat/                 # package
-├── bmon/                # package
-├── htop/                # package
-├── aws-cli-v2/          # package
-├── mpv/                 # package
-├── ....                 # package
-├── envsubst.env         # substitution variables
-├── pc-gaming.pkgs       # packages selection
-├── latop-work.pkgs      # packages selection
-└── ....                 # packages selection
-```
+    ```sh
+    ~/.ydf-packages # packages directory
+    ├── bat/ # package
+    ├── bmon/ # package
+    ├── htop/ # package
+    ├── aws-cli-v2/ # package
+    ├── mpv/ # package
+    ├── .... # package
+    ├── envsubst.env # substitution variables
+    ├── pc-gaming.pkgs # packages selection
+    ├── latop-work.pkgs # packages selection
+    └── .... # packages selection
+    ```
 
-You can check out: `tests/fixtures/packages`
+    You can check out: `tests/fixtures/packages`
 
-The `envsubst.env` file has the variables that are evaluated in the files inside
-of `Directory instructions` that end with `s`.
+    The `envsubst.env` file has the variables that are evaluated in the files inside
+    of `Directory instructions` that end with `s`.
 
-The `packages selection` are plain text files that contains a list of `packages`
-one per line.
+    The `packages selection` are plain text files that contains a list of `packages`
+    one per line.
 
-The `packages directory` is where the `interpreter` is going to look for
-`packages`, `envsubst.env` and `packages selection`.
+    The `packages directory` is where the `interpreter` is going to look for
+    `packages`, `envsubst.env` and `packages selection`.
 
-## Usage
+    ## Usage
 
-Reload your shell to load the new PATH.
+    Reload your shell to load the new PATH.
 
-```sh
-exec $SHELL
-```
+    ```sh
+    exec $SHELL
+    ```
 
-Show the help
+    Show the help
 
-```sh
-ydf --help
-```
+    ```sh
+    ydf --help
+    ```
 
-```sh
-# command output:
-Usage:
+    ```sh
+    # command output:
+    Usage:
 ydf COMMAND
 
 A tool for managing ydotfiles
@@ -213,69 +246,187 @@ Management Commands:
   package   Manage packages
 
 Run 'ydf COMMAND --help' for more information on a command.
-```
+    ```
 
-### Add packages to your packages directory
+    ### Add packages to your packages directory
 
-Before adding a `package` to your `packages directory` you must create a git
-repository.
+    Before adding a `package` to your `packages directory` you must create a git
+    repository.
 
-```sh
-cd ~/.ydf-packages
-git init
-git remote add origin git@github.com:<your_user>/.ydf-packages.git
-```
+    ```sh
+    cd ~/.ydf-packages
+    git init
+    git remote add origin git@github.com:<your_user>/.ydf-packages.git
+      ```
 
-Open the `packages directory` in your favorite code editor .
+      Open the `packages directory` in your favorite code editor .
 
-```sh
-code ~/.ydf-packages
-```
+      ```sh
+      code ~/.ydf-packages
+      ```
 
-Create a `package` and add `instructions` to it.
+      Create a `package` and add `instructions` to it.
 
-Add variables to the `~/.ydf-packages/envsubst.env` if apply.
+      Add variables to the `~/.ydf-packages/envsubst.env` if apply.
 
-Test that the `package` works.
+      Test that the `package` works.
 
-```sh
-ydf package install <package>
-```
+      ```sh
+      ydf package install <package>
+        ```
 
-Verify that the software was installed and configured correctly.
+        Verify that the software was installed and configured correctly.
 
-Create a `packages selection` if apply and add the package.
+        Create a `packages selection` if apply and add the package.
 
-```sh
-echo "<package>" >> ~/.ydf-packages/<packages selection>
-```
+        ```sh
+        echo "<package>" >> ~/.ydf-packages/<packages selection>
+            ```
 
-Save the changes.
+            Save the changes.
 
-```sh
-cd ~/.ydf-packages
-git add .
-git commit -m "Add <package>"
-git push -u origin master
-```
+            ```sh
+            cd ~/.ydf-packages
+            git add .
+            git commit -m "Add <package>"
+              git push -u origin master
+              ```
 
-Then when you reinstall your OS or on a new machine you can install all your
-packages with:
+              Then when you reinstall your OS or on a new machine you can install all your
+              packages with:
 
-```sh
-ydf packages install <packages-selection>
-```
+              ```sh
+              ydf packages install <packages-selection>
+                ```
 
-⚠️ Attention: It's highly recommended to test the installation of the packages
-on a virtual machine before install them.
+                ⚠️ Attention: It's highly recommended to test the installation of the packages
+                on a virtual machine before install them.
 
-It's recommended to check out `vedv` at <https://github.com/yunielrc/vedv>
-for working with virtual machines.
+                It's recommended to check out `vedv` at <https: //github.com/yunielrc/vedv>
+                  for working with virtual machines.
 
-## Contributing
+                  ## Contributing
 
-Contributions, issues and feature requests are welcome!
+                  Contributions, issues and feature requests are welcome!
 
-## Show your support
+                  ### Manjaro dev dependencies
 
-Give a ⭐️ if this project helped you!
+                  ```sh
+                  # SYSTEM: Linux yuniel-pc 6.1.51-1-MANJARO #1 SMP PREEMPT_DYNAMIC Sat Sep  2 23:22:36 UTC 2023 x86_64 GNU/Linux
+# YAY
+make 4.4.1-2
+python-pre-commit 2.20.0-3
+shfmt 3.7.0-1
+shellcheck 0.9.0-47
+nodejs 20.6.0-1
+npm 9.8.1-1
+bash-bats 1.10.0-1
+bash-bats-assert-git 2.1.0-1
+bash-bats-file 0.4.0-2
+bash-bats-support-git 0.3.0-1
+fd 8.7.0-1
+# NPM
+@commitlint/cli@17.7.1
+@commitlint/config-conventional@17.7.0
+commitizen@4.3.0
+cz-conventional-changelog@3.3.0
+                  ```
+
+                  ### Configure dev environment
+
+                  Copy config samples
+
+                  ```sh
+                  cp .env.sample .env
+                  cp .ydf.env.sample .ydf.env
+                  ```
+
+                  Install dev dependencies for Manjaro:
+
+                  ```sh
+                  make install-dev-manjaro
+                  ```
+
+                  For any other linux distribution dev dependencies manually.
+
+                  ### Workflow
+
+                  #### Code
+
+                  Write your code
+
+                  #### Run Tests
+
+                  Run Unit Testing for one component
+
+                  ```sh
+                  make test-suite u="$(fd utils.bats)"
+                  ```
+
+                  Run Unit Testing for one function
+
+                  ```sh
+                  make test-name n='text_file_to_words' u="$(fd utils.bats)"
+                  ```
+
+                  Run Integration Testing for one function
+
+                  ```sh
+                  make test-name n='install_one_from_dir' u="$(fd ydf-package-service.i.bats)"
+                  ```
+
+                  Run Functional Testing for one function
+
+                  ```sh
+                  make test-name n='20homecats' u="$(fd ydf-package-command.f.bats)"
+                  ```
+
+                  Run All Unit Tests
+
+                  ```sh
+                  make test-unit
+                  # 2.331s
+                  ```
+
+                  Run All Integration Tests
+
+                  ```sh
+                  make test-integration
+                  # 2m 17.652s
+                  ```
+
+                  Run All Functional Tests
+
+                  ```sh
+                  make test-functional
+                  # 2m 48.535s
+                  ```
+
+                  Run All tests
+
+                  On Manjaro
+
+                  ```sh
+                  make OS=manjaro test-all
+                  # 3m 5.173s
+                  ```
+
+                  Any OS
+
+                  ```sh
+                  make test-all
+                  ```
+
+                  #### Commit
+
+                  This project uses [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+
+                  For commiting use the command below
+
+                  ```sh
+                  make commit
+                  ```
+
+                  ## Show your support
+
+                  Give a ⭐️ if this project helped you!
