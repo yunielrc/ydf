@@ -7,6 +7,7 @@
 
 # SYSTEM: Linux yuniel-pc 6.1.51-1-MANJARO #1 SMP PREEMPT_DYNAMIC Sat Sep  2 23:22:36 UTC 2023 x86_64 GNU/Linux
 # YAY
+vedv-git 0.2.3-1
 make 4.4.1-2
 python-pre-commit 2.20.0-3
 shfmt 3.7.0-1

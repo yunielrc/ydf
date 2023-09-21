@@ -18,7 +18,7 @@ elephant script.
 
 This solution brings you a simple way to declare and install the tools you need along
 with its configurations, following the principles of high cohesion and low coupling.
-No more disorder or chaos, if you install the configuration, you install the tool
+Turn the chaos to order, if you install the configuration, you install the tool
 because those belong to the same `package`.
 
 With this solution you can create multiple selections of packages for your different
@@ -101,28 +101,28 @@ meaning, those are `instructions` that work on any linux distribution:
 
 ```sh
 package1
-├── preinstall # Script executed before install
-├── install # Script executed on install
-├── @flatpak # Install <package1> with flatpak
-├── @snap # Install <package1> with snap
-├── docker-compose.yml # Run docker compose up -d
-├── package1.plugin.zsh # Install yzsh plugin
-├── homeln/ # Create symlinks on home for the first level files and
-| # directories inside this directory
-├── homelnr/ # Create symlinks on home for all files inside this
-| # directory
-├── homecp/ # Copy all files to home directory
-├── rootcp/ # Copy all files to root directory
-├── homecat/ # Concatenate all files with those existing in home
-├── rootcat/ # Concatenate all files with those existing in root
-├── homecps/ # Evaluate variables in files and copy them to home
-├── rootcps/ # Evaluate variables in files and copy them to root
-├── homecats/ # Evaluate variables in files and concatenates them with
-| # those existing in home
-├── rootcats/ # Evaluate variables in files and concatenates them with
-| # those existing in root
-├── dconf.ini # Load dconf settings
-└── postinstall # Script executed after all instructions
+├── preinstall           # Script executed before install
+├── install              # Script executed on install
+├── @flatpak             # Install <package1> with flatpak
+├── @snap                # Install <package1> with snap
+├── docker-compose.yml   # Run docker compose up -d
+├── package1.plugin.zsh  # Install yzsh plugin
+├── homeln/              # Create symlinks on home for the first level files and
+|                        # directories inside this directory
+├── homelnr/             # Create symlinks on home for all files inside this
+|                        # directory
+├── homecp/              # Copy all files to home directory
+├── rootcp/              # Copy all files to root directory
+├── homecat/             # Concatenate all files with those existing in home
+├── rootcat/             # Concatenate all files with those existing in root
+├── homecps/             # Evaluate variables in files and copy them to home
+├── rootcps/             # Evaluate variables in files and copy them to root
+├── homecats/            # Evaluate variables in files and concatenates them with
+|                        # those existing in home
+├── rootcats/            # Evaluate variables in files and concatenates them with
+|                        # those existing in root
+├── dconf.ini            # Load dconf settings
+└── postinstall          # Script executed after all instructions
 ```
 
 The `instructions` can be grouped in 4 categories:
@@ -157,11 +157,11 @@ package2
 └── @yay
 ```
 
-👉 If you want support for other package managers you can create a pull request.
+👉 If you want support for others package managers you can create a pull request.
 
 You can check out some examples of `packages` at: `tests/fixtures/packages`
 
-## What is a YDF Packages Directory
+### What is a YDF Packages Directory
 
 A `packages directory` is a directory that contains a list of `packages` and the
 `envsubst.env` file, besides it can have one or more `packages selection` files.
@@ -169,17 +169,17 @@ A `packages directory` is a directory that contains a list of `packages` and the
 For example of a `packages directory`:
 
 ```sh
-~/.ydf-packages # packages directory
-├── bat/ # package
-├── bmon/ # package
-├── htop/ # package
-├── aws-cli-v2/ # package
-├── mpv/ # package
-├── .... # package
-├── envsubst.env # substitution variables
-├── pc-gaming.pkgs # packages selection
-├── latop-work.pkgs # packages selection
-└── .... # packages selection
+~/.ydf-packages       # packages directory
+├── bat/              # package
+├── bmon/             # package
+├── htop/             # package
+├── aws-cli-v2/       # package
+├── mpv/              # package
+├── ....              # package
+├── envsubst.env      # substitution variables
+├── pc-gaming.pkgs    # packages selection
+├── latop-work.pkgs   # packages selection
+└── ....              # packages selection
 ```
 
 You can check out: `tests/fixtures/packages`
@@ -289,6 +289,7 @@ Contributions, issues and feature requests are welcome!
 ```sh
 # SYSTEM: Linux yuniel-pc 6.1.51-1-MANJARO #1 SMP PREEMPT_DYNAMIC Sat Sep  2 23:22:36 UTC 2023 x86_64 GNU/Linux
 # YAY
+vedv-git 0.2.3-1
 make 4.4.1-2
 python-pre-commit 2.20.0-3
 shfmt 3.7.0-1

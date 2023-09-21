@@ -11,7 +11,7 @@ set -eu
 echo "# SYSTEM: $(uname -a)"
 
 echo '# YAY'
-pacman --color never -Q "${PKG_DEV_MANJARO_YAY[@]}"
+pacman --color never -Q vedv-git "${PKG_DEV_MANJARO_YAY[@]}"
 
 echo '# NPM'
 npm list -g |
