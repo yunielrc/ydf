@@ -2,9 +2,27 @@
 <!-- EDIT README.md.tpl INSTEAD -->
 # ydf
 
+A disruptive dotfiles manager and more.
+
 ## About
 
-The disruptive dotfiles manager+
+ This tool brings you a simple way
+to declare the software you use along with its configuration, following the
+principles of high cohesion and low coupling, so no more dotfiles of tools
+you are not using, no more installing a bunch of configs and executing an
+elephant script, if you install the configuration, you install the software
+because those belong to the same `package`.
+
+You can create multiple selections of packages for your different needs, for
+example, you can create a `packages selection` for your laptop, desktop, servers,
+different operating systems, etc.
+
+Declaring your working environment give you transparency and control over it,
+allow you to easily reproduce it on a new machine or fresh OS, besides you can
+share it with others, so they can reproduce your working environment, and very
+important, you can version it with git.
+
+> What you write you can read, share, save and reproduce, it is simply there, it exists.
 
 ## Tested OS
 
@@ -27,7 +45,7 @@ yunielrc/yzsh
 
 ⚠️ It should work on any linux distribution, but it has not been tested.
 
-### Install
+## Install
 
 Clone the repository and switch to ydf directory
 
@@ -35,7 +53,7 @@ Clone the repository and switch to ydf directory
 git clone https://github.com/yunielrc/ydf.git && cd ydf
 ```
 
-#### Install on Manjaro
+### Install on Manjaro
 
 Install runtime dependencies and ydf on home directory
 
@@ -65,8 +83,8 @@ vim ~/.ydf.env
 
 ### What is a package?
 
-A `package` is a directory that contains directories and files which some of
-then has a special meaning for the `interpreter`. ydf is an `interpreter`.
+A `package` is a directory containing files and directories in which some have
+special meaning for the `interpreter`. ydf is an `interpreter`.
 
 ### Which are the directories and files with special meaning?
 
@@ -92,7 +110,7 @@ package1
 ├── homecps/             # Evaluate variables in files and copy them to home
 ├── rootcps/             # Evaluate variables in files and copy them to root
 ├── homecats/            # Evaluate variables in files and concatenates them with
-|                        # those existing in root
+|                        # those existing in home
 ├── rootcats/            # Evaluate variables in files and concatenates them with
 |                        # those existing in root
 ├── dconf.ini            # Load dconf settings
@@ -130,6 +148,8 @@ package2
 ├── @pacman
 └── @yay
 ```
+
+👉 If you want support for other package managers you can create a pull request.
 
 You can check out some examples of `packages` at: `tests/fixtures/packages`
 
@@ -255,8 +275,6 @@ for working with virtual machines.
 ## Contributing
 
 Contributions, issues and feature requests are welcome!
-
-....
 
 ## Show your support
 
