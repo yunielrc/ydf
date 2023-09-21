@@ -10,5 +10,10 @@ set -eu
 
 echo "# SYSTEM: $(uname -a)"
 
-echo '# YAY'
-pacman --color never -Q bash "${PKG_RUN_MANJARO_YAY[@]}"
+echo '# PACMAN'
+pacman --color never -Q bash snapd docker docker-compose "${PKG_RUN_MANJARO_YAY[@]}"
+
+echo '# GITHUB'
+cat <<EOF
+yunielrc/yzsh
+EOF
