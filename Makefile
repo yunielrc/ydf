@@ -38,6 +38,13 @@ if [ ! -f ~/.ydf.env ]; then
 	echo 'Copied configuration file ~/.ydf.env from skel'
 fi
 
+if [ ! -f ~/.ydf-packages ]; then
+	mkdir -v ~/.ydf-packages
+
+	echo
+	echo 'Created ~/.ydf-packages'
+fi
+
 echo
 echo "It's recomended to create a git repository of ~/.ydf-packages"
 

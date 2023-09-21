@@ -215,7 +215,7 @@ Management Commands:
 Run 'ydf COMMAND --help' for more information on a command.
 ```
 
-## Add packages to your packages directory
+### Add packages to your packages directory
 
 Before adding a `package` to your `packages directory` you must create a git
 repository.
