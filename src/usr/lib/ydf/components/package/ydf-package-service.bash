@@ -165,7 +165,7 @@ ydf::package_service::__instruction_@yay() {
   # select the first no empty line
   local -r yay_pkg_name="$(ydf::utils::text_file_to_words @yay)"
 
-  eval sudo -H yay -Syu --noconfirm --needed "${yay_pkg_name:-"$pkg_name"}"
+  eval yay -Syu --noconfirm --needed "${yay_pkg_name:-"$pkg_name"}"
 }
 
 #
