@@ -1,0 +1,2 @@
+echo "install: MY_CONFIG1: ${MY_CONFIG1}"
+echo "install: HOME: ${HOME}"

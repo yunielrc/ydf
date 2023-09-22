@@ -108,9 +108,13 @@ ydf::package_service::get_instructions_names() {
 # Returns:
 #   0 on success, non-zero on error.
 #
-ydf::package_service::__instruction_preinstall() {
+ydf::package_service::__instruction_preinstall() (
+  set -o allexport
+  # shellcheck disable=SC1090
+  source "$__YDF_PACKAGE_SERVICE_ENVSUBST_FILE"
+
   bash ./preinstall
-}
+)
 
 #
 # Execute install script
@@ -119,9 +123,13 @@ ydf::package_service::__instruction_preinstall() {
 # Returns:
 #   0 on success, non-zero on error.
 #
-ydf::package_service::__instruction_install() {
+ydf::package_service::__instruction_install() (
+  set -o allexport
+  # shellcheck disable=SC1090
+  source "$__YDF_PACKAGE_SERVICE_ENVSUBST_FILE"
+
   bash ./install
-}
+)
 
 #
 # Execute postinstall script
@@ -130,9 +138,13 @@ ydf::package_service::__instruction_install() {
 # Returns:
 #   0 on success, non-zero on error.
 #
-ydf::package_service::__instruction_postinstall() {
+ydf::package_service::__instruction_postinstall() (
+  set -o allexport
+  # shellcheck disable=SC1090
+  source "$__YDF_PACKAGE_SERVICE_ENVSUBST_FILE"
+
   bash ./postinstall
-}
+)
 
 #
 # Execute @pacman instruction

@@ -1140,3 +1140,37 @@ line 11
 > FAILED. INSTALLING packages
 ERROR> Installing packages"
 }
+
+# Tests for ydf::package_service::__instruction_preinstall()
+@test "ydf::package_service::__instruction_preinstall() Should succeed With variables" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/23scriptvars"
+
+  run ydf::package_service::__instruction_preinstall
+
+  assert_success
+  assert_output "preinstall: FILE11_1: file11_1"
+}
+
+# Tests for ydf::package_service::__instruction_install()
+@test "ydf::package_service::__instruction_install() Should succeed With variables" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/23scriptvars"
+
+  run ydf::package_service::__instruction_install
+
+  assert_success
+  assert_output "install: MY_CONFIG1: my_config1
+install: HOME: /home/vedv"
+}
+
+# Tests for ydf::package_service::__instruction_postinstall()
+@test "ydf::package_service::__instruction_postinstall() Should succeed With variables" {
+
+  cd "${TEST_FIXTURES_DIR}/packages/23scriptvars"
+
+  run ydf::package_service::__instruction_postinstall
+
+  assert_success
+  assert_output "postinstall: MY_CONFIG2: my config2"
+}
