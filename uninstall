@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+#
+# Uninstalls ydf on the system
+#
+
+set -eu
+
+# ENV VARS
+if [ -n "$DESTDIR" ]; then
+  DESTDIR="$(realpath "$DESTDIR")"
+fi
+
+rm -vrf "${DESTDIR}/etc/ydf"
+rm -vf "${DESTDIR}/etc/skel/.ydf.env"
+rm -vrf "${DESTDIR}/usr/lib/ydf"
+rm -vf "${DESTDIR}/usr/bin/ydf"
+rm -vf "${DESTDIR}/usr/share/licenses/ydf/LICENSE"
+
+echo
+echo '>> UNINSTALLED SUCCESSFULLY'

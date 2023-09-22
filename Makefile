@@ -1,5 +1,5 @@
 # grep -Po '^\S+(?=:)' Makefile | tr '\n' ' '
-.PHONY: install install-tohome install-run-manjaro install-dev-manjaro test-unit test-integration test-functional test-all test-suite test-name commit img-rebuild img-build ct-create ct-start ct-status ct-stop ct-remove ct-login ct-copy-files
+.PHONY: install uninstall install-tohome install-run-manjaro install-opt-manjaro install-dev-manjaro test-unit test-integration test-functional test-all test-suite test-name commit img-rebuild img-build ct-create ct-start ct-status ct-stop ct-remove ct-login ct-copy-files
 
 define _script
 #
@@ -58,6 +58,10 @@ export script = $(value _script)
 install:
 	# ENV VARS: DESTDIR
 	./install
+
+uninstall:
+	# ENV VARS: DESTDIR
+	./uninstall
 
 install-tohome:
 	# ENVARS: DESTDIR
