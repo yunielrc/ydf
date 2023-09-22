@@ -41,7 +41,7 @@ It's tested on the following OS:
 Runtime Dependencies:
 
 ```sh
-# SYSTEM: Linux yuniel-pc 6.1.51-1-MANJARO #1 SMP PREEMPT_DYNAMIC Sat Sep  2 23:22:36 UTC 2023 x86_64 GNU/Linux
+# SYSTEM: Linux yuniel-pc 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
 # PACMAN
 bash 5.1.016-3
 ```
@@ -49,7 +49,7 @@ bash 5.1.016-3
 Optional Dependencies:
 
 ```sh
-# SYSTEM: Linux yuniel-pc 6.1.51-1-MANJARO #1 SMP PREEMPT_DYNAMIC Sat Sep  2 23:22:36 UTC 2023 x86_64 GNU/Linux
+# SYSTEM: Linux yuniel-pc 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
 # PACMAN
 yay 12.1.3-1
 snapd 2.60.3-1
@@ -312,7 +312,7 @@ Contributions, issues and feature requests are welcome!
 ### Manjaro dev dependencies
 
 ```sh
-# SYSTEM: Linux yuniel-pc 6.1.51-1-MANJARO #1 SMP PREEMPT_DYNAMIC Sat Sep  2 23:22:36 UTC 2023 x86_64 GNU/Linux
+# SYSTEM: Linux yuniel-pc 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
 # YAY
 vedv-git 0.2.3-1
 make 4.4.1-2
