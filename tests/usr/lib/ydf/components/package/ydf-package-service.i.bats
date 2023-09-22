@@ -25,6 +25,11 @@ setup() {
   fi
   mkdir /home/vedv/.yzsh/plugins/local
 
+  if [[ -d /home/vedv/.yzsh/themes/local ]]; then
+    rm -rf /home/vedv/.yzsh/themes/local
+  fi
+  mkdir /home/vedv/.yzsh/themes/local
+
   if [[ -d /.my ]]; then
     sudo rm -r /.my
   fi
@@ -1173,4 +1178,31 @@ install: HOME: /home/vedv"
 
   assert_success
   assert_output "postinstall: MY_CONFIG2: my config2"
+}
+
+# Tests for ydf::package_service::__instruction_theme_zsh()
+@test "ydf::package_service::__instruction_theme_zsh() Should fail if ln fails" {
+  cd "${TEST_FIXTURES_DIR}/packages/24ydftheme"
+
+  ln() {
+    assert_equal "$*" "-vsf /home/vedv/ydf/tests/fixtures/packages/24ydftheme/24ydftheme.theme.zsh /home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh"
+    return 1
+  }
+
+  run ydf::package_service::__instruction_theme_zsh '24ydftheme'
+
+  assert_failure
+  assert_output "ERROR> Creating theme symlink: /home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh"
+}
+
+@test "ydf::package_service::__instruction_theme_zsh() Should add theme" {
+  cd "${TEST_FIXTURES_DIR}/packages/24ydftheme"
+
+  run ydf::package_service::__instruction_theme_zsh '24ydftheme'
+
+  assert_success
+  assert_output "'/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/24ydftheme/24ydftheme.theme.zsh'"
+
+  assert [ -L '/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' ]
+  assert [ -f '/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' ]
 }

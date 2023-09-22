@@ -12,6 +12,11 @@ setup() {
   fi
   mkdir /home/vedv/.yzsh/plugins/local
 
+  if [[ -d /home/vedv/.yzsh/themes/local ]]; then
+    rm -rf /home/vedv/.yzsh/themes/local
+  fi
+  mkdir /home/vedv/.yzsh/themes/local
+
   if [[ -d /.my ]]; then
     sudo rm -r /.my
   fi
@@ -825,4 +830,17 @@ preinstall: preinstall succeed"
   assert_output "preinstall succeed
 postinstall
 preinstall: preinstall succeed"
+}
+
+# Tests for ydf package install ./24ydftheme
+@test "ydf package install ./24ydftheme Should succeed" {
+  local -r _package_name="24ydftheme"
+
+  run ydf package install "$_package_name"
+
+  assert_success
+  assert_output "'/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/24ydftheme/24ydftheme.theme.zsh'"
+
+  assert [ -L '/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' ]
+  assert [ -f '/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' ]
 }

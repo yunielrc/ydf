@@ -1,0 +1,1 @@
+echo 'great colors theme'

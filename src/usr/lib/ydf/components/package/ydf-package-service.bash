@@ -30,7 +30,7 @@ fi
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall pacman yay install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall apt install postinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # shellcheck disable=SC2016
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh homeln/ homelnr/ homecp/ rootcp/ homecat/ rootcat/ homecps/ rootcps/ homecats/ rootcats/ dconf_ini:dconf.ini postinstall'
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='install @flatpak @snap docker_compose:docker-compose.yml plugin_zsh:${pkg_name}.plugin.zsh theme_zsh:${pkg_name}.theme.zsh homeln/ homelnr/ homecp/ rootcp/ homecat/ rootcat/ homecps/ rootcps/ homecats/ rootcats/ dconf_ini:dconf.ini postinstall'
 # ANY OS
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_ANY="preinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # MANJARO
@@ -254,6 +254,28 @@ ydf::package_service::__instruction_plugin_zsh() {
   else
     msg "Plugin '${package_name}' already added to ${__YDF_YZSH_GEN_CONFIG_FILE}"
   fi
+}
+
+#
+# Execute theme_zsh instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_theme_zsh() {
+  local -r package_name="$1"
+
+  local -r theme_name="${package_name}.theme.zsh"
+  local -r theme_file="${PWD}/${theme_name}"
+  local -r theme_dest_file="${__YDF_YZSH_DATA_DIR}/themes/local/${theme_name}"
+
+  ln -vsf "$theme_file" "$theme_dest_file" || {
+    err "Creating theme symlink: ${theme_dest_file}"
+    return "$ERR_FILE_CREATION"
+  }
 }
 
 #
