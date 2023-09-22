@@ -38,7 +38,7 @@ if [ ! -f ~/.ydf.env ]; then
 	echo 'Copied configuration file ~/.ydf.env from skel'
 fi
 
-if [ ! -f ~/.ydf-packages ]; then
+if [ ! -d ~/.ydf-packages ]; then
 	mkdir -v ~/.ydf-packages
 	echo '/envsubst.env' >~/.ydf-packages/.gitignore
 
