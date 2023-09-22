@@ -23,10 +23,10 @@ With this solution you can create multiple selections of packages for your diffe
 needs, for example, you can create a `packages selection` for your laptop, desktop,
 servers, different operating systems, etc.
 
-Declaring your working environment give you transparency and control over it,
-allowing you to easily reproduce it on a new machine or fresh OS, besides you can
-share it with others, so they can reproduce your working environment, and very
-important, you can versioning it with git.
+Declaring your working environment give you some benefits: transparency and control
+over it, allowing you to easily reproduce it on a new machine or fresh OS, you can
+share it with others, so they can reproduce your working environment, you can
+versioning it with git.
 
 > What you write you can read, share, save and reproduce, it is simply there, it exists.
 
@@ -196,7 +196,7 @@ For example of a `packages directory`:
 └── ....              # packages selection
 ```
 
-You can check out: `tests/fixtures/packages`
+👉 You can check out my `packages directory` at: <https://github.com/yunielrc/.ydf-packages>
 
 The `envsubst.env` file has the variables that are evaluated in the files inside
 of `Directory instructions` that end with `s`.
