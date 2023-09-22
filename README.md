@@ -51,7 +51,7 @@ Optional Dependencies:
 ```sh
 # SYSTEM: Linux yuniel-pc 6.1.51-1-MANJARO #1 SMP PREEMPT_DYNAMIC Sat Sep  2 23:22:36 UTC 2023 x86_64 GNU/Linux
 # PACMAN
-yay 12.1.2-1
+yay 12.1.3-1
 snapd 2.60.3-1
 docker 1:24.0.5-1
 docker-compose 2.20.3-1
@@ -319,9 +319,9 @@ make 4.4.1-2
 python-pre-commit 2.20.0-3
 shfmt 3.7.0-1
 shellcheck 0.9.0-47
-nodejs 20.6.0-1
-npm 9.8.1-1
-bash-bats 1.10.0-1
+nodejs 20.6.1-1
+npm 10.1.0-1
+bash-bats 1.10.0-2
 bash-bats-assert-git 2.1.0-1
 bash-bats-file 0.4.0-2
 bash-bats-support-git 0.3.0-1

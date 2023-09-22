@@ -1,3 +1,4 @@
+# shellcheck disable=SC2317
 load test_helper
 
 setup() {
@@ -14,7 +15,6 @@ setup() {
     __YDF_YZSH_GEN_CONFIG_FILE \
     __YDF_PACKAGE_SERVICE_ENVSUBST_FILE \
     __YDF_PACKAGE_SERVICE_PACKAGES_DIR
-
 
   if [[ -f /home/vedv/.yzsh-gen.env ]]; then
     rm -f /home/vedv/.yzsh-gen.env
@@ -45,7 +45,6 @@ setup() {
 # teardown() {
 
 # }
-
 
 # Tests for ydf::package_service::get_instructions_names()
 @test "ydf::package_service::get_instructions_names() Should list instructions names for default_os" {
@@ -139,7 +138,6 @@ setup() {
 
   mkdir "${BATS_TEST_TMPDIR}/pkg1"
   chmod 000 "${BATS_TEST_TMPDIR}/pkg1"
-
 
   ydf::package_service::get_packages_dir() {
     echo "$BATS_TEST_TMPDIR"
@@ -317,6 +315,25 @@ docker_compose
 
   assert_success
   assert_output --regexp "dust"
+}
+
+@test "ydf::package_service::__instruction_@pacman() Should succeed with multiples packages" {
+  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" != manjaro ]]; then
+    skip "Only for manjaro"
+  fi
+
+  cd "${TEST_FIXTURES_DIR}/packages/21multi@pacman"
+
+  run ydf::package_service::__instruction_@pacman '21multi@pacman'
+
+  assert_success
+
+  run pacman -Q dust nnn bat
+
+  assert_success
+  assert_output --regexp "dust .*
+nnn .*
+bat .*"
 }
 
 # Tests for ydf::package_service::__instruction_@yay()
@@ -679,7 +696,6 @@ added line2 to file11
 
   local -r _package_name=''
   local -r _instruction=''
-
 
   run ydf::package_service::__recursive_copy_with_envsubst \
     "$_package_name" "$_instruction"

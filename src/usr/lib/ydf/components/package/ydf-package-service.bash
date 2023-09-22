@@ -146,9 +146,9 @@ ydf::package_service::__instruction_postinstall() {
 ydf::package_service::__instruction_@pacman() {
   local -r pkg_name="$1"
   # select the first no empty line
-  local -r pacman_pkg_name="$(ydf::utils::print_1line <@pacman)"
+  local -r pacman_pkg_name="$(ydf::utils::text_file_to_words @pacman)"
 
-  sudo -H pacman -Syu --noconfirm --needed "${pacman_pkg_name:-"$pkg_name"}"
+  eval sudo -H pacman -Syu --noconfirm --needed "${pacman_pkg_name:-"$pkg_name"}"
 }
 
 #
@@ -163,9 +163,9 @@ ydf::package_service::__instruction_@pacman() {
 ydf::package_service::__instruction_@yay() {
   local -r pkg_name="$1"
   # select the first no empty line
-  local -r yay_pkg_name="$(ydf::utils::print_1line <@yay)"
+  local -r yay_pkg_name="$(ydf::utils::text_file_to_words @yay)"
 
-  sudo -H yay -Syu --noconfirm --needed "${yay_pkg_name:-"$pkg_name"}"
+  eval sudo -H yay -Syu --noconfirm --needed "${yay_pkg_name:-"$pkg_name"}"
 }
 
 #
@@ -180,9 +180,9 @@ ydf::package_service::__instruction_@yay() {
 ydf::package_service::__instruction_@flatpak() {
   local -r pkg_name="$1"
   # select the first no empty line
-  local -r flatpak_pkg_name="$(ydf::utils::print_1line <@flatpak)"
+  local -r flatpak_pkg_name="$(ydf::utils::text_file_to_words @flatpak)"
 
-  sudo -H flatpak install --assumeyes --noninteractive flathub "${flatpak_pkg_name:-"$pkg_name"}"
+  eval sudo -H flatpak install --assumeyes --noninteractive flathub "${flatpak_pkg_name:-"$pkg_name"}"
 }
 
 #
@@ -197,7 +197,7 @@ ydf::package_service::__instruction_@flatpak() {
 ydf::package_service::__instruction_@snap() {
   local -r pkg_name="$1"
   # select the first no empty line
-  local -r snap_pkg_name="$(ydf::utils::print_1line <@snap)"
+  local -r snap_pkg_name="$(ydf::utils::text_file_to_words @snap)"
   # eval allows include options along with package name
   eval sudo -H snap install "${snap_pkg_name:-"$pkg_name"}"
 }
