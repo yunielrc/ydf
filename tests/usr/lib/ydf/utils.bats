@@ -1,3 +1,5 @@
+# shellcheck disable=SC2317
+
 load test_helper
 
 # setup() {
@@ -283,7 +285,6 @@ added line1 to file1
 added line2 to file1"
 }
 
-
 # Tests for ydf::utils::copy_with_envar_sub()
 @test "ydf::utils::copy_with_envar_sub() Should fail If src_file doesn't exist" {
   local -r _src_file=""
@@ -344,12 +345,12 @@ added line2 to file1"
 
   sudo() {
     case "$*" in
-      mkdir* )
-        return 1
-        ;;
-      * )
-        command sudo "$@"
-        ;;
+    mkdir*)
+      return 1
+      ;;
+    *)
+      command sudo "$@"
+      ;;
     esac
   }
 
@@ -435,7 +436,6 @@ line 11'
   local -r _dest_file=""
   local -r _env_file=""
 
-
   run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
 
   assert_failure
@@ -446,7 +446,6 @@ line 11'
   local -r _src_file="$(mktemp)"
   local -r _dest_file=""
   local -r _env_file=""
-
 
   run ydf::utils::mark_concat_with_envar_sub "$_src_file" "$_dest_file" "$_env_file"
 
@@ -515,7 +514,6 @@ added line2 to file1"
   local -r _src_file="${TEST_FIXTURES_DIR}/packages/20homecats/homecats/.my/dir1/file11"
   local -r _dest_file="${BATS_TEST_TMPDIR}/.my/dir1/file11"
   local -r _env_file="${TEST_FIXTURES_DIR}/packages/envsubst.env"
-
 
   chmod -w "$_dest_file"
 
@@ -755,17 +753,17 @@ added line2 to file1"
 
   func1() {
     case "$*" in
-      e1 )
-        return 0
+    e1)
+      return 0
       ;;
-      e2 )
-        return 1
+    e2)
+      return 1
       ;;
-      e3 )
-        return 0
+    e3)
+      return 0
       ;;
-      * )
-        return 0
+    *)
+      return 0
       ;;
     esac
   }
@@ -782,11 +780,11 @@ added line2 to file1"
 
   func1() {
     case "$*" in
-      e1 | e2 | e3 )
-        return 0
+    e1 | e2 | e3)
+      return 0
       ;;
-      * )
-        return 1
+    *)
+      return 1
       ;;
     esac
   }
@@ -798,11 +796,20 @@ added line2 to file1"
 }
 
 # Tests for ydf::utils::text_file_to_words()
-@test "ydf::utils::text_file_to_words() Should fail If file doesn't exist" {
+@test "ydf::utils::text_file_to_words() Should succeed" {
   local -r _file="${TEST_FIXTURES_DIR}/packages/selection2"
 
   run ydf::utils::text_file_to_words "$_file"
 
   assert_success
   assert_output "1freedom 2preinstall "
+}
+
+@test "ydf::utils::text_file_to_words() Should succeed with multiple words in one line" {
+  local -r _file="${TEST_FIXTURES_DIR}/packages/selection3"
+
+  run ydf::utils::text_file_to_words "$_file"
+
+  assert_success
+  assert_output "1freedom 2freedom 2preinstall 3preinstall "
 }
