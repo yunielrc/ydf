@@ -35,7 +35,15 @@ fi
 
 {
   echo "$header"
+  bash "./tools/list-pkgs-opt-${OS}"
+} >"packages-opt-${OS}.versions"
+
+{
+  echo "$header"
   bash "./tools/list-pkgs-dev-${OS}"
 } >"packages-dev-${OS}.versions"
 
-git add "packages-dev-${OS}.versions" "packages-run-${OS}.versions"
+git add \
+  "packages-run-${OS}.versions" \
+  "packages-opt-${OS}.versions" \
+  "packages-dev-${OS}.versions"

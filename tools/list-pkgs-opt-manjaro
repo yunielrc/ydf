@@ -5,10 +5,12 @@
 
 set -eu
 
-# shellcheck source=../packages.env
-. ./packages.env
-
 echo "# SYSTEM: $(uname -a)"
 
 echo '# PACMAN'
-pacman --color never -Q bash "${PKG_RUN_MANJARO_YAY[@]}"
+pacman --color never -Q yay snapd docker docker-compose
+
+echo '# GITHUB'
+cat <<EOF
+yunielrc/yzsh
+EOF

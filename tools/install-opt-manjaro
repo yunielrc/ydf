@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+#
+# Install optional dependencies for manjaro
+#
+
+set -eu
+
+# Install yay
+sudo pacman -Syu --noconfirm --needed yay
+
+# Install snap
+sudo pacman -S --noconfirm --needed snapd
+
+sudo systemctl enable apparmor --now
+sudo systemctl enable snapd.apparmor --now
+sudo systemctl enable snapd --now
+
+sudo ln -vs /var/lib/snapd/snap /snap
+
+echo ">>Attention: log out and back in again, or restart your system, to ensure snap’s paths are updated correctly"
+
+# sudo snap install core
+
+# Install docker
+sudo pacman -S --noconfirm --needed docker docker-compose
+sudo systemctl enable docker --now
+
+sudo usermod -aG docker "$USER"
+
+# Install YZSH
+
+if [[ -f .ydf.env ]]; then
+  # shellcheck source=../.ydf.env
+  source .ydf.env
+
+  ## DOWNLOAD USER YZSH DATA
+  if [[ -n "${YDF_YZSH_DATA_REPOSITORY_URL:-}" ]]; then
+    git clone "$YDF_YZSH_DATA_REPOSITORY_URL" "$YDF_YZSH_DATA_DIR"
+  fi
+##
+
+fi
+
+cd "$(mktemp -d)"
+git clone https://github.com/yunielrc/yzsh.git && cd yzsh
+make install

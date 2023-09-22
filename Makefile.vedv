@@ -4,6 +4,9 @@
 install-run-manjaro:
 	./tools/install-run-manjaro
 
+install-opt-manjaro:
+	./tools/install-opt-manjaro
+
 install-dev-manjaro:
 	./tools/install-dev-manjaro.vedv
 
@@ -24,6 +27,3 @@ test-suite:
 
 test-name:
 	./tools/bats --filter '$(n)' $(u)
-
-
-

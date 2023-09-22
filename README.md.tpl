@@ -42,6 +42,12 @@ Runtime Dependencies:
 ${MANJARO_PACKAGES_RUN}
 ```
 
+Optional Dependencies:
+
+```sh
+${MANJARO_PACKAGES_OPT}
+```
+
 ⚠️ It should work on any linux distribution, but it has not been tested.
 
 ## Install
@@ -57,10 +63,27 @@ git clone https://github.com/yunielrc/ydf.git && cd ydf
 Install runtime dependencies and ydf on home directory
 
 ```sh
-make install-run-manjaro && make install-tohome
+make install-opt-manjaro && make install-tohome
 ```
 
-For any other linux distribution install the runtime dependencies manually,
+Minimal installation without optional dependencies:
+
+```sh
+make install-tohome
+```
+
+⚠️ Attention: Instruction that rely on optional dependencies can't be used.
+
+Instruction | Dependency
+---------|----------
+ `@snap` | snapd
+ `docker-compose.yml` | docker, docker-compose
+ `@yay` | yay
+ `*.plugin.zsh` | yzsh
+
+### Other linux Distros
+
+For any other linux distribution you can install optional dependencies manually,
 then execute the following command:
 
 ```sh

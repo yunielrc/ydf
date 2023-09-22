@@ -68,6 +68,9 @@ install-tohome:
 install-run-manjaro:
 	./tools/install-run-manjaro
 
+install-opt-manjaro:
+	./tools/install-opt-manjaro
+
 install-dev-manjaro:
 	./tools/install-dev-manjaro
 
