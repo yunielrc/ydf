@@ -1,4 +1,4 @@
-# shellcheck disable=SC2317
+# shellcheck disable=SC2317,SC2153
 load test_helper
 
 setup() {
@@ -558,16 +558,13 @@ Plugin '10ydfplugin' already added to /home/vedv/.yzsh-gen.env"
 }
 
 # Tests for ydf::package_service::__instruction_homecat()
-@test "ydf::package_service::__instruction_homecat() Should skip if dest_file doesn't exist" {
-
+@test "ydf::package_service::__instruction_homecat() Should fail if dest_file doesn't exist" {
   cd "${TEST_FIXTURES_DIR}/packages/15homecat"
 
   run ydf::package_service::__instruction_homecat '15homecat'
 
-  assert_success
-  assert_output "WARNING> Skipped homecat, file '/home/vedv/.my/file1' doesn't exist
-WARNING> Skipped homecat, file '/home/vedv/.my/dir1/file11' doesn't exist
-WARNING> Skipped homecat, file '/home/vedv/.my-config.env' doesn't exist"
+  assert_failure
+  assert_output "ERROR> homecat, file '/home/vedv/.my/file1' doesn't exist"
 }
 
 @test "ydf::package_service::__instruction_homecat() Should fail if mark_concat fail" {
@@ -590,13 +587,14 @@ WARNING> Skipped homecat, file '/home/vedv/.my-config.env' doesn't exist"
 @test "ydf::package_service::__instruction_homecat() Should succeed" {
 
   cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+  touch /home/vedv/.my-config.env
 
   cd "${TEST_FIXTURES_DIR}/packages/15homecat"
 
   run ydf::package_service::__instruction_homecat '15homecat'
 
   assert_success
-  assert_output "WARNING> Skipped homecat, file '/home/vedv/.my-config.env' doesn't exist"
+  assert_output ""
 
   run cat /home/vedv/.my/file1
 
@@ -624,21 +622,19 @@ added line2 to file11
 }
 
 # Tests for ydf::package_service::__instruction_rootcat()
-@test "ydf::package_service::__instruction_rootcat() Should skip if dest_file doesn't exist" {
-
+@test "ydf::package_service::__instruction_rootcat() Should fail if dest_file doesn't exist" {
   cd "${TEST_FIXTURES_DIR}/packages/16rootcat"
 
   run ydf::package_service::__instruction_rootcat '16rootcat'
 
-  assert_success
-  assert_output "WARNING> Skipped rootcat, file '/.my/file1' doesn't exist
-WARNING> Skipped rootcat, file '/.my/dir1/file11' doesn't exist
-WARNING> Skipped rootcat, file '/.my-config.env' doesn't exist"
+  assert_failure
+  assert_output "ERROR> rootcat, file '/.my/file1' doesn't exist"
 }
 
 @test "ydf::package_service::__instruction_rootcat() Should fail if mark_concat fail" {
 
   sudo cp -r "${TEST_FIXTURES_DIR}/dirs/.my" /
+  sudo touch /.my-config.env
 
   cd "${TEST_FIXTURES_DIR}/packages/16rootcat"
 
@@ -656,13 +652,14 @@ WARNING> Skipped rootcat, file '/.my-config.env' doesn't exist"
 @test "ydf::package_service::__instruction_rootcat() Should succeed" {
 
   sudo cp -r "${TEST_FIXTURES_DIR}/dirs/.my" /
+  sudo touch /.my-config.env
 
   cd "${TEST_FIXTURES_DIR}/packages/16rootcat"
 
   run ydf::package_service::__instruction_rootcat '16rootcat'
 
   assert_success
-  assert_output "WARNING> Skipped rootcat, file '/.my-config.env' doesn't exist"
+  assert_output ""
 
   run cat /.my/file1
 
@@ -917,7 +914,7 @@ line 11'
 
 }
 
-@test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should skip if dest_file doesn't exist" {
+@test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should fail if dest_file doesn't exist" {
 
   cd "${TEST_FIXTURES_DIR}/packages/20homecats"
 
@@ -932,16 +929,15 @@ line 11'
   run ydf::package_service::__recursive_mark_concat_with_envsubst \
     "$_package_name" "$_instruction"
 
-  assert_success
-  assert_output "WARNING> Skipped homecats, file '/home/vedv/.my/file1' doesn't exist
-WARNING> Skipped homecats, file '/home/vedv/.my/dir1/file11' doesn't exist
-WARNING> Skipped homecats, file '/home/vedv/.my-config.env' doesn't exist"
+  assert_failure
+  assert_output "ERROR> homecats, file '/home/vedv/.my/file1' doesn't exist"
 }
 
 @test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should fail If mark_concat_with_envar_sub fails" {
 
   cd "${TEST_FIXTURES_DIR}/packages/20homecats"
   cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+  touch /home/vedv/.my-config.env
 
   local -r _package_name='20homecats'
   local -r _instruction='homecats'
@@ -962,6 +958,7 @@ WARNING> Skipped homecats, file '/home/vedv/.my-config.env' doesn't exist"
 
   cd "${TEST_FIXTURES_DIR}/packages/20homecats"
   cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+  touch /home/vedv/.my-config.env
 
   local -r _package_name='20homecats'
   local -r _instruction='homecats'
@@ -970,7 +967,7 @@ WARNING> Skipped homecats, file '/home/vedv/.my-config.env' doesn't exist"
     "$_package_name" "$_instruction"
 
   assert_success
-  assert_output "WARNING> Skipped homecats, file '/home/vedv/.my-config.env' doesn't exist"
+  assert_output ""
 
   run cat /home/vedv/.my/file1
 
@@ -1020,6 +1017,7 @@ line 11
 
   cd "${TEST_FIXTURES_DIR}/packages/21rootcats"
   sudo cp -r "${TEST_FIXTURES_DIR}/dirs/.my" /
+  sudo touch /.my-config.env
 
   local -r _package_name='21rootcats'
   local -r _instruction='rootcats'
@@ -1028,7 +1026,7 @@ line 11
     "$_package_name" "$_instruction"
 
   assert_success
-  assert_output "WARNING> Skipped rootcats, file '/.my-config.env' doesn't exist"
+  assert_output ""
 
   run cat /.my/file1
 

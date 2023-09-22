@@ -312,8 +312,8 @@ ydf::package_service::__instruction_homecat() {
     local dest_file="${HOME}/${src_file#*/}"
 
     if [[ ! -f "$dest_file" ]]; then
-      warn "Skipped homecat, file '${dest_file}' doesn't exist"
-      continue
+      err "homecat, file '${dest_file}' doesn't exist"
+      return "$ERR_NO_FILE"
     fi
 
     ydf::utils::mark_concat "$src_file" "$dest_file" >/dev/null || {
@@ -340,8 +340,8 @@ ydf::package_service::__instruction_rootcat() {
     local dest_file="/${src_file#*/}"
 
     if [[ ! -f "$dest_file" ]]; then
-      warn "Skipped rootcat, file '${dest_file}' doesn't exist"
-      continue
+      err "rootcat, file '${dest_file}' doesn't exist"
+      return "$ERR_NO_FILE"
     fi
 
     ydf::utils::mark_concat "$src_file" "$dest_file" >/dev/null || {
@@ -458,8 +458,8 @@ ydf::package_service::__recursive_mark_concat_with_envsubst() {
     local dest_file="${dest_dir}/${src_file#*/}"
 
     if [[ ! -f "$dest_file" ]]; then
-      warn "Skipped ${instruction}, file '${dest_file}' doesn't exist"
-      continue
+      err "${instruction}, file '${dest_file}' doesn't exist"
+      return "$ERR_NO_FILE"
     fi
 
     ydf::utils::mark_concat_with_envar_sub \

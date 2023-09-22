@@ -483,11 +483,12 @@ com.github.tchx84.Flatseal: postinstall succeed"
 @test "ydf package install ./15homecat Should succeed" {
   local -r _package_name="15homecat"
   cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+  touch /home/vedv/.my-config.env
 
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "WARNING> Skipped homecat, file '/home/vedv/.my-config.env' doesn't exist"
+  assert_output ""
 
   run cat /home/vedv/.my/file1
 
@@ -518,11 +519,12 @@ added line2 to file11
 @test "ydf package install ./16rootcat Should succeed" {
   local -r _package_name="16rootcat"
   sudo cp -r "${TEST_FIXTURES_DIR}/dirs/.my" /
+  sudo touch /.my-config.env
 
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "WARNING> Skipped rootcat, file '/.my-config.env' doesn't exist"
+  assert_output ""
 
   run cat /.my/file1
 
@@ -695,11 +697,12 @@ speed=0.5"
 @test "ydf package install ./20homecats Should succeed" {
   local -r _package_name="20homecats"
   cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+  touch /home/vedv/.my-config.env
 
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "WARNING> Skipped homecats, file '/home/vedv/.my-config.env' doesn't exist"
+  assert_output ""
 
   run cat /home/vedv/.my/file1
 
@@ -749,13 +752,14 @@ line 11
 @test "ydf package install ./21rootcats Should succeed" {
   local -r _package_name="21rootcats"
   sudo cp -r "${TEST_FIXTURES_DIR}/dirs/.my" /
+  sudo touch /.my-config.env
 
   run ydf package install \
     --packages-dir "$YDF_PACKAGE_SERVICE_PACKAGES_DIR" \
     "$_package_name"
 
   assert_success
-  assert_output "WARNING> Skipped rootcats, file '/.my-config.env' doesn't exist"
+  assert_output ""
 
   run cat /.my/file1
 
