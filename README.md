@@ -44,17 +44,19 @@ Runtime Dependencies:
 # SYSTEM: Linux yuniel-pc 6.1.51-1-MANJARO #1 SMP PREEMPT_DYNAMIC Sat Sep  2 23:22:36 UTC 2023 x86_64 GNU/Linux
 # PACMAN
 bash 5.1.016-3
-snapd 2.60.3-1
-docker 1:24.0.5-1
-docker-compose 2.20.3-1
-# GITHUB
-yunielrc/yzsh
 ```
 
 Optional Dependencies:
 
 ```sh
-
+# SYSTEM: Linux yuniel-pc 6.1.51-1-MANJARO #1 SMP PREEMPT_DYNAMIC Sat Sep  2 23:22:36 UTC 2023 x86_64 GNU/Linux
+# PACMAN
+yay 12.1.2-1
+snapd 2.60.3-1
+docker 1:24.0.5-1
+docker-compose 2.20.3-1
+# GITHUB
+yunielrc/yzsh
 ```
 
 ⚠️ It should work on any linux distribution, but it has not been tested.
@@ -69,7 +71,7 @@ git clone https://github.com/yunielrc/ydf.git && cd ydf
 
 ### Install on Manjaro
 
-Install runtime dependencies and ydf on home directory
+Install optional dependencies and ydf on home directory
 
 ```sh
 make install-opt-manjaro && make install-tohome
@@ -81,9 +83,9 @@ Minimal installation without optional dependencies:
 make install-tohome
 ```
 
-⚠️ Attention: Instruction that rely on optional dependencies can't be used.
+⚠️ Attention: Instructions that rely on optional dependencies can't be used.
 
-Instruction | Dependency
+Instruction | Optional dependency
 ---------|----------
  `@snap` | snapd
  `docker-compose.yml` | docker, docker-compose
@@ -93,7 +95,7 @@ Instruction | Dependency
 ### Other linux Distros
 
 For any other linux distribution you can install optional dependencies manually,
-then execute the following command:
+then execute the command below:
 
 ```sh
 make install-tohome

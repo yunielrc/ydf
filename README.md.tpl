@@ -60,7 +60,7 @@ git clone https://github.com/yunielrc/ydf.git && cd ydf
 
 ### Install on Manjaro
 
-Install runtime dependencies and ydf on home directory
+Install optional dependencies and ydf on home directory
 
 ```sh
 make install-opt-manjaro && make install-tohome
@@ -72,9 +72,9 @@ Minimal installation without optional dependencies:
 make install-tohome
 ```
 
-⚠️ Attention: Instruction that rely on optional dependencies can't be used.
+⚠️ Attention: Instructions that rely on optional dependencies can't be used.
 
-Instruction | Dependency
+Instruction | Optional dependency
 ---------|----------
  `@snap` | snapd
  `docker-compose.yml` | docker, docker-compose
@@ -84,7 +84,7 @@ Instruction | Dependency
 ### Other linux Distros
 
 For any other linux distribution you can install optional dependencies manually,
-then execute the following command:
+then execute the command below:
 
 ```sh
 make install-tohome
