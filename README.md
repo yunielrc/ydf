@@ -2,7 +2,7 @@
 <!-- EDIT README.md.tpl INSTEAD -->
 <div align="center">
   <a href="" rel="noopener">
-    <img src="media/ydf.png" width="64px" alt="ydf" />
+    <img src="media/ydf.png" width="96px" alt="ydf" />
 
 # ydf
 
