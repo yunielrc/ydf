@@ -262,9 +262,9 @@ rustscan: postinstall succeed"
 
   assert_success
   assert_output --regexp "7micenter@flathub: preinstall succeed
-7micenter@flathub: install succeed
 .*
 .*io.missioncenter.MissionCenter.*
+7micenter@flathub: install succeed
 7micenter@flathub: postinstall succeed"
 
   __run_wrapper() {
@@ -285,8 +285,8 @@ rustscan: postinstall succeed"
 
   assert_success
   assert_output --regexp "com.github.tchx84.Flatseal: preinstall succeed
-com.github.tchx84.Flatseal: install succeed
 .*app/com.github.tchx84.Flatseal.*
+com.github.tchx84.Flatseal: install succeed
 com.github.tchx84.Flatseal: postinstall succeed"
 
   __run_wrapper() {
@@ -307,8 +307,8 @@ com.github.tchx84.Flatseal: postinstall succeed"
 
   assert_success
   assert_output --regexp "8go@snap: preinstall succeed
-8go@snap: install succeed
 .*
+8go@snap: install succeed
 8go@snap: postinstall succeed"
 
   run command -v go
