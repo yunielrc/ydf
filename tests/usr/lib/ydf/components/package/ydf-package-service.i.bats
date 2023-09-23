@@ -183,7 +183,8 @@ ERROR> Changing current directory to "
   run ydf::package_service::install_one_from_dir "$_package_name"
 
   assert_failure
-  assert_output ">> INSTALLING: 0freedom-fail
+  assert_output "
+>> INSTALLING: 0freedom-fail
 >> FAILED. NOT INSTALLED: 0freedom-fail
 ERROR> Executing instruction 'preinstall' on '/home/vedv/ydf/tests/fixtures/packages/0freedom-fail'"
 }
@@ -219,7 +220,8 @@ ERROR> Executing instruction 'preinstall' on '/home/vedv/ydf/tests/fixtures/pack
   run ydf::package_service::install_one_from_dir "$_package_name"
 
   assert_success
-  assert_output ">> INSTALLING: 0freedom-fail
+  assert_output "
+>> INSTALLING: 0freedom-fail
 docker_compose
 preinstall
 >> DONE. INSTALLED: 0freedom-fail"
@@ -250,7 +252,8 @@ preinstall
   run ydf::package_service::install_one_from_dir "$_package_name"
 
   assert_success
-  assert_output ">> INSTALLING: 0freedom-fail
+  assert_output "
+>> INSTALLING: 0freedom-fail
 preinstall
 postinstall
 docker_compose
@@ -280,7 +283,8 @@ docker_compose
     "$_package_name" "$_os_name" "$_packages_dir"
 
   assert_success
-  assert_output ">> INSTALLING: 1liberty
+  assert_output "
+>> INSTALLING: 1liberty
 1liberty: preinstall succeed
 1liberty: postinstall
 >> DONE. INSTALLED: 1liberty"

@@ -102,7 +102,8 @@ ydf package COMMAND'
     1liberty
 
   assert_success
-  assert_output "1liberty: preinstall succeed
+  assert_output "
+1liberty: preinstall succeed
 1liberty: postinstall"
 }
 
@@ -122,7 +123,8 @@ ydf package COMMAND'
   run ydf package install --os "$YDF_PACKAGE_SERVICE_DEFAULT_OS" "$_package_name"
 
   assert_success
-  assert_output "preinstall: preinstall succeed"
+  assert_output "
+preinstall: preinstall succeed"
 }
 
 @test "ydf package install 2preinstall, Should succeed" {
@@ -131,7 +133,8 @@ ydf package COMMAND'
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "preinstall: preinstall succeed"
+  assert_output "
+preinstall: preinstall succeed"
 }
 
 # Tests for ydf package install 3install
@@ -150,7 +153,8 @@ ydf package COMMAND'
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "3install: preinstall succeed
+  assert_output "
+3install: preinstall succeed
 3install: install succeed"
 }
 
@@ -161,7 +165,8 @@ ydf package COMMAND'
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "4postinstall: preinstall succeed
+  assert_output "
+4postinstall: preinstall succeed
 4postinstall: install succeed
 4postinstall: postinstall succeed"
 }
@@ -350,7 +355,8 @@ com.github.tchx84.Flatseal: postinstall succeed"
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "'/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'"
+  assert_output "
+'/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'"
 
   assert [ -L '/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' ]
   assert [ -f '/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' ]
@@ -368,7 +374,8 @@ com.github.tchx84.Flatseal: postinstall succeed"
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "'/home/vedv/.my' -> '/home/vedv/ydf/tests/fixtures/packages/11homeln/homeln/.my'
+  assert_output "
+'/home/vedv/.my' -> '/home/vedv/ydf/tests/fixtures/packages/11homeln/homeln/.my'
 '/home/vedv/.my-config.env' -> '/home/vedv/ydf/tests/fixtures/packages/11homeln/homeln/.my-config.env'"
 
   assert [ -L '/home/vedv/.my' ]
@@ -386,7 +393,8 @@ com.github.tchx84.Flatseal: postinstall succeed"
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my' -> '/home/vedv/.my'
+  assert_output "
+'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my' -> '/home/vedv/.my'
 '/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/dir1' -> '/home/vedv/.my/dir1'
 '/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/dir1/file11' -> '/home/vedv/.my/dir1/file11'
 '/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/file1' -> '/home/vedv/.my/file1'
@@ -421,7 +429,8 @@ com.github.tchx84.Flatseal: postinstall succeed"
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my' -> '/home/vedv/.my'
+  assert_output "
+'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my' -> '/home/vedv/.my'
 '/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1' -> '/home/vedv/.my/dir1'
 '/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1/file11' -> '/home/vedv/.my/dir1/file11'
 '/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/file1' -> '/home/vedv/.my/file1'
@@ -456,7 +465,8 @@ com.github.tchx84.Flatseal: postinstall succeed"
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my' -> '/.my'
+  assert_output "
+'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my' -> '/.my'
 '/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1' -> '/.my/dir1'
 '/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1/file11' -> '/.my/dir1/file11'
 '/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/file1' -> '/.my/file1'
@@ -816,8 +826,10 @@ line 11
   run ydf package install 1freedom 2preinstall
 
   assert_success
-  assert_output "preinstall succeed
+  assert_output "
+preinstall succeed
 postinstall
+
 preinstall: preinstall succeed"
 }
 
@@ -827,8 +839,10 @@ preinstall: preinstall succeed"
   run ydf package install ./selection
 
   assert_success
-  assert_output "preinstall succeed
+  assert_output "
+preinstall succeed
 postinstall
+
 preinstall: preinstall succeed"
 }
 
@@ -839,7 +853,8 @@ preinstall: preinstall succeed"
   run ydf package install "$_package_name"
 
   assert_success
-  assert_output "'/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/24ydftheme/24ydftheme.theme.zsh'"
+  assert_output "
+'/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/24ydftheme/24ydftheme.theme.zsh'"
 
   assert [ -L '/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' ]
   assert [ -f '/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' ]

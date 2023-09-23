@@ -59,7 +59,7 @@ docker-compose 2.20.3-1
 yunielrc/yzsh
 ```
 
-⚠️ It should work on any linux distribution, but it has not been tested.
+⚠️ It should work on any other linux distribution, but it has not been tested.
 
 ## Install
 
@@ -292,7 +292,9 @@ git commit -m "Add <package>"
 git push -u origin master
 ```
 
-Then when you reinstall your OS or on a new machine you can install all your
+### Install packages
+
+When you reinstall your OS or on a new machine you can install all your
 packages with:
 
 ```sh

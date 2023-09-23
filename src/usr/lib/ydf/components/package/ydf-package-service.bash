@@ -592,6 +592,7 @@ ydf::package_service::install_one_from_dir() {
   instr_arr=($instr)
   readonly instr_arr
 
+  echo
   msg ">> INSTALLING: ${pkg_name}"
 
   (
