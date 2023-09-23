@@ -1,6 +1,13 @@
+<div align="center">
+  <a href="" rel="noopener">
+    <img src="media/ydf.png" width="64px" alt="ydf" />
+
 # ydf
 
-A disruptive dotfiles manager and more.
+  </a>
+
+**_A disruptive dotfiles manager+_**
+</div>
 
 ## Table of Contents
 
