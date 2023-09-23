@@ -313,8 +313,8 @@ packages with:
 ydf packages install <packages_selection>.pkgs
 ```
 
-⚠️ Attention: It's highly recommended to test the installation of the packages
-on a virtual machine before install them.
+👉 You can test the installation of the packages on a virtual machine before
+   install them on a real one.
 
 It's recommended to check out `vedv` at <https://github.com/yunielrc/vedv>
 for working with virtual machines.
