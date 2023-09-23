@@ -83,7 +83,8 @@ Minimal installation without optional dependencies:
 make install-tohome
 ```
 
-⚠️ Attention: Instructions that rely on optional dependencies can't be used.
+⚠️ Attention: Instructions that rely on optional dependencies can't be used
+   with the minimal installation.
 
 Instruction | Optional dependency
 ---------|----------
@@ -117,21 +118,22 @@ vim ~/.ydf.env
 ### What is a package?
 
 A `package` is a directory containing files and directories in which some have
-special meaning for the `interpreter`. ydf is an `interpreter`.
+a special meaning for the `interpreter`. ydf is an `interpreter`.
 
 ### Which are the directories and files with special meaning?
 
-These is an example of a `package` with 18 directories and files with special
+Here is an example of a `package` with 19 directories and files with special
 meaning, those are `instructions` that work on any linux distribution:
 
 ```sh
 package1
-├── preinstall           # Script executed before install
-├── install              # Script executed on install
+├── preinstall           # Script executed before all instructions
 ├── @flatpak             # Install <package1> with flatpak
 ├── @snap                # Install <package1> with snap
+├── install              # Script executed on install
 ├── docker-compose.yml   # Run docker compose up -d
 ├── package1.plugin.zsh  # Install yzsh plugin
+├── package1.theme.zsh   # Install yzsh theme
 ├── homeln/              # Create symlinks on home for the first level files and
 |                        # directories inside this directory
 ├── homelnr/             # Create symlinks on home for all files inside this
@@ -156,10 +158,9 @@ The `instructions` can be grouped in 4 categories:
 These instructions are shell scripts that are executed by bash.
 
 - Package manager instructions: `@flatpak`, `@snap`.
-These instrucions are plain text files, the file can have inside one line with
-the package name or a list of packages names that are going to be installed.
-The file can be empty, in this case the package name (`package1`) is going to
-be used.
+These instrucions are plain text files, the file can have inside one or some package
+names that are going to be installed. The file can be empty, in this case the package
+`package1` is going to be installed.
 
 - Directory instructions: `homeln`, `homelnr`, `homecp`, `rootcp`, `homecat`,
 `rootcat`, `homecps`, `rootcps`, `homecats`, `rootcats`.
@@ -168,7 +169,8 @@ copied, concatenated or symlinked to the home or root directory. For those
 that end with `s` all the variables inside each file are substituted with the
 values defined in the `envsubst.env` file that is inside the `package directory`.
 
-- Tool files instructions: `docker-compose.yml`, `dconf.ini`, `package1.plugin.zsh`.
+- Tool files instructions: `docker-compose.yml`, `dconf.ini`, `package1.plugin.zsh`,
+`package1.theme.zsh`.
 These instructions are files that are going to be used by a tool. For example
 `docker-compose.yml` is going to be used by docker compose.
 The `package1.plugin.zsh` is a plugin that is going to be installed inside the
@@ -191,7 +193,7 @@ You can check out some examples of `packages` at: `tests/fixtures/packages`
 A `packages directory` is a directory that contains a list of `packages` and the
 `envsubst.env` file, besides it can have one or more `packages selection` files.
 
-For example of a `packages directory`:
+Here is an example of a `packages directory`:
 
 ```sh
 ~/.ydf-packages       # packages directory
@@ -280,10 +282,10 @@ Verify that the software was installed and configured correctly.
 Create a `packages selection` if apply and add the package.
 
 ```sh
-echo "<package>" >> ~/.ydf-packages/<packages selection>
+echo "<package>" >> ~/.ydf-packages/<packages_selection>.pkgs
 ```
 
-Save the changes.
+Commit the changes.
 
 ```sh
 cd ~/.ydf-packages
@@ -298,13 +300,13 @@ When you reinstall your OS or on a new machine you can install all your
 packages with:
 
 ```sh
-ydf packages install <packages-selection>
+ydf packages install <packages_selection>.pkgs
 ```
 
 ⚠️ Attention: It's highly recommended to test the installation of the packages
 on a virtual machine before install them.
 
-It's recommended to check out `vedv` at <https: //github.com/yunielrc/vedv>
+It's recommended to check out `vedv` at <https://github.com/yunielrc/vedv>
 for working with virtual machines.
 
 ## Contributing
@@ -350,7 +352,7 @@ Install dev dependencies for Manjaro:
 make install-dev-manjaro
 ```
 
-For any other linux distribution dev dependencies manually.
+For any other linux distribution install dev dependencies manually.
 
 ### Workflow
 
