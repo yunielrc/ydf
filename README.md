@@ -11,6 +11,8 @@
 **_A disruptive dotfiles manager+_**
 </div>
 
+<a href="https://www.producthunt.com/posts/ydf?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-ydf" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=416013&theme=light" alt="ydf - A&#0032;disruptive&#0032;dotfiles&#0032;manager&#0043; | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
 ## Table of Contents
 
 Click on the menu right before `README.md` as shown in the image below.
