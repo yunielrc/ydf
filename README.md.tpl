@@ -147,16 +147,16 @@ The `instructions` can be grouped in 4 categories:
 These instructions are shell scripts that are executed by bash.
 
 - Package manager instructions: `@flatpak`, `@snap`.
-These instrucions are plain text files, the file can have inside one or some package
+These instrucions are plain text files, the file can have inside one or more package
 names that are going to be installed. The file can be empty, in this case the package
 `package1` is going to be installed.
 
 - Directory instructions: `homeln`, `homelnr`, `homecp`, `rootcp`, `homecat`,
 `rootcat`, `homecps`, `rootcps`, `homecats`, `rootcats`.
 These instructions are directories that contains files that are going to be
-copied, concatenated or symlinked to the home or root directory. For those
+symlinked, copied or concatenated to the home or root directory. For those
 that end with `s` all the variables inside each file are substituted with the
-values defined in the `envsubst.env` file that is inside the `package directory`.
+values defined in the `envsubst.env` file that is inside the `packages directory`.
 
 - Tool files instructions: `docker-compose.yml`, `dconf.ini`, `package1.plugin.zsh`,
 `package1.theme.zsh`.
@@ -173,7 +173,8 @@ package2
 └── @yay
 ```
 
-👉 If you want support for others package managers you can create a pull request.
+👉 If you want support for others package managers you can open an issue or
+create a pull request.
 
 You can check out some examples of `packages` at: `tests/fixtures/packages`
 
