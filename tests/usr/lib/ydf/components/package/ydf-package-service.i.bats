@@ -185,6 +185,8 @@ ERROR> Changing current directory to "
   assert_failure
   assert_output "
 >> INSTALLING: 0freedom-fail
+>> EXECUTING: preinstall
+>> FAILED. EXECUTING: preinstall
 >> FAILED. NOT INSTALLED: 0freedom-fail
 ERROR> Executing instruction 'preinstall' on '/home/vedv/ydf/tests/fixtures/packages/0freedom-fail'"
 }
@@ -222,8 +224,12 @@ ERROR> Executing instruction 'preinstall' on '/home/vedv/ydf/tests/fixtures/pack
   assert_success
   assert_output "
 >> INSTALLING: 0freedom-fail
+>> EXECUTING: docker_compose
 docker_compose
+>> DONE. EXECUTED: docker_compose
+>> EXECUTING: preinstall
 preinstall
+>> DONE. EXECUTED: preinstall
 >> DONE. INSTALLED: 0freedom-fail"
 }
 
@@ -254,9 +260,15 @@ preinstall
   assert_success
   assert_output "
 >> INSTALLING: 0freedom-fail
+>> EXECUTING: preinstall
 preinstall
+>> DONE. EXECUTED: preinstall
+>> EXECUTING: postinstall
 postinstall
+>> DONE. EXECUTED: postinstall
+>> EXECUTING: docker_compose
 docker_compose
+>> DONE. EXECUTED: docker_compose
 >> DONE. INSTALLED: 0freedom-fail"
 }
 
@@ -285,8 +297,12 @@ docker_compose
   assert_success
   assert_output "
 >> INSTALLING: 1liberty
+>> EXECUTING: preinstall
 1liberty: preinstall succeed
+>> DONE. EXECUTED: preinstall
+>> EXECUTING: postinstall
 1liberty: postinstall
+>> DONE. EXECUTED: postinstall
 >> DONE. INSTALLED: 1liberty"
 }
 
@@ -603,7 +619,9 @@ Plugin '10ydfplugin' already added to /home/vedv/.yzsh-gen.env"
   run ydf::package_service::__instruction_homecat '15homecat'
 
   assert_success
-  assert_output ""
+  assert_output "cat homecat/.my/file1 >> /home/vedv/.my/file1
+cat homecat/.my/dir1/file11 >> /home/vedv/.my/dir1/file11
+cat homecat/.my-config.env >> /home/vedv/.my-config.env"
 
   run cat /home/vedv/.my/file1
 
@@ -668,7 +686,9 @@ added line2 to file11
   run ydf::package_service::__instruction_rootcat '16rootcat'
 
   assert_success
-  assert_output ""
+  assert_output "cat rootcat/.my/file1 >> /.my/file1
+cat rootcat/.my/dir1/file11 >> /.my/dir1/file11
+cat rootcat/.my-config.env >> /.my-config.env"
 
   run cat /.my/file1
 
@@ -755,7 +775,9 @@ added line2 to file11
     "$_package_name" "$_instruction"
 
   assert_success
-  assert_output ""
+  assert_output "cps homecps/.my/file1 --> /home/vedv/.my/file1
+cps homecps/.my/dir1/file11 --> /home/vedv/.my/dir1/file11
+cps homecps/.my-config.env --> /home/vedv/.my-config.env"
 
   run cat /home/vedv/.my/file1
 
@@ -822,7 +844,9 @@ line 11'
     "$_package_name" "$_instruction"
 
   assert_success
-  assert_output ""
+  assert_output "cps rootcps/.my/file1 --> /.my/file1
+cps rootcps/.my/dir1/file11 --> /.my/dir1/file11
+cps rootcps/.my-config.env --> /.my-config.env"
 
   run cat /.my/file1
 
@@ -976,7 +1000,9 @@ line 11'
     "$_package_name" "$_instruction"
 
   assert_success
-  assert_output ""
+  assert_output "cats homecats/.my/file1 >> /home/vedv/.my/file1
+cats homecats/.my/dir1/file11 >> /home/vedv/.my/dir1/file11
+cats homecats/.my-config.env >> /home/vedv/.my-config.env"
 
   run cat /home/vedv/.my/file1
 
@@ -1035,7 +1061,9 @@ line 11
     "$_package_name" "$_instruction"
 
   assert_success
-  assert_output ""
+  assert_output "cats rootcats/.my/file1 >> /.my/file1
+cats rootcats/.my/dir1/file11 >> /.my/dir1/file11
+cats rootcats/.my-config.env >> /.my-config.env"
 
   run cat /.my/file1
 

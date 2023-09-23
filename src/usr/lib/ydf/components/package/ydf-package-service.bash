@@ -355,6 +355,8 @@ ydf::package_service::__instruction_homecat() {
       return "$ERR_FAILED"
     }
 
+    msg "cat ${src_file} >> ${dest_file}"
+
   done < <(find homecat/ -type f)
 }
 
@@ -382,6 +384,8 @@ ydf::package_service::__instruction_rootcat() {
       err "Marking concat for '${src_file}' to '${dest_file}'"
       return "$ERR_FAILED"
     }
+
+    msg "cat ${src_file} >> ${dest_file}"
 
   done < <(find rootcat/ -type f)
 }
@@ -424,6 +428,8 @@ ydf::package_service::__recursive_copy_with_envsubst() {
       err "Copying with envar substitution file '${src_file}' to '${dest_file}'"
       return "$ERR_FAILED"
     }
+
+    msg "cps ${src_file} --> ${dest_file}"
 
   done < <(find "$instruction"/ -type f)
 }
@@ -501,6 +507,8 @@ ydf::package_service::__recursive_mark_concat_with_envsubst() {
       err "Concat with envar substitution file '${src_file}' to '${dest_file}'"
       return "$ERR_FAILED"
     }
+
+    msg "cats ${src_file} >> ${dest_file}"
 
   done < <(find "$instruction"/ -type f)
 }
@@ -619,11 +627,16 @@ ydf::package_service::install_one_from_dir() {
         continue
       fi
 
+      msg ">> EXECUTING: ${ifunc_partial_name}"
+
       "$ifunction" "$pkg_name" || {
+        msg ">> FAILED. EXECUTING: ${ifunc_partial_name}"
         msg ">> FAILED. NOT INSTALLED: ${pkg_name}"
         err "Executing instruction '${_instr}' on '${package_dir}'"
         return "$ERR_YPS_INSTRUCTION_FAIL"
       }
+
+      msg ">> DONE. EXECUTED: ${ifunc_partial_name}"
     done
 
     msg ">> DONE. INSTALLED: ${pkg_name}"
