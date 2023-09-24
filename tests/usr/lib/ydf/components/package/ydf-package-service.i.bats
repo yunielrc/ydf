@@ -2,6 +2,7 @@
 load test_helper
 
 setup() {
+  export YDF_PACKAGE_SERVICE_DEFAULT_OS="$TEST_OS"
 
   ydf::package_service::constructor \
     "$YDF_PACKAGE_SERVICE_DEFAULT_OS" \

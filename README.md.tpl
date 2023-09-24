@@ -57,6 +57,20 @@ Optional Dependencies:
 ${MANJARO_PACKAGES_OPT}
 ```
 
+### Ubuntu
+
+Runtime Dependencies:
+
+```sh
+${UBUNTU_PACKAGES_RUN}
+```
+
+Optional Dependencies:
+
+```sh
+${UBUNTU_PACKAGES_OPT}
+```
+
 ⚠️ It should work on any other linux distribution, but it has not been tested.
 
 ## Install
@@ -288,7 +302,7 @@ When you reinstall your OS or on a new machine you can install all your
 packages with:
 
 ```sh
-ydf packages install <packages_selection>.pkgs
+ydf package install <packages_selection>.pkgs
 ```
 
 👉 You can test the installation of the packages on a virtual machine before
@@ -305,6 +319,12 @@ Contributions, issues and feature requests are welcome!
 
 ```sh
 ${MANJARO_PACKAGES_DEV}
+```
+
+### Ubuntu dev dependencies
+
+```sh
+${UBUNTU_PACKAGES_DEV}
 ```
 
 ### Configure dev environment

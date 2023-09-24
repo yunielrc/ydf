@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#
+# List manjaro dev dependencies
+#
+
+set -eu
+# shellcheck source=../packages.env
+. ./packages.env
+
+echo "# SYSTEM: $(uname -a)"
+
+echo '# APT'
+apt -qq list --installed bash "${PKG_RUN_UBUNTU_APT[@]}" 2>/dev/null |
+  sed -E 's/\/\S+//' |
+  awk '{print $1, $2}'
+
+# echo '# PIP'
+# pip list |
+#   grep -E "$(tr ' ' '|' <<<"${PKG_PROD_UBUNTU_PIP[*]}")" |
+#   tr -s ' '

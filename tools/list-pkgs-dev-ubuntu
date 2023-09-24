@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#
+# List manjaro dev dependencies
+#
+
+set -eu
+# shellcheck source=../packages.env
+. ./packages.env
+
+echo "# SYSTEM: $(uname -a)"
+
+echo '# APT'
+apt -qq list --installed "${PKG_DEV_UBUNTU_APT[@]}" 2>/dev/null |
+  sed -E 's/\/\S+//' |
+  awk '{print $1, $2}'
+
+echo '# SNAP'
+snap list |
+  grep -E "$(tr ' ' '|' <<<"${PKG_DEV_UBUNTU_SNAP[*]}")" |
+  awk '{print $1, $2}'
+
+echo '# NPM'
+npm list -g |
+  grep -Po '\s\K.*' |
+  grep -E "$(tr ' ' '|' <<<"${PKG_DEV_UBUNTU_NPM[*]}")"
+
+echo '# GITHUB'
+tr ' ' '\n' <<<"${PKG_DEV_UBUNTU_GITHUB[*]}"

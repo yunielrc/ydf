@@ -2,7 +2,7 @@
   "files.associations": {
     "*.zunit": "bats",
     "Makefile.vedv": "makefile",
-    "Vedvfile": "dockerfile",
+    "Vedvfile*": "dockerfile",
     ".vedvfileignore": "gitignore"
   },
   "search.exclude": {

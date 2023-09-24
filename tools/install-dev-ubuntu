@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+#
+# Install ubuntu dev packages
+#
+
+set -eu
+# shellcheck source=../packages.env
+. ./packages.env
+
+# ENVIROMENT VARIABLES
+readonly IMAGE_BUILDING="${IMAGE_BUILDING:-false}"
+
+export DEBIAN_FRONTEND=noninteractive
+
+sudo -E apt-get update -y &&
+  sudo -E apt-get upgrade -y
+
+sudo -E apt-get install -y "${PKG_DEV_UBUNTU_APT[@]}"
+
+if command -v fdfind >/dev/null; then
+  sudo ln -s "$(command -v fdfind)" "$(dirname "$(command -v fdfind)")/fd"
+fi
+
+# Install snap packages
+# shellcheck disable=SC2086
+for s in "${PKG_DEV_UBUNTU_SNAP[@]}"; do sudo snap install $s; done
+
+# Install npm packages
+sudo -H npm install -g "${PKG_DEV_UBUNTU_NPM[@]}"
+
+# Install bash bats libs
+for bats_lib in bats-support bats-assert bats-file; do
+  repo="https://github.com/bats-core/${bats_lib}.git"
+  tag="$(git ls-remote --tags --exit-code --sort='v:refname' --refs "$repo" | tail -n 1 | cut -d/ -f3)"
+
+  sudo -H git clone "$repo" --depth 1 --branch "$tag" "/usr/lib/bash-${bats_lib}-git" >/dev/null
+done
+
+sudo ln -s /usr/lib/bash-bats-file-git /usr/lib/bats-file
+
+if [[ "$IMAGE_BUILDING" == false ]]; then
+  # Install vedv
+  (
+    cd "$(mktemp -d)"
+
+    git clone https://github.com/yunielrc/vedv.git && cd vedv
+
+    # select latest stable version
+    pkgver="$(git tag --sort='version:refname' | grep -Po '^v\K\d+\.\d+\.\d+$' | tail -n 1)"
+    git checkout "v${pkgver}"
+
+    make install-deps-ubuntu && sudo make install
+
+    cat <<EOF
+>> Configure vedv, for help navigate to: https://github.com/yunielrc/vedv#configure"
+EOF
+  )
+fi
+
+if [[ "$IMAGE_BUILDING" == false ]]; then
+  # configure git hooks
+  git config core.hooksPath .githooks
+fi

@@ -5,6 +5,6 @@
 ## What are the packages with which the application worked well?
 ##
 
-# SYSTEM: Linux manjaro-gnome 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
-# PACMAN
-bash 5.1.016-3
+# SYSTEM: Linux ubuntu-server 5.15.0-84-generic #93-Ubuntu SMP Tue Sep 5 17:16:10 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+# APT
+bash 5.1-6ubuntu1

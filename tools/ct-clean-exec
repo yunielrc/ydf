@@ -14,15 +14,19 @@ if [[ $# -eq 0 ]]; then
   exit 1
 fi
 
-readonly VEDV_CONTAINER_NAME='ydf-manjaro-dev'
-readonly VEDV_IMAGE_NAME='ydf-manjaro-dev'
+# ENVIRONMENT VARIABLES
+readonly TEST_OS
+readonly RECREATE_CONTAINER=${RECREATE_CONTAINER:-true}
+
+readonly VEDV_CONTAINER_NAME="ydf-${TEST_OS}-dev"
+readonly VEDV_IMAGE_NAME="ydf-${TEST_OS}-dev"
 
 declare -i EXIT_STATUS=0
 
 if ! vedv image ls | grep -q "$VEDV_IMAGE_NAME"; then
   echo
   echo ">> Image ${VEDV_IMAGE_NAME} not found, building..."
-  vedv image build --force --name "$VEDV_IMAGE_NAME"
+  vedv image build --force --name "$VEDV_IMAGE_NAME" Vedvfile."$TEST_OS"
   echo ">> Image built"
 fi
 
@@ -55,21 +59,27 @@ vedv container exec "$VEDV_CONTAINER_NAME" "$@" ||
 readonly end_time=$(date +%s%N)
 echo ">>Command executed, time: $(((end_time - start_time) / 1000000)) ms."
 
-echo
-echo ">>Removing dirty container"
-vedv container remove --force "$VEDV_CONTAINER_NAME"
-echo ">>Container removed"
+if [[ "$RECREATE_CONTAINER" == true ]]; then
+  echo
+  echo ">>Removing dirty container"
+  vedv container remove --force "$VEDV_CONTAINER_NAME"
+  echo ">>Container removed"
 
-echo
-echo ">>Creating a clean container for the next run"
-vedv container create --name "$VEDV_CONTAINER_NAME" "$VEDV_IMAGE_NAME"
-echo ">>Container created"
+  echo
+  echo ">>Creating a clean container for the next run"
+  vedv container create --name "$VEDV_CONTAINER_NAME" "$VEDV_IMAGE_NAME"
+  echo ">>Container created"
 
-echo
-echo ">>Starting container in background for the next run. It can take up to 30 seconds for container to be ready"
-echo
+  echo
+  echo ">>Starting container in background for the next run. It can take up to 30 seconds for container to be ready"
+  echo
 
-vedv container start "$VEDV_CONTAINER_NAME" &>/dev/null
+  vedv container start "$VEDV_CONTAINER_NAME" &>/dev/null
+else
+  echo
+  echo ">>Leaving container running for the next run"
+  exit $EXIT_STATUS
+fi
 
 if [[ $EXIT_STATUS -ne 0 ]]; then
   echo

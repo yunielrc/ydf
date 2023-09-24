@@ -1,5 +1,10 @@
 # grep -Po '^\S+(?=:)' Makefile | tr '\n' ' '
-.PHONY: install uninstall install-tohome install-run-manjaro install-opt-manjaro install-dev-manjaro test-unit test-integration test-functional test-all test-suite test-name commit img-rebuild img-build ct-create ct-start ct-status ct-stop ct-remove ct-login ct-copy-files
+.PHONY: install uninstall install-tohome install-opt-manjaro install-dev-manjaro install-opt-ubuntu install-dev-ubuntu test-unit test-integration test-functional test-all test-suite test-name commit img-rebuild img-build ct-create ct-start ct-status ct-stop ct-remove ct-login ct-copy-files
+
+include .env
+
+export TEST_OS
+export HOST_OS
 
 define _script
 #
@@ -69,14 +74,23 @@ install-tohome:
 	@eval "$$script"
 
 
-install-run-manjaro:
-	./tools/install-run-manjaro
+# install-run-manjaro:
+# 	./tools/install-run-manjaro
 
 install-opt-manjaro:
 	./tools/install-opt-manjaro
 
 install-dev-manjaro:
 	./tools/install-dev-manjaro
+
+# install-run-ubuntu:
+# 	./tools/install-run-ubuntu
+
+install-opt-ubuntu:
+	./tools/install-opt-ubuntu
+
+install-dev-ubuntu:
+	./tools/install-dev-ubuntu
 
 test-unit:
 	tools/ct-clean-exec make -f Makefile.vedv test-unit
@@ -88,9 +102,20 @@ test-functional:
 	tools/ct-clean-exec make -f Makefile.vedv test-functional
 
 test-all:
-	# # MANDATORY ENVARS: OS
-	tools/ct-clean-exec make -f Makefile.vedv test-all && \
-	./tools/update-pkgs-versions
+	# MANDATORY ENVARS: TEST_OS
+	RECREATE_CONTAINER=false tools/ct-clean-exec make -f Makefile.vedv test-all && \
+	tools/update-pkgs-versions && \
+	vedv container exec ydf-$(TEST_OS)-dev 'TEST_OS=$(TEST_OS) tools/update-pkgs-versions' && \
+	vedv container exec ydf-$(TEST_OS)-dev cat packages-opt-$(TEST_OS).versions \
+		>packages-opt-$(TEST_OS).versions && \
+	vedv container exec ydf-$(TEST_OS)-dev cat packages-run-$(TEST_OS).versions \
+			>packages-run-$(TEST_OS).versions || :
+
+	vedv container remove --force ydf-$(TEST_OS)-dev
+	vedv container create --name ydf-$(TEST_OS)-dev ydf-$(TEST_OS)-dev
+	@echo '>>Starting container in background for the next run. It can take up to 30 seconds for container to be ready'
+	vedv container start ydf-$(TEST_OS)-dev &>/dev/null
+
 
 test-suite:
 	tools/ct-clean-exec make -f Makefile.vedv test-suite u='$(u)'
@@ -102,28 +127,28 @@ commit:
 	git cz
 
 img-rebuild:
-	vedv image build --force --no-cache --name ydf-manjaro-dev
+	vedv image build --force --no-cache --name ydf-$(TEST_OS)-dev Vedvfile.$(TEST_OS)
 
 img-build:
-	vedv image build --force --name ydf-manjaro-dev
+	vedv image build --force --name ydf-$(TEST_OS)-dev Vedvfile.$(TEST_OS)
 
 ct-create:
-	vedv container create --name ydf-manjaro-dev ydf-manjaro-dev
+	vedv container create --name ydf-$(TEST_OS)-dev ydf-$(TEST_OS)-dev
 
 ct-start:
-	vedv container start --wait ydf-manjaro-dev
+	vedv container start --wait ydf-$(TEST_OS)-dev
 
 ct-status:
-	vedv container ls | grep ydf-manjaro-dev
-
-ct-stop:
-	vedv container stop ydf-manjaro-dev
-
-ct-remove:
-	vedv container remove --force ydf-manjaro-dev
-
-ct-login:
-	vedv container login ydf-manjaro-dev
+	vedv container ls | grep ydf-$(TEST_OS)-dev
 
 ct-copy-files:
-	vedv container copy --no-vedvfileignore ydf-manjaro-dev . .
+	vedv container copy --no-vedvfileignore ydf-$(TEST_OS)-dev . .
+
+ct-login:
+	vedv container login ydf-$(TEST_OS)-dev
+
+ct-stop:
+	vedv container stop ydf-$(TEST_OS)-dev
+
+ct-remove:
+	vedv container remove --force ydf-$(TEST_OS)-dev

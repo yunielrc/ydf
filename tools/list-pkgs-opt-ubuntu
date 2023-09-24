@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# List ubuntu optional dependencies
+#
+
+set -eu
+# shellcheck source=../packages.env
+. ./packages.env
+
+echo "# SYSTEM: $(uname -a)"
+
+echo '# APT'
+apt -qq list --installed "${PKG_OPT_UBUNTU_APT[@]}" 2>/dev/null |
+  sed -E 's/\/\S+//' |
+  awk '{print $1, $2}'
+
+echo '# GITHUB'
+tr ' ' '\n' <<<"${PKG_OPT_UBUNTU_GITHUB[*]}"

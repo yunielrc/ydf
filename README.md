@@ -50,7 +50,7 @@ It's tested on the following OS:
 Runtime Dependencies:
 
 ```sh
-# SYSTEM: Linux yuniel-pc 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
+# SYSTEM: Linux manjaro-gnome 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
 # PACMAN
 bash 5.1.016-3
 ```
@@ -58,12 +58,33 @@ bash 5.1.016-3
 Optional Dependencies:
 
 ```sh
-# SYSTEM: Linux yuniel-pc 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
+# SYSTEM: Linux manjaro-gnome 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
 # PACMAN
 yay 12.1.3-1
 snapd 2.60.3-1
 docker 1:24.0.5-1
 docker-compose 2.20.3-1
+# GITHUB
+yunielrc/yzsh
+```
+
+### Ubuntu
+
+Runtime Dependencies:
+
+```sh
+# SYSTEM: Linux ubuntu-server 5.15.0-84-generic #93-Ubuntu SMP Tue Sep 5 17:16:10 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+# APT
+bash 5.1-6ubuntu1
+```
+
+Optional Dependencies:
+
+```sh
+# SYSTEM: Linux ubuntu-server 5.15.0-84-generic #93-Ubuntu SMP Tue Sep 5 17:16:10 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+# APT
+dconf-cli 0.40.0-3
+flatpak 1.14.4-1~flatpak1~22.04.1
 # GITHUB
 yunielrc/yzsh
 ```
@@ -310,7 +331,7 @@ When you reinstall your OS or on a new machine you can install all your
 packages with:
 
 ```sh
-ydf packages install <packages_selection>.pkgs
+ydf package install <packages_selection>.pkgs
 ```
 
 👉 You can test the installation of the packages on a virtual machine before
@@ -345,6 +366,24 @@ fd 8.7.0-1
 @commitlint/config-conventional@17.7.0
 commitizen@4.3.0
 cz-conventional-changelog@3.3.0
+```
+
+### Ubuntu dev dependencies
+
+```sh
+# SYSTEM: Linux yuniel-pc 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
+# APT
+# SNAP
+# NPM
+@commitlint/cli@17.7.1
+@commitlint/config-conventional@17.7.0
+commitizen@4.3.0
+cz-conventional-changelog@3.3.0
+# GITHUB
+bats-core/bats-support
+bats-core/bats-assert
+bats-core/bats-file
+yunielrc/vedv
 ```
 
 ### Configure dev environment

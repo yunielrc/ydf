@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Install optional dependencies for manjaro
+# Install optional dependencies for ubuntu
 #
 
 set -eu
@@ -11,27 +11,22 @@ set -eu
 # ENVIROMENT VARIABLES
 readonly IMAGE_BUILDING="${IMAGE_BUILDING:-false}"
 
-# Install yay, snapd, docker,docker-compose
-sudo pacman -Syyu --noconfirm --needed make "${PKG_OPT_MANJARO_PACMAN[@]}"
+export DEBIAN_FRONTEND=noninteractive
 
-# Configure snap
-sudo systemctl enable apparmor
-sudo systemctl enable snapd.apparmor
-sudo systemctl enable snapd
+sudo -E apt-get update -y &&
+  sudo -E apt-get upgrade -y
 
-if [[ "$IMAGE_BUILDING" == false ]]; then
-  sudo systemctl start apparmor
-  sudo systemctl start snapd.apparmor
-  sudo systemctl start snapd
-fi
+sudo -E apt-get install -y dconf-cli
 
-sudo ln -vs /var/lib/snapd/snap /snap
+# Install flatpak
+sudo -E add-apt-repository ppa:flatpak/stable -y &&
+  sudo -E apt-get update -y &&
+  sudo -E apt-get install flatpak -y &&
+  sudo -H flatpak remote-add --if-not-exists \
+    flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
-echo ">>Attention: log out and back in again, or restart your system, to ensure snap’s paths are updated correctly"
-
-# sudo snap install core
-
-# Configure docker
+# Install docker
+curl -fsSL https://get.docker.com | sudo -E sh -
 
 sudo systemctl enable docker
 
@@ -56,6 +51,7 @@ if [[ -f .ydf.env ]]; then
 
 fi
 
+sudo -E apt-get install -y make git
 cd "$(mktemp -d)"
 git clone https://github.com/yunielrc/yzsh.git && cd yzsh
 make install

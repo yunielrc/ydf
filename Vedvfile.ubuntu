@@ -1,0 +1,26 @@
+FROM admin@ubuntu/ubuntu-gnome-22.04.3-amd64
+
+# ENV IMAGE_BUILDING=true # [BUG] (https://github.com/yunielrc/vedv/issues/54)
+RUN echo 'export IMAGE_BUILDING=true' | \
+  sudo tee -a /etc/profile.d/qw-env.sh
+RUN echo 'export DEBIAN_FRONTEND=noninteractive' | \
+  sudo tee -a /etc/profile.d/qw-env.sh
+
+WORKDIR /home/vedv/ydf
+
+# update system
+RUN sudo -E apt-get update -y && \
+  sudo -E apt-get upgrade -y
+
+COPY packages.env .
+RUN mkdir tools
+# install optional dependencies
+COPY tools/install-opt-ubuntu tools
+RUN tools/install-opt-ubuntu
+# install dev dependencies
+COPY tools/install-dev-ubuntu tools
+RUN tools/install-dev-ubuntu
+
+# install flatpak gnome base system
+RUN sudo -H flatpak install --assumeyes --noninteractive \
+  io.github.andreibachim.shortcut

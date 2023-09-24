@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Install manjaro prod packages
+# Install manjaro runtime packages
 #
 
 set -eu

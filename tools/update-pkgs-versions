@@ -16,34 +16,34 @@ readonly header="##
 "
 
 # MANDATORY ENV VARS
-readonly OS
+readonly TEST_OS
 
-if [[ -z "$OS" ]]; then
-  echo "OS env var is not set" >&2
+if [[ -z "$TEST_OS" ]]; then
+  echo "TEST_OS env var is not set" >&2
   exit 1
 fi
 
-if [[ ! -f "./tools/list-pkgs-run-${OS}" ]]; then
-  echo "File ./tools/list-pkgs-run-${OS} does not exist" >&2
+if [[ ! -f "./tools/list-pkgs-run-${TEST_OS}" ]]; then
+  echo "File ./tools/list-pkgs-run-${TEST_OS} does not exist" >&2
   exit 1
 fi
 
 {
   echo "$header"
-  bash "./tools/list-pkgs-run-${OS}"
-} >"packages-run-${OS}.versions"
+  bash "./tools/list-pkgs-run-${TEST_OS}"
+} >"packages-run-${TEST_OS}.versions"
 
 {
   echo "$header"
-  bash "./tools/list-pkgs-opt-${OS}"
-} >"packages-opt-${OS}.versions"
+  bash "./tools/list-pkgs-opt-${TEST_OS}"
+} >"packages-opt-${TEST_OS}.versions"
 
 {
   echo "$header"
-  bash "./tools/list-pkgs-dev-${OS}"
-} >"packages-dev-${OS}.versions"
+  bash "./tools/list-pkgs-dev-${TEST_OS}"
+} >"packages-dev-${TEST_OS}.versions"
 
 git add \
-  "packages-run-${OS}.versions" \
-  "packages-opt-${OS}.versions" \
-  "packages-dev-${OS}.versions"
+  "packages-run-${TEST_OS}.versions" \
+  "packages-opt-${TEST_OS}.versions" \
+  "packages-dev-${TEST_OS}.versions"

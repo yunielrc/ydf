@@ -7,15 +7,28 @@ set -eu
 # shellcheck source=../packages.env
 . ./packages.env
 
+# ENVIROMENT VARIABLES
+readonly IMAGE_BUILDING="${IMAGE_BUILDING:-false}"
+
 sudo pacman -Syu --noconfirm --needed yay
 
+# Install yay packages
 yay -Sy --noconfirm --needed "${PKG_DEV_MANJARO_YAY[@]}"
 
-yay -Sy --noconfirm --needed vedv-git &&
-  sudo pacman -Syu --noconfirm --needed "$(mhwd-kernel -li | grep -Po '\(\Klinux\d+\S*(?=\))')-virtualbox-host-modules" &&
-  sudo vboxreload
+if [[ "$IMAGE_BUILDING" == false ]]; then
+  # Install vedv
+  yay -Sy --noconfirm --needed vedv-git &&
+    sudo pacman -Syu --noconfirm --needed "$(mhwd-kernel -li | grep -Po '\(\Klinux\d+\S*(?=\))')-virtualbox-host-modules" &&
+    sudo vboxreload
+  cat <<EOF
+>> Configure vedv, for help navigate to: https://github.com/yunielrc/vedv#configure"
+EOF
+fi
 
+# Install npm packages
 sudo -H npm install -g "${PKG_DEV_MANJARO_NPM[@]}"
 
 # Configure
-git config core.hooksPath .githooks
+if [[ "$IMAGE_BUILDING" == false ]]; then
+  git config core.hooksPath .githooks
+fi

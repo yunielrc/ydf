@@ -1,14 +1,5 @@
 # grep -Po '^\S+(?=:)' Makefile.vedv | tr '\n' ' '
-.PHONY: install-run-manjaro install-dev-manjaro test-unit test-integration test-functional test-all test-suite test-name
-
-install-run-manjaro:
-	./tools/install-run-manjaro
-
-install-opt-manjaro:
-	./tools/install-opt-manjaro
-
-install-dev-manjaro:
-	./tools/install-dev-manjaro.vedv
+.PHONY: test-unit test-integration test-functional test-all test-suite test-name
 
 test-unit:
 	./tools/bats-unit

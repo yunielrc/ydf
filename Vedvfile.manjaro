@@ -1,0 +1,23 @@
+FROM admin@manjaro/manjaro-gnome-22.1.3-x86_64
+
+# ENV IMAGE_BUILDING=true # [BUG] (https://github.com/yunielrc/vedv/issues/54)
+RUN echo 'export IMAGE_BUILDING=true' | \
+  sudo tee -a /etc/profile.d/qw-env.sh
+
+WORKDIR /home/vedv/ydf
+
+# generate mirrors
+RUN sudo pacman-mirrors --country United_States
+
+# install flatpak gnome base system
+RUN sudo -H flatpak install --assumeyes --noninteractive \
+  io.github.andreibachim.shortcut
+
+COPY packages.env .
+RUN mkdir tools
+# install optional dependencies
+COPY tools/install-opt-manjaro tools
+RUN tools/install-opt-manjaro
+# install dev dependencies
+COPY tools/install-dev-manjaro tools
+RUN tools/install-dev-manjaro
