@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Update packages versions files
+# Update runtime and optional packages versions files from Test OS
 #
 # This script should be executed after each successful test-all run
 #
@@ -38,12 +38,6 @@ fi
   bash "./tools/list-pkgs-opt-${TEST_OS}"
 } >"packages-opt-${TEST_OS}.versions"
 
-{
-  echo "$header"
-  bash "./tools/list-pkgs-dev-${TEST_OS}"
-} >"packages-dev-${TEST_OS}.versions"
-
 git add \
   "packages-run-${TEST_OS}.versions" \
-  "packages-opt-${TEST_OS}.versions" \
-  "packages-dev-${TEST_OS}.versions"
+  "packages-opt-${TEST_OS}.versions"

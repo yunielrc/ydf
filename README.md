@@ -73,7 +73,7 @@ yunielrc/yzsh
 Runtime Dependencies:
 
 ```sh
-# SYSTEM: Linux ubuntu-server 5.15.0-84-generic #93-Ubuntu SMP Tue Sep 5 17:16:10 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+# SYSTEM: Linux ubuntu-gnome 6.2.0-26-generic #26~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Jul 13 16:27:29 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
 # APT
 bash 5.1-6ubuntu1
 ```
@@ -81,9 +81,13 @@ bash 5.1-6ubuntu1
 Optional Dependencies:
 
 ```sh
-# SYSTEM: Linux ubuntu-server 5.15.0-84-generic #93-Ubuntu SMP Tue Sep 5 17:16:10 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+# SYSTEM: Linux ubuntu-gnome 6.2.0-26-generic #26~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Jul 13 16:27:29 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
 # APT
-dconf-cli 0.40.0-3
+containerd.io 1.6.24-1
+docker-buildx-plugin 0.11.2-1~ubuntu.22.04~jammy
+docker-ce-cli 5:24.0.6-1~ubuntu.22.04~jammy
+docker-ce 5:24.0.6-1~ubuntu.22.04~jammy
+docker-compose-plugin 2.21.0-1~ubuntu.22.04~jammy
 flatpak 1.14.4-1~flatpak1~22.04.1
 # GITHUB
 yunielrc/yzsh
@@ -371,19 +375,7 @@ cz-conventional-changelog@3.3.0
 ### Ubuntu dev dependencies
 
 ```sh
-# SYSTEM: Linux yuniel-pc 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
-# APT
-# SNAP
-# NPM
-@commitlint/cli@17.7.1
-@commitlint/config-conventional@17.7.0
-commitizen@4.3.0
-cz-conventional-changelog@3.3.0
-# GITHUB
-bats-core/bats-support
-bats-core/bats-assert
-bats-core/bats-file
-yunielrc/vedv
+
 ```
 
 ### Configure dev environment

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# Update development packages versions files from Host OS
+#
+# This script should be executed after each successful test-all run
+#
+
+set -eu
+
+readonly header="##
+## All tests must succeed before updating these files in order to answer
+## the question
+##
+## What are the packages with which the application worked well?
+##
+"
+
+# MANDATORY ENV VARS
+readonly TEST_OS
+
+if [[ -z "$HOST_OS" ]]; then
+  echo "HOST_OS env var is not set" >&2
+  exit 1
+fi
+
+if [[ ! -f "./tools/list-pkgs-dev-${HOST_OS}" ]]; then
+  echo "File ./tools/list-pkgs-dev-${HOST_OS} does not exist" >&2
+  exit 1
+fi
+
+{
+  echo "$header"
+  bash "./tools/list-pkgs-dev-${HOST_OS}"
+} >"packages-dev-${HOST_OS}.versions"
+
+git add "packages-dev-${HOST_OS}.versions"

@@ -104,8 +104,8 @@ test-functional:
 test-all:
 	# MANDATORY ENVARS: TEST_OS
 	RECREATE_CONTAINER=false tools/ct-clean-exec make -f Makefile.vedv test-all && \
-	tools/update-pkgs-versions && \
-	vedv container exec ydf-$(TEST_OS)-dev 'TEST_OS=$(TEST_OS) tools/update-pkgs-versions' && \
+	tools/update-pkgs-dev-host-version && \
+	vedv container exec ydf-$(TEST_OS)-dev 'TEST_OS=$(TEST_OS) tools/update-pkgs-test-versions' && \
 	vedv container exec ydf-$(TEST_OS)-dev cat packages-opt-$(TEST_OS).versions \
 		>packages-opt-$(TEST_OS).versions && \
 	vedv container exec ydf-$(TEST_OS)-dev cat packages-run-$(TEST_OS).versions \

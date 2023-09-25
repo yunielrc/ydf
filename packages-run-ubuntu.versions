@@ -5,6 +5,6 @@
 ## What are the packages with which the application worked well?
 ##
 
-# SYSTEM: Linux ubuntu-server 5.15.0-84-generic #93-Ubuntu SMP Tue Sep 5 17:16:10 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+# SYSTEM: Linux ubuntu-gnome 6.2.0-26-generic #26~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Jul 13 16:27:29 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
 # APT
 bash 5.1-6ubuntu1
