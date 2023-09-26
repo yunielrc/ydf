@@ -75,6 +75,8 @@ ${UBUNTU_PACKAGES_OPT}
 
 ## Install
 
+Install `git`, `make` and `vim`
+
 Clone the repository and switch to ydf directory
 
 ```sh
