@@ -99,7 +99,7 @@ Install optional dependencies and ydf on home directory
 make install-opt-ubuntu && make install-tohome
 ```
 
-### Any Linux Distro (Minimal installation)
+### Install on Any Linux Distro (Minimal installation)
 
 Minimal installation without optional dependencies
 
@@ -365,9 +365,13 @@ make install-dev-manjaro
 make install-dev-ubuntu
 ```
 
-#### Any Linux Distro
+#### Install on Any Linux Distro
 
 For any other linux distribution install dev dependencies manually.
+
+#### Configure vedv
+
+Check out: <https://github.com/yunielrc/vedv#configure>
 
 ### Workflow
 
@@ -376,7 +380,17 @@ For any other linux distribution install dev dependencies manually.
 Write your code
 
 #### Run Tests
+<!--
+The first time the image need to be downloaded and builded for development,
+this process take a while, below are shown the download and build time for the
+supported Linux distros at 90Mbps:
 
+Distro  | download    | build
+--------|-------------|----------
+manjaro | 5m 9.11s    | 13m 4.74s
+ubuntu  | 10m 13.611s | 8m 33.755s
+
+-->
 Run Unit Testing for one component
 
 ```sh
@@ -405,36 +419,32 @@ Run All Unit Tests
 
 ```sh
 make test-unit
-# 2.331s
+# 2.331s on manjaro
+# 2.304s on ubuntu
 ```
 
 Run All Integration Tests
 
 ```sh
 make test-integration
-# 2m 17.652s
+# 53.475s on manjaro
+# 1m 11.739s on ubuntu
 ```
 
 Run All Functional Tests
 
 ```sh
 make test-functional
-# 2m 48.535s
+# 1m 52.301s on manjaro
+# 1m 31.900s on ubuntu
 ```
 
 Run All tests
 
-On Manjaro
-
-```sh
-make OS=manjaro test-all
-# 3m 5.173s
-```
-
-Any OS
-
 ```sh
 make test-all
+# 1m 43.793s on manjaro
+# 2m 17.157s on ubuntu
 ```
 
 #### Commit
