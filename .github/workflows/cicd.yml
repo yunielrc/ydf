@@ -1,0 +1,52 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [master]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+
+  test:
+    name: Tests
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure CI
+        run: |
+          cp .env.ci.sample .env
+          cp .ydf.env.sample .ydf.env
+          make OS=ubuntu configure-ci
+
+      - name: Run Lint
+        uses: ludeeus/action-shellcheck@master
+
+      - name: Run Unit Tests
+        run: |
+          echo "CI server does not support VT-x so we can't run integration or functional tests"
+          make test-all-ci
+
+  release-please:
+    needs: test
+    name: Release Please
+    runs-on: ubuntu-22.04
+
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: simple
+          package-name: release-please-action
+          prerelease: true

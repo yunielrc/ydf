@@ -413,31 +413,36 @@ cp .ydf.env.sample .ydf.env
 
 Edit the config file .env:
 
-- Set the variable `HOST_OS` to `manjaro` or `ubuntu` according to your distro. 
+- Set the variable `HOST_OS` to `manjaro` or `ubuntu` according to your distro.
   If you have any other distro don't set this variable.
 
-- Set the variable `TEST_OS` to `manjaro` or `ubuntu` according to distro that 
+- Set the variable `TEST_OS` to `manjaro` or `ubuntu` according to distro that
   It's going to be tested.
 
 ```sh
 vim ~/.env
 ```
 
-#### Install dev dependencies for Manjaro
+#### Install dependencies for Manjaro
+
+The command below install optional and development dependencies for Manjaro
 
 ```sh
-make install-dev-manjaro
+make install-opt-manjaro && make install-dev-manjaro
 ```
 
-#### Install dev dependencies for Ubuntu
+#### Install dependencies for Ubuntu
+
+The command below install optional and development dependencies for Ubuntu
 
 ```sh
-make install-dev-ubuntu
+make install-opt-ubuntu && make install-dev-ubuntu
 ```
 
 #### Install on Any Linux Distro
 
-For any other linux distribution install dev dependencies manually.
+For any other linux distribution install optional and development dependencies
+manually.
 
 #### Configure vedv
 
@@ -450,7 +455,7 @@ Check out: <https://github.com/yunielrc/vedv#configure>
 Write your code
 
 #### Run Tests
-<!--
+
 The first time the image need to be downloaded and builded for development,
 this process take a while, below are shown the download and build time for the
 supported Linux distros at 90Mbps:
@@ -460,7 +465,6 @@ Distro  | download    | build
 manjaro | 5m 9.11s    | 13m 4.74s
 ubuntu  | 10m 13.611s | 8m 33.755s
 
--->
 Run Unit Testing for one component
 
 ```sh
