@@ -1,10 +1,14 @@
 # grep -Po '^\S+(?=:)' Makefile | tr '\n' ' '
 .PHONY: install uninstall install-tohome install-opt-manjaro install-dev-manjaro install-opt-ubuntu install-dev-ubuntu test-unit test-integration test-functional test-all test-suite test-name commit img-rebuild img-build ct-create ct-start ct-status ct-stop ct-remove ct-login ct-copy-files
 
+ifneq ($(wildcard .env),)
+
 include .env
 
 export TEST_OS
 export HOST_OS
+
+endif
 
 define _script
 #
