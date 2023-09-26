@@ -380,26 +380,7 @@ cz-conventional-changelog@3.3.0
 ### Ubuntu dev dependencies
 
 ```sh
-# SYSTEM: Linux user-MS-7D43 6.2.0-33-generic #33~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Sep  7 10:33:52 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
-# APT
-fd-find 8.3.1-1ubuntu0.1
-make 4.3-4.1build1
-pre-commit 2.17.0-1
-# SNAP
-node 18.18.0
-shellcheck v0.9.0
-shfmt 3.5.1
-# NPM
-@commitlint/cli@17.7.1
-@commitlint/config-conventional@17.7.0
-bats@1.10.0
-commitizen@4.3.0
-cz-conventional-changelog@3.3.0
-# GITHUB
-bats-core/bats-support
-bats-core/bats-assert
-bats-core/bats-file
-yunielrc/vedv
+
 ```
 
 ### Configure dev environment
@@ -409,6 +390,18 @@ yunielrc/vedv
 ```sh
 cp .env.sample .env
 cp .ydf.env.sample .ydf.env
+```
+
+Edit the config file .env:
+
+- Set the variable `HOST_OS` to `manjaro` or `ubuntu` according to your distro. 
+  If you have any other distro don't set this variable.
+
+- Set the variable `TEST_OS` to `manjaro` or `ubuntu` according to distro that 
+  It's going to be tested.
+
+```sh
+vim ~/.env
 ```
 
 #### Install dev dependencies for Manjaro

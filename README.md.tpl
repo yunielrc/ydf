@@ -341,6 +341,18 @@ cp .env.sample .env
 cp .ydf.env.sample .ydf.env
 ```
 
+Edit the config file .env:
+
+- Set the variable `HOST_OS` to `manjaro` or `ubuntu` according to your distro. 
+  If you have any other distro don't set this variable.
+
+- Set the variable `TEST_OS` to `manjaro` or `ubuntu` according to distro that 
+  It's going to be tested.
+
+```sh
+vim ~/.env
+```
+
 #### Install dev dependencies for Manjaro
 
 ```sh
