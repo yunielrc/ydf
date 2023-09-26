@@ -35,7 +35,8 @@ readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON='@flatpak @snap install docke
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_ANY="preinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 # MANJARO
 readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_MANJARO="preinstall @pacman @yay ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
-readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
+
+readonly __YDF_PACKAGE_SERVICE_INSTRUCTIONS_UBUNTU="preinstall @apt @apt-get ${__YDF_PACKAGE_SERVICE_INSTRUCTIONS_COMMON}"
 
 #
 # FUNCTIONS
@@ -554,6 +555,48 @@ ydf::package_service::__instruction_rootcats() {
 #
 ydf::package_service::__instruction_dconf_ini() {
   dconf load / <dconf.ini
+}
+
+#
+# Execute @apt instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_@apt() {
+  local -r pkg_name="$1"
+  # select the first no empty line
+  local -r apt_pkg_name="$(ydf::utils::text_file_to_words @apt)"
+
+  sudo -E apt update -y &&
+    sudo -E apt upgrade -y
+
+  eval sudo -H DEBIAN_FRONTEND=noninteractive apt install -y \
+    "${apt_pkg_name:-"$pkg_name"}"
+}
+
+#
+# Execute @apt-get instruction
+#
+# Arguments:
+#   pkg_name  string    package name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::__instruction_@apt-get() {
+  local -r pkg_name="$1"
+  # select the first no empty line
+  local -r apt_pkg_name="$(ydf::utils::text_file_to_words @apt-get)"
+
+  sudo -E apt-get update -y &&
+    sudo -E apt-get upgrade -y
+
+  eval sudo -H DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    "${apt_pkg_name:-"$pkg_name"}"
 }
 
 #

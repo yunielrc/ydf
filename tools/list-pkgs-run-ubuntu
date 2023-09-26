@@ -10,7 +10,7 @@ set -eu
 echo "# SYSTEM: $(uname -a)"
 
 echo '# APT'
-apt -qq list --installed bash "${PKG_RUN_UBUNTU_APT[@]}" 2>/dev/null |
+apt -qq list --installed "${PKG_RUN_UBUNTU_APT[@]}" 2>/dev/null |
   sed -E 's/\/\S+//' |
   awk '{print $1, $2}'
 

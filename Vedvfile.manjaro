@@ -7,7 +7,7 @@ RUN echo 'export IMAGE_BUILDING=true' | \
 WORKDIR /home/vedv/ydf
 
 # generate mirrors
-RUN sudo pacman-mirrors --country United_States
+RUN sudo pacman-mirrors --fasttrack
 
 # install flatpak gnome base system
 RUN sudo -H flatpak install --assumeyes --noninteractive \

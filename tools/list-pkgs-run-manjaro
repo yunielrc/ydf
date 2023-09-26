@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# List manjaro prod dependencies
+# List manjaro runtime dependencies
 #
 
 set -eu
@@ -11,4 +11,7 @@ set -eu
 echo "# SYSTEM: $(uname -a)"
 
 echo '# PACMAN'
-pacman --color never -Q bash "${PKG_RUN_MANJARO_YAY[@]}"
+pacman --color never -Q "${PKG_RUN_MANJARO_PACMAN[@]}"
+
+# echo '# YAY'
+# pacman --color never -Q "${PKG_RUN_MANJARO_YAY[@]}"

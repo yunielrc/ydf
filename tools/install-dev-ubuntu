@@ -15,31 +15,32 @@ export DEBIAN_FRONTEND=noninteractive
 sudo -E apt-get update -y &&
   sudo -E apt-get upgrade -y
 
+# Install Packages
+
+## apt packages
 sudo -E apt-get install -y "${PKG_DEV_UBUNTU_APT[@]}"
 
-if command -v fdfind >/dev/null; then
-  sudo ln -s "$(command -v fdfind)" "$(dirname "$(command -v fdfind)")/fd"
-fi
-
-# Install snap packages
+# snap packages
 # shellcheck disable=SC2086
 for s in "${PKG_DEV_UBUNTU_SNAP[@]}"; do sudo snap install $s; done
 
-# Install npm packages
+# npm packages
 sudo -H npm install -g "${PKG_DEV_UBUNTU_NPM[@]}"
 
-# Install bash bats libs
+## github packages
+
+### Install bash bats libs
 for bats_lib in bats-support bats-assert bats-file; do
   repo="https://github.com/bats-core/${bats_lib}.git"
   tag="$(git ls-remote --tags --exit-code --sort='v:refname' --refs "$repo" | tail -n 1 | cut -d/ -f3)"
 
   sudo -H git clone "$repo" --depth 1 --branch "$tag" "/usr/lib/bash-${bats_lib}-git" >/dev/null
 done
-
+#### configure bash libs
 sudo ln -s /usr/lib/bash-bats-file-git /usr/lib/bats-file
 
+### Install vedv
 if [[ "$IMAGE_BUILDING" == false ]]; then
-  # Install vedv
   (
     cd "$(mktemp -d)"
 
@@ -57,7 +58,14 @@ EOF
   )
 fi
 
+# Configure
+
+## configure fd
+if command -v fdfind >/dev/null; then
+  sudo ln -s "$(command -v fdfind)" "$(dirname "$(command -v fdfind)")/fd"
+fi
+
+## configure git hooks
 if [[ "$IMAGE_BUILDING" == false ]]; then
-  # configure git hooks
   git config core.hooksPath .githooks
 fi

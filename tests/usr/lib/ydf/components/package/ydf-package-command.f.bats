@@ -2,6 +2,8 @@ load test_helper
 
 setup() {
   export YDF_PACKAGE_SERVICE_DEFAULT_OS="$TEST_OS"
+  export E_YDF_PACKAGE_SERVICE_DEFAULT_OS="$TEST_OS"
+
   export E_YDF_UTILS_NO_MSG=true
 
   if [[ -f /home/vedv/.yzsh-gen.env ]]; then
@@ -859,4 +861,88 @@ preinstall: preinstall succeed"
 
   assert [ -L '/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' ]
   assert [ -f '/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' ]
+}
+
+# Tests for ydf package install 25bat@apt
+@test "ydf package install 25bat@apt Should succeed" {
+  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" != ubuntu ]]; then
+    skip "Only for ubuntu"
+  fi
+
+  sudo -E DEBIAN_FRONTEND=noninteractive apt remove -y bat
+
+  local -r _package_name="25bat@apt"
+
+  run ydf package install "$_package_name"
+
+  assert_success
+  assert_output --partial "Setting up bat"
+
+  run apt -qq list --installed bat
+
+  assert_success
+  assert_output --partial "bat/"
+}
+
+# Tests for ydf package install bat
+@test "ydf package install bat Should succeed with @apt" {
+  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" != ubuntu ]]; then
+    skip "Only for ubuntu"
+  fi
+
+  sudo -E DEBIAN_FRONTEND=noninteractive apt remove -y bat
+
+  local -r _package_name="bat"
+
+  run ydf package install "$_package_name"
+
+  assert_success
+  assert_output --partial "Setting up bat"
+
+  run apt -qq list --installed bat
+
+  assert_success
+  assert_output --partial "bat/"
+}
+
+# Tests for ydf package install 26exa@apt-get
+@test "ydf package install 26exa@apt-get Should succeed with @apt-get" {
+  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" != ubuntu ]]; then
+    skip "Only for ubuntu"
+  fi
+
+  sudo -E DEBIAN_FRONTEND=noninteractive apt remove -y exa
+
+  local -r _package_name="26exa@apt-get"
+
+  run ydf package install "$_package_name"
+
+  assert_success
+  assert_output --partial "Setting up exa"
+
+  run apt -qq list --installed exa
+
+  assert_success
+  assert_output --partial "exa/"
+}
+
+# Tests for ydf package install exa
+@test "ydf package install exa Should succeed with @apt-get" {
+  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" != ubuntu ]]; then
+    skip "Only for ubuntu"
+  fi
+
+  sudo -E DEBIAN_FRONTEND=noninteractive apt remove -y exa
+
+  local -r _package_name="exa"
+
+  run ydf package install "$_package_name"
+
+  assert_success
+  assert_output --partial "Setting up exa"
+
+  run apt -qq list --installed exa
+
+  assert_success
+  assert_output --partial "exa/"
 }

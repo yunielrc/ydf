@@ -16,16 +16,13 @@ export DEBIAN_FRONTEND=noninteractive
 sudo -E apt-get update -y &&
   sudo -E apt-get upgrade -y
 
-# Install flatpak
+# Add apt repositories
+
+## Add flatpak repo
 sudo -E add-apt-repository ppa:flatpak/stable -y &&
-  sudo -E apt-get update -y &&
-  sudo -E apt-get install flatpak -y &&
-  sudo -H flatpak remote-add --if-not-exists \
-    flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  sudo -E apt-get update -y
 
-# Install docker
-
-## Add Docker's official GPG key:
+## Add docker's official GPG key
 sudo -E apt-get update -y
 sudo -E apt-get install -y ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -33,17 +30,38 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg |
   sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
-## Add the repository to Apt sources:
+## Add docker repo
 echo \
   "deb [arch=\"$(dpkg --print-architecture)\" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   \"$(. /etc/os-release && echo "$VERSION_CODENAME")\" stable" |
   sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
 sudo -E apt-get update -y
 
-## Install
-sudo -E apt-get install -y docker-ce docker-ce-cli \
-  containerd.io docker-buildx-plugin docker-compose-plugin
+# Install Packages
 
+## apt packages
+sudo -E apt-get install -y "${PKG_OPT_UBUNTU_APT[@]}"
+
+## github packages
+sudo -E apt-get install -y make git
+
+cd "$(mktemp -d)"
+
+for pkg in "${PKG_OPT_MANJARO_GITHUB[@]}"; do
+  (
+    git clone "https://github.com/${pkg}.git" && cd "${pkg#*/}"
+    make install
+  )
+done
+cd -
+
+# Configure
+
+## configure flatpak
+sudo -H flatpak remote-add --if-not-exists \
+  flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+## configure docker
 sudo systemctl enable docker
 
 if [[ "$IMAGE_BUILDING" == false ]]; then
@@ -53,7 +71,7 @@ fi
 sudo groupadd docker || :
 sudo usermod -aG docker "$USER"
 
-# Install YZSH
+## configure YZSH
 
 if [[ -f .ydf.env ]]; then
   # shellcheck source=../.ydf.env
@@ -66,8 +84,3 @@ if [[ -f .ydf.env ]]; then
 ##
 
 fi
-
-sudo -E apt-get install -y make git
-cd "$(mktemp -d)"
-git clone https://github.com/yunielrc/yzsh.git && cd yzsh
-make install

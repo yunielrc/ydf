@@ -57,5 +57,10 @@ if [[ -f .ydf.env ]]; then
 fi
 
 cd "$(mktemp -d)"
-git clone https://github.com/yunielrc/yzsh.git && cd yzsh
-make install
+
+for pkg in "${PKG_OPT_MANJARO_GITHUB[@]}"; do
+  (
+    git clone "https://github.com/${pkg}.git" && cd "${pkg#*/}"
+    make install
+  )
+done

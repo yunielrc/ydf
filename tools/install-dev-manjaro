@@ -12,11 +12,13 @@ readonly IMAGE_BUILDING="${IMAGE_BUILDING:-false}"
 
 sudo pacman -Syu --noconfirm --needed yay
 
-# Install yay packages
+# Install packages
+
+## yay packages
 yay -Sy --noconfirm --needed "${PKG_DEV_MANJARO_YAY[@]}"
 
+### install vedv
 if [[ "$IMAGE_BUILDING" == false ]]; then
-  # Install vedv
   yay -Sy --noconfirm --needed vedv-git &&
     sudo pacman -Syu --noconfirm --needed "$(mhwd-kernel -li | grep -Po '\(\Klinux\d+\S*(?=\))')-virtualbox-host-modules" &&
     sudo vboxreload
@@ -25,7 +27,7 @@ if [[ "$IMAGE_BUILDING" == false ]]; then
 EOF
 fi
 
-# Install npm packages
+## npm packages
 sudo -H npm install -g "${PKG_DEV_MANJARO_NPM[@]}"
 
 # Configure
