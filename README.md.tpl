@@ -123,8 +123,8 @@ Instruction | Optional dependency
 
 Edit the config file:
 
-- If your distro is manjaro set the variable `YDF_PACKAGE_SERVICE_DEFAULT_OS` to
-manjaro. If you have any other distro don't set this variable.
+- Set the variable `YDF_PACKAGE_SERVICE_DEFAULT_OS` to `manjaro` or `ubuntu`
+  according to your distro. If you have any other distro don't set this variable.
 
 ```sh
 vim ~/.ydf.env
