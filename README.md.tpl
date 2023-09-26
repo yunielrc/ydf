@@ -89,14 +89,25 @@ Install optional dependencies and ydf on home directory
 make install-opt-manjaro && make install-tohome
 ```
 
-Minimal installation without optional dependencies:
+### Install on Ubuntu
+
+Install optional dependencies and ydf on home directory
+
+```sh
+make install-opt-ubuntu && make install-tohome
+```
+
+### Any Linux Distro (Minimal installation)
+
+Minimal installation without optional dependencies
 
 ```sh
 make install-tohome
 ```
 
 ⚠️ Attention: Instructions that rely on optional dependencies can't be used
-   with the minimal installation.
+   with the minimal installation. For each instruction you want to use install
+   its dependency.
 
 Instruction | Optional dependency
 ---------|----------
@@ -104,15 +115,7 @@ Instruction | Optional dependency
  `docker-compose.yml` | docker, docker-compose
  `@yay` | yay
  `*.plugin.zsh` | yzsh
-
-### Other linux Distros
-
-For any other linux distribution you can install optional dependencies manually,
-then execute the command below:
-
-```sh
-make install-tohome
-```
+ `*.theme.zsh` | yzsh
 
 ## Configure
 
@@ -329,18 +332,26 @@ ${UBUNTU_PACKAGES_DEV}
 
 ### Configure dev environment
 
-Copy config samples
+#### Copy config samples
 
 ```sh
 cp .env.sample .env
 cp .ydf.env.sample .ydf.env
 ```
 
-Install dev dependencies for Manjaro:
+#### Install dev dependencies for Manjaro
 
 ```sh
 make install-dev-manjaro
 ```
+
+#### Install dev dependencies for Ubuntu
+
+```sh
+make install-dev-ubuntu
+```
+
+#### Any Linux Distro
 
 For any other linux distribution install dev dependencies manually.
 
