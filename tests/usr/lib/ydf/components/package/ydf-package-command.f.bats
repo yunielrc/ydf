@@ -111,7 +111,7 @@ ydf package COMMAND'
 }
 
 # Tests for ydf package install 2preinstall
-@test "ydf package install --os _OS_ 2preinstall, Should succeed With no preinstall script" {
+@test "ydf package install --os _OS_ 0empty, Should succeed With no preinstall script" {
   local -r _package_name="0empty"
 
   run ydf package install --os "$YDF_PACKAGE_SERVICE_DEFAULT_OS" "$_package_name"
