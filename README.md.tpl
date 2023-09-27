@@ -83,6 +83,12 @@ Clone the repository and switch to ydf directory
 git clone https://github.com/yunielrc/ydf.git && cd ydf
 ```
 
+Select the last stable version
+
+```sh
+git checkout "$(git tag --sort='version:refname' | grep -Po '^v\d+\.\d+\.\d+$' | tail -n 1)"
+```
+
 ### Install on Manjaro
 
 Install optional dependencies and ydf on home directory
