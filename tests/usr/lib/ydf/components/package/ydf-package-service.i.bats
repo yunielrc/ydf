@@ -880,18 +880,18 @@ line 11'
   run ls -la "${TEST_HOME_DIR}/.my"
 
   assert_success
-  assert_output --regexp ".* vedv vedv .* \.
-.* vedv vedv .* \.\.
-.* vedv vedv .* dir1
-.* vedv vedv  .* file1"
+  assert_output --regexp ".* ${TEST_USER} ${TEST_GROUP} .* \.
+.* ${TEST_USER} ${TEST_GROUP} .* \.\.
+.* ${TEST_USER} ${TEST_GROUP} .* dir1
+.* ${TEST_USER} ${TEST_GROUP}  .* file1"
 
   run ls -la "${TEST_HOME_DIR}/.my/file1" \
     "${TEST_HOME_DIR}/.my/dir1/file11" "${TEST_HOME_DIR}/.my-config.env"
 
   assert_success
-  assert_output --regexp ".* vedv vedv .* ${TEST_HOME_DIR}/.my-config.env
-.* vedv vedv .* ${TEST_HOME_DIR}/.my/dir1/file11
-.* vedv vedv .* ${TEST_HOME_DIR}/.my/file1"
+  assert_output --regexp ".* ${TEST_USER} ${TEST_GROUP} .* ${TEST_HOME_DIR}/.my-config.env
+.* ${TEST_USER} ${TEST_GROUP} .* ${TEST_HOME_DIR}/.my/dir1/file11
+.* ${TEST_USER} ${TEST_GROUP} .* ${TEST_HOME_DIR}/.my/file1"
 }
 
 @test "ydf::package_service::__recursive_copy_with_envsubst() Should succeed With user root" {
@@ -1124,17 +1124,17 @@ line 11
   run ls -la "${TEST_HOME_DIR}/.my"
 
   assert_success
-  assert_output --regexp ".* vedv vedv .* \.
-.* vedv vedv .* \.\.
-.* vedv vedv .* dir1
-.* vedv vedv  .* file1"
+  assert_output --regexp ".* ${TEST_USER} ${TEST_GROUP} .* \.
+.* ${TEST_USER} ${TEST_GROUP} .* \.\.
+.* ${TEST_USER} ${TEST_GROUP} .* dir1
+.* ${TEST_USER} ${TEST_GROUP}  .* file1"
 
   run ls -la "${TEST_HOME_DIR}/.my/file1" \
     "${TEST_HOME_DIR}/.my/dir1/file11"
 
   assert_success
-  assert_output --regexp ".* vedv vedv .* ${TEST_HOME_DIR}/.my/dir1/file11
-.* vedv vedv .* ${TEST_HOME_DIR}/.my/file1"
+  assert_output --regexp ".* ${TEST_USER} ${TEST_GROUP} .* ${TEST_HOME_DIR}/.my/dir1/file11
+.* ${TEST_USER} ${TEST_GROUP} .* ${TEST_HOME_DIR}/.my/file1"
 }
 
 @test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should succeed With user root" {
