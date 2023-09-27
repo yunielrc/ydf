@@ -107,7 +107,7 @@ setup() {
   run ydf::package_service::install_one_from_dir "$_package_name"
 
   assert_failure
-  assert_output "ERROR> Package 'asdjflk3408rgsjl' doesn't exist in '${TEST_HOME_DIR}/ydf/tests/fixtures/packages'"
+  assert_output "ERROR> Package 'asdjflk3408rgsjl' doesn't exist in '${TEST_WORKING_DIR}/tests/fixtures/packages'"
 }
 
 @test "ydf::package_service::install_one_from_dir() Should fail if get_instructions_names fails" {
@@ -189,7 +189,7 @@ ERROR> Changing current directory to "
 >> EXECUTING: preinstall
 >> FAILED. EXECUTING: preinstall
 >> FAILED. NOT INSTALLED: 0freedom-fail
-ERROR> Executing instruction 'preinstall' on '${TEST_HOME_DIR}/ydf/tests/fixtures/packages/0freedom-fail'"
+ERROR> Executing instruction 'preinstall' on '${TEST_WORKING_DIR}/tests/fixtures/packages/0freedom-fail'"
 }
 
 @test "ydf::package_service::install_one_from_dir() Should execute only instructions with files" {
@@ -427,7 +427,7 @@ bat .*"
   cd "${TEST_FIXTURES_DIR}/packages/10ydfplugin"
 
   ln() {
-    assert_equal "$*" "-vsf ${TEST_HOME_DIR}/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh ${TEST_HOME_DIR}/.yzsh/plugins/local/10ydfplugin.plugin.zsh"
+    assert_equal "$*" "-vsf ${TEST_WORKING_DIR}/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh ${TEST_HOME_DIR}/.yzsh/plugins/local/10ydfplugin.plugin.zsh"
     return 1
   }
 
@@ -443,7 +443,7 @@ bat .*"
   run ydf::package_service::__instruction_plugin_zsh '10ydfplugin'
 
   assert_success
-  assert_output "'${TEST_HOME_DIR}/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '${TEST_HOME_DIR}/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'"
+  assert_output "'${TEST_HOME_DIR}/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '${TEST_WORKING_DIR}/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'"
 
   assert [ -L "${TEST_HOME_DIR}/.yzsh/plugins/local/10ydfplugin.plugin.zsh" ]
   assert [ -f "${TEST_HOME_DIR}/.yzsh/plugins/local/10ydfplugin.plugin.zsh" ]
@@ -456,7 +456,7 @@ bat .*"
   run ydf::package_service::__instruction_plugin_zsh '10ydfplugin'
 
   assert_success
-  assert_output "'${TEST_HOME_DIR}/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '${TEST_HOME_DIR}/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'
+  assert_output "'${TEST_HOME_DIR}/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '${TEST_WORKING_DIR}/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'
 Plugin '10ydfplugin' already added to ${TEST_HOME_DIR}/.yzsh-gen.env"
 }
 
@@ -467,8 +467,8 @@ Plugin '10ydfplugin' already added to ${TEST_HOME_DIR}/.yzsh-gen.env"
   run ydf::package_service::__instruction_homeln '11homeln'
 
   assert_success
-  assert_output "'${TEST_HOME_DIR}/.my' -> '${TEST_HOME_DIR}/ydf/tests/fixtures/packages/11homeln/homeln/.my'
-'${TEST_HOME_DIR}/.my-config.env' -> '${TEST_HOME_DIR}/ydf/tests/fixtures/packages/11homeln/homeln/.my-config.env'"
+  assert_output "'${TEST_HOME_DIR}/.my' -> '${TEST_WORKING_DIR}/tests/fixtures/packages/11homeln/homeln/.my'
+'${TEST_HOME_DIR}/.my-config.env' -> '${TEST_WORKING_DIR}/tests/fixtures/packages/11homeln/homeln/.my-config.env'"
 
   assert [ -L "${TEST_HOME_DIR}/.my" ]
   assert [ -d "${TEST_HOME_DIR}/.my" ]
@@ -485,12 +485,12 @@ Plugin '10ydfplugin' already added to ${TEST_HOME_DIR}/.yzsh-gen.env"
   run ydf::package_service::__instruction_homelnr '12homelnr'
 
   assert_success
-  assert_output "'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my' -> '${TEST_HOME_DIR}/.my'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/dir1' -> '${TEST_HOME_DIR}/.my/dir1'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/dir1/file11' -> '${TEST_HOME_DIR}/.my/dir1/file11'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/file1' -> '${TEST_HOME_DIR}/.my/file1'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/file2' -> '${TEST_HOME_DIR}/.my/file2'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my-config.env' -> '${TEST_HOME_DIR}/.my-config.env'"
+  assert_output "'${TEST_WORKING_DIR}/tests/fixtures/packages/12homelnr/homelnr/.my' -> '${TEST_HOME_DIR}/.my'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/12homelnr/homelnr/.my/dir1' -> '${TEST_HOME_DIR}/.my/dir1'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/12homelnr/homelnr/.my/dir1/file11' -> '${TEST_HOME_DIR}/.my/dir1/file11'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/12homelnr/homelnr/.my/file1' -> '${TEST_HOME_DIR}/.my/file1'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/12homelnr/homelnr/.my/file2' -> '${TEST_HOME_DIR}/.my/file2'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/12homelnr/homelnr/.my-config.env' -> '${TEST_HOME_DIR}/.my-config.env'"
 
   assert [ ! -L "${TEST_HOME_DIR}/.my" ]
   assert [ -d "${TEST_HOME_DIR}/.my" ]
@@ -520,12 +520,12 @@ Plugin '10ydfplugin' already added to ${TEST_HOME_DIR}/.yzsh-gen.env"
   run ydf::package_service::__instruction_homecp '13homecp'
 
   assert_success
-  assert_output "'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my' -> '${TEST_HOME_DIR}/.my'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1' -> '${TEST_HOME_DIR}/.my/dir1'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1/file11' -> '${TEST_HOME_DIR}/.my/dir1/file11'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my/file1' -> '${TEST_HOME_DIR}/.my/file1'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my/file2' -> '${TEST_HOME_DIR}/.my/file2'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my-config.env' -> '${TEST_HOME_DIR}/.my-config.env'"
+  assert_output "'${TEST_WORKING_DIR}/tests/fixtures/packages/13homecp/homecp/.my' -> '${TEST_HOME_DIR}/.my'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/13homecp/homecp/.my/dir1' -> '${TEST_HOME_DIR}/.my/dir1'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/13homecp/homecp/.my/dir1/file11' -> '${TEST_HOME_DIR}/.my/dir1/file11'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/13homecp/homecp/.my/file1' -> '${TEST_HOME_DIR}/.my/file1'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/13homecp/homecp/.my/file2' -> '${TEST_HOME_DIR}/.my/file2'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/13homecp/homecp/.my-config.env' -> '${TEST_HOME_DIR}/.my-config.env'"
 
   assert [ ! -L "${TEST_HOME_DIR}/.my" ]
   assert [ -d "${TEST_HOME_DIR}/.my" ]
@@ -555,12 +555,12 @@ Plugin '10ydfplugin' already added to ${TEST_HOME_DIR}/.yzsh-gen.env"
   run ydf::package_service::__instruction_rootcp '14rootcp'
 
   assert_success
-  assert_output "'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my' -> '/.my'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1' -> '/.my/dir1'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1/file11' -> '/.my/dir1/file11'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/file1' -> '/.my/file1'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/file2' -> '/.my/file2'
-'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my-config.env' -> '/.my-config.env'"
+  assert_output "'${TEST_WORKING_DIR}/tests/fixtures/packages/14rootcp/rootcp/.my' -> '/.my'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/14rootcp/rootcp/.my/dir1' -> '/.my/dir1'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/14rootcp/rootcp/.my/dir1/file11' -> '/.my/dir1/file11'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/14rootcp/rootcp/.my/file1' -> '/.my/file1'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/14rootcp/rootcp/.my/file2' -> '/.my/file2'
+'${TEST_WORKING_DIR}/tests/fixtures/packages/14rootcp/rootcp/.my-config.env' -> '/.my-config.env'"
 
   assert [ ! -L '/.my' ]
   assert [ -d '/.my' ]
@@ -798,9 +798,9 @@ added line2 to file11
 
   ydf::utils::copy_with_envar_sub() {
     if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-      assert_equal "$*" "homecps/.my/dir1/file11 ${TEST_HOME_DIR}/.my/dir1/file11 ${TEST_HOME_DIR}/ydf/tests/fixtures/packages/envsubst.env"
+      assert_equal "$*" "homecps/.my/dir1/file11 ${TEST_HOME_DIR}/.my/dir1/file11 ${TEST_WORKING_DIR}/tests/fixtures/packages/envsubst.env"
     else
-      assert_equal "$*" "homecps/.my/file1 ${TEST_HOME_DIR}/.my/file1 ${TEST_HOME_DIR}/ydf/tests/fixtures/packages/envsubst.env"
+      assert_equal "$*" "homecps/.my/file1 ${TEST_HOME_DIR}/.my/file1 ${TEST_WORKING_DIR}/tests/fixtures/packages/envsubst.env"
     fi
     return 1
   }
@@ -1023,7 +1023,7 @@ line 11'
   local -r _instruction='homecats'
 
   ydf::utils::mark_concat_with_envar_sub() {
-    assert_equal "$*" "homecats/.my/file1 ${TEST_HOME_DIR}/.my/file1 ${TEST_HOME_DIR}/ydf/tests/fixtures/packages/envsubst.env"
+    assert_equal "$*" "homecats/.my/file1 ${TEST_HOME_DIR}/.my/file1 ${TEST_WORKING_DIR}/tests/fixtures/packages/envsubst.env"
     return 1
   }
 
@@ -1050,9 +1050,9 @@ line 11'
 
   ydf::utils::mark_concat_with_envar_sub() {
     if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-      assert_equal "$*" "homecats/.my/dir1/file11 ${TEST_HOME_DIR}/.my/dir1/file11 ${TEST_HOME_DIR}/ydf/tests/fixtures/packages/envsubst.env"
+      assert_equal "$*" "homecats/.my/dir1/file11 ${TEST_HOME_DIR}/.my/dir1/file11 ${TEST_WORKING_DIR}/tests/fixtures/packages/envsubst.env"
     else
-      assert_equal "$*" "homecats/.my/file1 ${TEST_HOME_DIR}/.my/file1 ${TEST_HOME_DIR}/ydf/tests/fixtures/packages/envsubst.env"
+      assert_equal "$*" "homecats/.my/file1 ${TEST_HOME_DIR}/.my/file1 ${TEST_WORKING_DIR}/tests/fixtures/packages/envsubst.env"
     fi
     return 1
   }
@@ -1313,7 +1313,7 @@ install: HOME: /home/vedv"
   cd "${TEST_FIXTURES_DIR}/packages/24ydftheme"
 
   ln() {
-    assert_equal "$*" "-vsf ${TEST_HOME_DIR}/ydf/tests/fixtures/packages/24ydftheme/24ydftheme.theme.zsh ${TEST_HOME_DIR}/.yzsh/themes/local/24ydftheme.theme.zsh"
+    assert_equal "$*" "-vsf ${TEST_WORKING_DIR}/tests/fixtures/packages/24ydftheme/24ydftheme.theme.zsh ${TEST_HOME_DIR}/.yzsh/themes/local/24ydftheme.theme.zsh"
     return 1
   }
 
@@ -1329,7 +1329,7 @@ install: HOME: /home/vedv"
   run ydf::package_service::__instruction_theme_zsh '24ydftheme'
 
   assert_success
-  assert_output "'${TEST_HOME_DIR}/.yzsh/themes/local/24ydftheme.theme.zsh' -> '${TEST_HOME_DIR}/ydf/tests/fixtures/packages/24ydftheme/24ydftheme.theme.zsh'"
+  assert_output "'${TEST_HOME_DIR}/.yzsh/themes/local/24ydftheme.theme.zsh' -> '${TEST_WORKING_DIR}/tests/fixtures/packages/24ydftheme/24ydftheme.theme.zsh'"
 
   assert [ -L "${TEST_HOME_DIR}/.yzsh/themes/local/24ydftheme.theme.zsh" ]
   assert [ -f "${TEST_HOME_DIR}/.yzsh/themes/local/24ydftheme.theme.zsh" ]
