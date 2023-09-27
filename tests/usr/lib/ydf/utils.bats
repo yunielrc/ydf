@@ -399,7 +399,7 @@ line 11'
   local -r env_file="${TEST_FIXTURES_DIR}/packages/envsubst.env"
 
   sudo() {
-    assert_equal "$*" '-u vedv tee /home/vedv/.my-config.env'
+    assert_equal "$*" "-u ${TEST_USER} tee ${TEST_HOME_DIR}/.my-config.env"
     command sudo "$@"
   }
 

@@ -6,19 +6,19 @@ setup() {
 
   export E_YDF_UTILS_NO_MSG=true
 
-  if [[ -f /home/vedv/.yzsh-gen.env ]]; then
-    rm -f /home/vedv/.yzsh-gen.env
+  if [[ -f "$TEST_HOME_DIR"/.yzsh-gen.env ]]; then
+    rm -f "$TEST_HOME_DIR"/.yzsh-gen.env
   fi
 
-  if [[ -d /home/vedv/.yzsh/plugins/local ]]; then
-    rm -rf /home/vedv/.yzsh/plugins/local
+  if [[ -d "$TEST_HOME_DIR"/.yzsh/plugins/local ]]; then
+    rm -rf "$TEST_HOME_DIR"/.yzsh/plugins/local
   fi
-  mkdir /home/vedv/.yzsh/plugins/local
+  mkdir "$TEST_HOME_DIR"/.yzsh/plugins/local
 
-  if [[ -d /home/vedv/.yzsh/themes/local ]]; then
-    rm -rf /home/vedv/.yzsh/themes/local
+  if [[ -d "$TEST_HOME_DIR"/.yzsh/themes/local ]]; then
+    rm -rf "$TEST_HOME_DIR"/.yzsh/themes/local
   fi
-  mkdir /home/vedv/.yzsh/themes/local
+  mkdir "$TEST_HOME_DIR"/.yzsh/themes/local
 
   if [[ -d /.my ]]; then
     sudo rm -r /.my
@@ -359,10 +359,10 @@ com.github.tchx84.Flatseal: postinstall succeed"
 
   assert_success
   assert_output "
-'/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'"
+'${TEST_HOME_DIR}/.yzsh/plugins/local/10ydfplugin.plugin.zsh' -> '${TEST_HOME_DIR}/ydf/tests/fixtures/packages/10ydfplugin/10ydfplugin.plugin.zsh'"
 
-  assert [ -L '/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' ]
-  assert [ -f '/home/vedv/.yzsh/plugins/local/10ydfplugin.plugin.zsh' ]
+  assert [ -L "${TEST_HOME_DIR}/.yzsh/plugins/local/10ydfplugin.plugin.zsh" ]
+  assert [ -f "${TEST_HOME_DIR}/.yzsh/plugins/local/10ydfplugin.plugin.zsh" ]
 
   run grep "YZSH_PLUGINS+=(10ydfplugin)" "$YDF_YZSH_GEN_CONFIG_FILE"
 
@@ -378,15 +378,15 @@ com.github.tchx84.Flatseal: postinstall succeed"
 
   assert_success
   assert_output "
-'/home/vedv/.my' -> '/home/vedv/ydf/tests/fixtures/packages/11homeln/homeln/.my'
-'/home/vedv/.my-config.env' -> '/home/vedv/ydf/tests/fixtures/packages/11homeln/homeln/.my-config.env'"
+'${TEST_HOME_DIR}/.my' -> '${TEST_HOME_DIR}/ydf/tests/fixtures/packages/11homeln/homeln/.my'
+'${TEST_HOME_DIR}/.my-config.env' -> '${TEST_HOME_DIR}/ydf/tests/fixtures/packages/11homeln/homeln/.my-config.env'"
 
-  assert [ -L '/home/vedv/.my' ]
-  assert [ -d '/home/vedv/.my' ]
-  assert [ -L '/home/vedv/.my-config.env' ]
-  assert [ -f '/home/vedv/.my-config.env' ]
+  assert [ -L "${TEST_HOME_DIR}/.my" ]
+  assert [ -d "${TEST_HOME_DIR}/.my" ]
+  assert [ -L "${TEST_HOME_DIR}/.my-config.env" ]
+  assert [ -f "${TEST_HOME_DIR}/.my-config.env" ]
 
-  rm /home/vedv/.my /home/vedv/.my-config.env
+  rm "${TEST_HOME_DIR}/.my" "${TEST_HOME_DIR}/.my-config.env"
 }
 
 # Tests for ydf package install ./12homelnr
@@ -397,32 +397,32 @@ com.github.tchx84.Flatseal: postinstall succeed"
 
   assert_success
   assert_output "
-'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my' -> '/home/vedv/.my'
-'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/dir1' -> '/home/vedv/.my/dir1'
-'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/dir1/file11' -> '/home/vedv/.my/dir1/file11'
-'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/file1' -> '/home/vedv/.my/file1'
-'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/file2' -> '/home/vedv/.my/file2'
-'/home/vedv/ydf/tests/fixtures/packages/12homelnr/homelnr/.my-config.env' -> '/home/vedv/.my-config.env'"
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my' -> '${TEST_HOME_DIR}/.my'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/dir1' -> '${TEST_HOME_DIR}/.my/dir1'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/dir1/file11' -> '${TEST_HOME_DIR}/.my/dir1/file11'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/file1' -> '${TEST_HOME_DIR}/.my/file1'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my/file2' -> '${TEST_HOME_DIR}/.my/file2'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/12homelnr/homelnr/.my-config.env' -> '${TEST_HOME_DIR}/.my-config.env'"
 
-  assert [ ! -L '/home/vedv/.my' ]
-  assert [ -d '/home/vedv/.my' ]
+  assert [ ! -L "${TEST_HOME_DIR}/.my" ]
+  assert [ -d "${TEST_HOME_DIR}/.my" ]
 
-  assert [ ! -L '/home/vedv/.my/dir1' ]
-  assert [ -d '/home/vedv/.my/dir1' ]
+  assert [ ! -L "${TEST_HOME_DIR}/.my/dir1" ]
+  assert [ -d "${TEST_HOME_DIR}/.my/dir1" ]
 
-  assert [ -L '/home/vedv/.my/dir1/file11' ]
-  assert [ -f '/home/vedv/.my/dir1/file11' ]
+  assert [ -L "${TEST_HOME_DIR}/.my/dir1/file11" ]
+  assert [ -f "${TEST_HOME_DIR}/.my/dir1/file11" ]
 
-  assert [ -L '/home/vedv/.my/file1' ]
-  assert [ -f '/home/vedv/.my/file1' ]
+  assert [ -L "${TEST_HOME_DIR}/.my/file1" ]
+  assert [ -f "${TEST_HOME_DIR}/.my/file1" ]
 
-  assert [ -L '/home/vedv/.my/file2' ]
-  assert [ -f '/home/vedv/.my/file2' ]
+  assert [ -L "${TEST_HOME_DIR}/.my/file2" ]
+  assert [ -f "${TEST_HOME_DIR}/.my/file2" ]
 
-  assert [ -L '/home/vedv/.my-config.env' ]
-  assert [ -f '/home/vedv/.my-config.env' ]
+  assert [ -L "${TEST_HOME_DIR}/.my-config.env" ]
+  assert [ -f "${TEST_HOME_DIR}/.my-config.env" ]
 
-  rm -r /home/vedv/.my /home/vedv/.my-config.env
+  rm -r "${TEST_HOME_DIR}/.my" "${TEST_HOME_DIR}/.my-config.env"
 }
 
 # Tests for ydf package install ./13homecp
@@ -433,32 +433,32 @@ com.github.tchx84.Flatseal: postinstall succeed"
 
   assert_success
   assert_output "
-'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my' -> '/home/vedv/.my'
-'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1' -> '/home/vedv/.my/dir1'
-'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1/file11' -> '/home/vedv/.my/dir1/file11'
-'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/file1' -> '/home/vedv/.my/file1'
-'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my/file2' -> '/home/vedv/.my/file2'
-'/home/vedv/ydf/tests/fixtures/packages/13homecp/homecp/.my-config.env' -> '/home/vedv/.my-config.env'"
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my' -> '${TEST_HOME_DIR}/.my'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1' -> '${TEST_HOME_DIR}/.my/dir1'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my/dir1/file11' -> '${TEST_HOME_DIR}/.my/dir1/file11'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my/file1' -> '${TEST_HOME_DIR}/.my/file1'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my/file2' -> '${TEST_HOME_DIR}/.my/file2'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/13homecp/homecp/.my-config.env' -> '${TEST_HOME_DIR}/.my-config.env'"
 
-  assert [ ! -L '/home/vedv/.my' ]
-  assert [ -d '/home/vedv/.my' ]
+  assert [ ! -L "${TEST_HOME_DIR}/.my" ]
+  assert [ -d "${TEST_HOME_DIR}/.my" ]
 
-  assert [ ! -L '/home/vedv/.my/dir1' ]
-  assert [ -d '/home/vedv/.my/dir1' ]
+  assert [ ! -L "${TEST_HOME_DIR}/.my/dir1" ]
+  assert [ -d "${TEST_HOME_DIR}/.my/dir1" ]
 
-  assert [ ! -L '/home/vedv/.my/dir1/file11' ]
-  assert [ -f '/home/vedv/.my/dir1/file11' ]
+  assert [ ! -L "${TEST_HOME_DIR}/.my/dir1/file11" ]
+  assert [ -f "${TEST_HOME_DIR}/.my/dir1/file11" ]
 
-  assert [ ! -L '/home/vedv/.my/file1' ]
-  assert [ -f '/home/vedv/.my/file1' ]
+  assert [ ! -L "${TEST_HOME_DIR}/.my/file1" ]
+  assert [ -f "${TEST_HOME_DIR}/.my/file1" ]
 
-  assert [ ! -L '/home/vedv/.my/file2' ]
-  assert [ -f '/home/vedv/.my/file2' ]
+  assert [ ! -L "${TEST_HOME_DIR}/.my/file2" ]
+  assert [ -f "${TEST_HOME_DIR}/.my/file2" ]
 
-  assert [ ! -L '/home/vedv/.my-config.env' ]
-  assert [ -f '/home/vedv/.my-config.env' ]
+  assert [ ! -L "${TEST_HOME_DIR}/.my-config.env" ]
+  assert [ -f "${TEST_HOME_DIR}/.my-config.env" ]
 
-  rm -r /home/vedv/.my /home/vedv/.my-config.env
+  rm -r "${TEST_HOME_DIR}/.my" "${TEST_HOME_DIR}/.my-config.env"
 }
 
 # Tests for ydf package install ./14rootcp
@@ -469,12 +469,12 @@ com.github.tchx84.Flatseal: postinstall succeed"
 
   assert_success
   assert_output "
-'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my' -> '/.my'
-'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1' -> '/.my/dir1'
-'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1/file11' -> '/.my/dir1/file11'
-'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/file1' -> '/.my/file1'
-'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/file2' -> '/.my/file2'
-'/home/vedv/ydf/tests/fixtures/packages/14rootcp/rootcp/.my-config.env' -> '/.my-config.env'"
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my' -> '/.my'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1' -> '/.my/dir1'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/dir1/file11' -> '/.my/dir1/file11'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/file1' -> '/.my/file1'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my/file2' -> '/.my/file2'
+'${TEST_HOME_DIR}/ydf/tests/fixtures/packages/14rootcp/rootcp/.my-config.env' -> '/.my-config.env'"
 
   assert [ ! -L '/.my' ]
   assert [ -d '/.my' ]
@@ -501,14 +501,14 @@ com.github.tchx84.Flatseal: postinstall succeed"
 @test "ydf package install ./15homecat Should succeed" {
   local -r _package_name="15homecat"
   cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
-  touch /home/vedv/.my-config.env
+  touch "${TEST_HOME_DIR}/.my-config.env"
 
   run ydf package install "$_package_name"
 
   assert_success
   assert_output ""
 
-  run cat /home/vedv/.my/file1
+  run cat "${TEST_HOME_DIR}/.my/file1"
 
   assert_success
   assert_output "file1
@@ -516,7 +516,7 @@ added line1 to file1
 
 added line2 to file1"
 
-  run cat /home/vedv/.my/dir1/file11
+  run cat "${TEST_HOME_DIR}/.my/dir1/file11"
 
   assert_success
   assert_output "file11
@@ -527,7 +527,7 @@ added line2 to file11
 
 # :@CAT_SECTION_HOME_CAT"
 
-  run cat /home/vedv/.my/file2
+  run cat "${TEST_HOME_DIR}/.my/file2"
 
   assert_success
   assert_output "file2"
@@ -578,14 +578,14 @@ added line2 to file11
   assert_success
   assert_output ""
 
-  run cat /home/vedv/.my/file1
+  run cat "${TEST_HOME_DIR}/.my/file1"
 
   assert_success
   assert_output "line 1
 
 line 3"
 
-  run cat /home/vedv/.my/dir1/file11
+  run cat "${TEST_HOME_DIR}/.my/dir1/file11"
 
   assert_success
   assert_output 'line 1
@@ -600,7 +600,7 @@ file11_2: file11 2
 
 line 11'
 
-  run cat /home/vedv/.my-config.env
+  run cat "${TEST_HOME_DIR}/.my-config.env"
 
   assert_success
   assert_output 'line 1
@@ -615,7 +615,7 @@ my_config2: my config2
 
 line 11'
 
-  run ls -la /home/vedv/.my
+  run ls -la "${TEST_HOME_DIR}/.my"
 
   assert_success
   assert_output --regexp ".* vedv vedv .* \.
@@ -623,13 +623,13 @@ line 11'
 .* vedv vedv .* dir1
 .* vedv vedv  .* file1"
 
-  run ls -la /home/vedv/.my/file1 \
-    /home/vedv/.my/dir1/file11 /home/vedv/.my-config.env
+  run ls -la "${TEST_HOME_DIR}/.my/file1" \
+    "${TEST_HOME_DIR}/.my/dir1/file11" "${TEST_HOME_DIR}/.my-config.env"
 
   assert_success
-  assert_output --regexp ".* vedv vedv .* /home/vedv/.my-config.env
-.* vedv vedv .* /home/vedv/.my/dir1/file11
-.* vedv vedv .* /home/vedv/.my/file1"
+  assert_output --regexp ".* vedv vedv .* ${TEST_HOME_DIR}/.my-config.env
+.* vedv vedv .* ${TEST_HOME_DIR}/.my/dir1/file11
+.* vedv vedv .* ${TEST_HOME_DIR}/.my/file1"
 }
 
 # Tests for ydf package install ./18rootcps
@@ -715,14 +715,14 @@ speed=0.5"
 @test "ydf package install ./20homecats Should succeed" {
   local -r _package_name="20homecats"
   cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
-  touch /home/vedv/.my-config.env
+  touch "${TEST_HOME_DIR}/.my-config.env"
 
   run ydf package install "$_package_name"
 
   assert_success
   assert_output ""
 
-  run cat /home/vedv/.my/file1
+  run cat "${TEST_HOME_DIR}/.my/file1"
 
   assert_success
   assert_output "file1
@@ -730,7 +730,7 @@ added line1 to file1
 
 added line2 to file1"
 
-  run cat /home/vedv/.my/dir1/file11
+  run cat "${TEST_HOME_DIR}/.my/dir1/file11"
 
   assert_success
   assert_output 'file11
@@ -750,7 +750,7 @@ line 11
 
 # :@CAT_SECTION_HOME_CAT'
 
-  run ls -la /home/vedv/.my
+  run ls -la "${TEST_HOME_DIR}/.my"
 
   assert_success
   assert_output --regexp ".* vedv vedv .* \.
@@ -758,12 +758,12 @@ line 11
 .* vedv vedv .* dir1
 .* vedv vedv  .* file1"
 
-  run ls -la /home/vedv/.my/file1 \
-    /home/vedv/.my/dir1/file11
+  run ls -la "${TEST_HOME_DIR}/.my/file1" \
+    "${TEST_HOME_DIR}/.my/dir1/file11"
 
   assert_success
-  assert_output --regexp ".* vedv vedv .* /home/vedv/.my/dir1/file11
-.* vedv vedv .* /home/vedv/.my/file1"
+  assert_output --regexp ".* vedv vedv .* ${TEST_HOME_DIR}/.my/dir1/file11
+.* vedv vedv .* ${TEST_HOME_DIR}/.my/file1"
 }
 
 # Tests for ydf package install ./21rootcats
@@ -857,10 +857,10 @@ preinstall: preinstall succeed"
 
   assert_success
   assert_output "
-'/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' -> '/home/vedv/ydf/tests/fixtures/packages/24ydftheme/24ydftheme.theme.zsh'"
+'${TEST_HOME_DIR}/.yzsh/themes/local/24ydftheme.theme.zsh' -> '${TEST_HOME_DIR}/ydf/tests/fixtures/packages/24ydftheme/24ydftheme.theme.zsh'"
 
-  assert [ -L '/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' ]
-  assert [ -f '/home/vedv/.yzsh/themes/local/24ydftheme.theme.zsh' ]
+  assert [ -L "${TEST_HOME_DIR}/.yzsh/themes/local/24ydftheme.theme.zsh" ]
+  assert [ -f "${TEST_HOME_DIR}/.yzsh/themes/local/24ydftheme.theme.zsh" ]
 }
 
 # Tests for ydf package install 25bat@apt
