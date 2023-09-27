@@ -152,7 +152,7 @@ added line2 to file11
 
   sudo() {
     # sed must be called with mark
-    if [[ "$*" != *"-u vedv"* ]]; then
+    if [[ "$*" != *"-u ${TEST_USER}"* ]]; then
       return 1
     fi
     command sudo "$@"
@@ -188,7 +188,7 @@ added line2 to file11
 
   sudo() {
     # sed must be called with mark
-    if [[ "$*" != *"-u vedv"* ]]; then
+    if [[ "$*" != *"-u ${TEST_USER}"* ]]; then
       return 1
     fi
     command sudo "$@"
@@ -245,7 +245,7 @@ added line2 to file11
 
   sudo() {
     # sed must be called with mark
-    if [[ "$*" != *"-u vedv"* ]]; then
+    if [[ "$*" != *"-u ${TEST_USER}"* ]]; then
       return 1
     fi
     command sudo "$@"
@@ -427,7 +427,7 @@ line 11'
   run ls -la "$_dest_file"
 
   assert_success
-  assert_output --partial "vedv vedv"
+  assert_output --partial "${TEST_USER} ${TEST_GROUP}"
 }
 
 # Tests for ydf::utils::mark_concat_with_envar_sub()
@@ -583,7 +583,7 @@ line 11
 
   sudo() {
     # sed must be called with mark
-    if [[ "$*" != *"-u vedv"* ]]; then
+    if [[ "$*" != *"-u ${TEST_USER}"* ]]; then
       return 1
     fi
     command sudo "$@"
@@ -624,7 +624,7 @@ line 11
 
   sudo() {
     # sed must be called with mark
-    if [[ "$*" != *"-u vedv"* ]]; then
+    if [[ "$*" != *"-u ${TEST_USER}"* ]]; then
       return 1
     fi
     command sudo "$@"
@@ -690,7 +690,7 @@ line 11
 
   sudo() {
     # sed must be called with mark
-    if [[ "$*" != *"-u vedv"* ]]; then
+    if [[ "$*" != *"-u ${TEST_USER}"* ]]; then
       return 1
     fi
     command sudo "$@"
