@@ -35,17 +35,17 @@ jobs:
       - name: Run Unit Tests
         run: make -f Makefile.vedv test-all
 
-  # release-please:
-  #   needs: test
-  #   name: Release Please
-  #   runs-on: ubuntu-22.04
+  release-please:
+    needs: test
+    name: Release Please
+    runs-on: ubuntu-22.04
 
-  #   if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
 
-  #   steps:
-  #     - uses: google-github-actions/release-please-action@v3
-  #       with:
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         release-type: simple
-  #         package-name: release-please-action
-  #         prerelease: true
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: simple
+          package-name: release-please-action
+          prerelease: true
