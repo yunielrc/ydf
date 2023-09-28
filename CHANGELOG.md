@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0](https://github.com/yunielrc/ydf/compare/v0.2.0...v0.3.0) (2023-09-28)
+
+
+### Features
+
+* **package:** add a command to list packages ([02ace92](https://github.com/yunielrc/ydf/commit/02ace92dadd4cd6c733ab6eef0f4a9619cd88fba)), closes [#5](https://github.com/yunielrc/ydf/issues/5)
+* **package:** add a command to list selections ([c6c9907](https://github.com/yunielrc/ydf/commit/c6c99077bd09ff22fb0dc0020fa02c53ebdf2668)), closes [#6](https://github.com/yunielrc/ydf/issues/6)
+
 ## 0.2.0 (2023-09-27)
 
 
