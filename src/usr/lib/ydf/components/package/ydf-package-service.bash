@@ -768,3 +768,37 @@ ydf::package_service::install() {
 
   msg "> DONE. INSTALLED ${#_elements_arr[*]} packages"
 }
+
+#
+# List packages in the packages directory
+#
+# Arguments:
+#   [packages_dir]   string    packages dir
+#
+# Output:
+#  writes packages_names (list) to the stdout
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_service::list() {
+  local -r packages_dir="${1:-"$(ydf::package_service::get_packages_dir)"}"
+
+  # validate arguments
+  if [[ ! -d "$packages_dir" ]]; then
+    err "Packages directory '${packages_dir}' doesn't exist"
+    return "$ERR_NO_DIR"
+  fi
+
+  # show only non hidden directories
+  (
+    cd "$packages_dir" 2>/dev/null || {
+      err "Changing current directory to '${packages_dir}'"
+      return "$ERR_CHANGING_WORKDIR"
+    }
+
+    find . -maxdepth 1 -type d -printf '%f\n' |
+      grep -Ev '^\.' |
+      sort
+  )
+}

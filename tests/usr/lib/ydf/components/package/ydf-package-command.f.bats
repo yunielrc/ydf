@@ -1,3 +1,4 @@
+# shellcheck disable=SC2153
 load test_helper
 
 setup() {
@@ -949,4 +950,53 @@ preinstall: preinstall succeed"
 
   assert_success
   assert_output --partial "exa/"
+}
+
+# Tests for ydf package list
+@test "ydf package list, Should show help" {
+
+  for p in -h --help; do
+    run ydf package list $p
+
+    assert_success
+    assert_output --partial 'ydf package list [OPTIONS]'
+  done
+}
+
+@test "ydf package list  --packages-dir, Should fail with missing argument packages-dir" {
+
+  run ydf package list --packages-dir
+
+  assert_failure
+  assert_output --partial 'ERROR> No packages dir specified'
+}
+
+@test "ydf package list  --packages-dir, Should fail If packages-dir doesn't exist" {
+
+  run ydf package list --packages-dir 'asdfadf324325623afddwg11'
+
+  assert_failure
+  assert_output "ERROR> Packages directory 'asdfadf324325623afddwg11' doesn't exist"
+}
+
+@test "ydf package list, Should list packages" {
+
+  export E_YDF_PACKAGE_SERVICE_PACKAGES_DIR="${TEST_FIXTURES_DIR}/packages3"
+
+  run ydf package list
+
+  assert_success
+  assert_output "pkg1
+pkg2
+pkg3"
+}
+
+@test "ydf package list --packages-dir ..., Should list packages with" {
+
+  run ydf package list --packages-dir "${TEST_FIXTURES_DIR}/packages3"
+
+  assert_success
+  assert_output "pkg1
+pkg2
+pkg3"
 }

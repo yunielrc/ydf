@@ -1418,3 +1418,41 @@ install: HOME: ${TEST_HOME_DIR}"
   assert_success
   assert_output --partial "exa/"
 }
+
+# Tests for ydf::package_service::list()
+@test "ydf::package_service::list() Should fail If packages_dir doesn't exist" {
+  local -r _packages_dir="adfadsf23423098587209"
+
+  run ydf::package_service::list "$_packages_dir"
+
+  assert_failure
+  assert_output "ERROR> Packages directory '${_packages_dir}' doesn't exist"
+}
+
+@test "ydf::package_service::list() Should fail If change dir fails" {
+  local -r _packages_dir="$(mktemp -d)"
+
+  cd() {
+    if [[ "$*" == "$_packages_dir" ]]; then
+      return 1
+    fi
+    command cd "$@"
+  }
+
+  run ydf::package_service::list "$_packages_dir"
+
+  assert_failure
+  assert_output "ERROR> Changing current directory to '${_packages_dir}'"
+}
+
+@test "ydf::package_service::list() Should succeed" {
+
+  local -r _packages_dir="${TEST_FIXTURES_DIR}/packages3"
+
+  run ydf::package_service::list "$_packages_dir"
+
+  assert_success
+  assert_output "pkg1
+pkg2
+pkg3"
+}

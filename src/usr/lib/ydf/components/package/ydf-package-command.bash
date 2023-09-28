@@ -63,7 +63,7 @@ HELPMSG
 # Install one or more ydotfile packages
 #
 # Flags:
-#   -h | --help   Show help
+#   -h, --help   Show help
 #
 # Options:
 #   --os              Operating system
@@ -137,6 +137,71 @@ ydf::package_command::__install() {
   ydf::package_service::install "$packages" "$os" "$packages_dir"
 }
 
+#
+# Show help for __list command
+#
+# Output:
+#  Writes the help to the stdout
+#
+ydf::package_command::__list_help() {
+  cat <<-HELPMSG
+Usage:
+${__YDF_SCRIPT_NAME} package list [OPTIONS]
+
+List packages in the packages directory
+
+Flags:
+  -h, --help    Show this help
+
+Options:
+  --packages-dir    Packages directory
+
+HELPMSG
+}
+
+#
+# List packages in the packages directory
+#
+# Flags:
+#   -h, --help   Show help
+#
+# Options:
+#   --packages-dir    Packages directory
+#
+# Output:
+#   write packages_names (list) to stdout
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_command::__list() {
+  # shellcheck disable=SC2155
+  local packages_dir="$(ydf::package_service::get_packages_dir)"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    # flags
+    -h | --help)
+      ydf::package_command::__list_help
+      return 0
+      ;;
+    # options
+    --packages-dir)
+      readonly packages_dir="${2:-}"
+      # validate argument
+      if [[ -z "$packages_dir" ]]; then
+        err "No packages dir specified\n"
+        ydf::package_command::__list_help
+        return "$ERR_MISSING_ARG"
+      fi
+      shift 2
+      ;;
+    esac
+  done
+
+  ydf::package_service::list "$packages_dir"
+}
+
 ydf::package_command::__help() {
   cat <<-HELPMSG
 Usage:
@@ -149,6 +214,7 @@ Flags:
 
 Commands:
   install   install packages
+  list      list packages
 
 Run '${__YDF_SCRIPT_NAME} package --help' for more information on a command.
 HELPMSG
@@ -166,6 +232,11 @@ ydf::package_service::run_cmd() {
     install)
       shift
       ydf::package_command::__install "$@"
+      return $?
+      ;;
+    list)
+      shift
+      ydf::package_command::__list "$@"
       return $?
       ;;
     *)
