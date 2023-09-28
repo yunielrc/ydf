@@ -117,7 +117,7 @@ test-all:
 
 	vedv container remove --force ydf-$(TEST_OS)-dev
 	vedv container create --name ydf-$(TEST_OS)-dev ydf-$(TEST_OS)-dev
-	@echo '>>Starting container in background for the next run. It can take up to 30 seconds for container to be ready'
+	@echo 'Starting container in background for the next run. It can take up to 30 seconds for container to be ready'
 	vedv container start ydf-$(TEST_OS)-dev &>/dev/null
 
 
