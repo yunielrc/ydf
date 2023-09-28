@@ -1456,3 +1456,40 @@ install: HOME: ${TEST_HOME_DIR}"
 pkg2
 pkg3"
 }
+
+# Tests for ydf::package_service::list_selections()
+@test "ydf::package_service::list_selections() Should fail If packages_dir doesn't exist" {
+  local -r _packages_dir="adfadsf23423098587209"
+
+  run ydf::package_service::list_selections "$_packages_dir"
+
+  assert_failure
+  assert_output "ERROR> Packages directory '${_packages_dir}' doesn't exist"
+}
+
+@test "ydf::package_service::list_selections() Should fail If change dir fails" {
+  local -r _packages_dir="$(mktemp -d)"
+
+  cd() {
+    if [[ "$*" == "$_packages_dir" ]]; then
+      return 1
+    fi
+    command cd "$@"
+  }
+
+  run ydf::package_service::list_selections "$_packages_dir"
+
+  assert_failure
+  assert_output "ERROR> Changing current directory to '${_packages_dir}'"
+}
+
+@test "ydf::package_service::list_selections() Should succeed" {
+
+  local -r _packages_dir="${TEST_FIXTURES_DIR}/packages3"
+
+  run ydf::package_service::list_selections "$_packages_dir"
+
+  assert_success
+  assert_output "selection1.pkgs
+selection2.pkgs"
+}

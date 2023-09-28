@@ -202,6 +202,71 @@ ydf::package_command::__list() {
   ydf::package_service::list "$packages_dir"
 }
 
+#
+# Show help for __list_selections command
+#
+# Output:
+#  Writes the help to the stdout
+#
+ydf::package_command::__list_selections_help() {
+  cat <<-HELPMSG
+Usage:
+${__YDF_SCRIPT_NAME} package list-selections [OPTIONS]
+
+List packages selections in the packages directory
+
+Flags:
+  -h, --help    Show this help
+
+Options:
+  --packages-dir    Packages directory
+
+HELPMSG
+}
+
+#
+# List selections packages in the packages directory
+#
+# Flags:
+#   -h, --help   Show help
+#
+# Options:
+#   --packages-dir    Packages directory
+#
+# Output:
+#   write packages selections names (list) to stdout
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
+ydf::package_command::__list_selections() {
+  # shellcheck disable=SC2155
+  local packages_dir="$(ydf::package_service::get_packages_dir)"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    # flags
+    -h | --help)
+      ydf::package_command::__list_selections_help
+      return 0
+      ;;
+    # options
+    --packages-dir)
+      readonly packages_dir="${2:-}"
+      # validate argument
+      if [[ -z "$packages_dir" ]]; then
+        err "No packages dir specified\n"
+        ydf::package_command::__list_selections_help
+        return "$ERR_MISSING_ARG"
+      fi
+      shift 2
+      ;;
+    esac
+  done
+
+  ydf::package_service::list_selections "$packages_dir"
+}
+
 ydf::package_command::__help() {
   cat <<-HELPMSG
 Usage:
@@ -213,8 +278,9 @@ Flags:
   -h, --help    Show this help
 
 Commands:
-  install   install packages
-  list      list packages
+  install           Install packages
+  list              List packages
+  list-selections   List packages selections
 
 Run '${__YDF_SCRIPT_NAME} package --help' for more information on a command.
 HELPMSG
@@ -237,6 +303,11 @@ ydf::package_service::run_cmd() {
     list)
       shift
       ydf::package_command::__list "$@"
+      return $?
+      ;;
+    list-selections)
+      shift
+      ydf::package_command::__list_selections "$@"
       return $?
       ;;
     *)

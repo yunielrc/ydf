@@ -1,4 +1,4 @@
-# shellcheck disable=SC2153
+# shellcheck disable=SC2153,SC2030,SC2031
 load test_helper
 
 setup() {
@@ -999,4 +999,51 @@ pkg3"
   assert_output "pkg1
 pkg2
 pkg3"
+}
+
+# Tests for ydf package list-selections
+@test "ydf package list-selections, Should show help" {
+
+  for p in -h --help; do
+    run ydf package list-selections $p
+
+    assert_success
+    assert_output --partial 'ydf package list-selections [OPTIONS]'
+  done
+}
+
+@test "ydf package list-selections  --packages-dir, Should fail with missing argument packages-dir" {
+
+  run ydf package list-selections --packages-dir
+
+  assert_failure
+  assert_output --partial 'ERROR> No packages dir specified'
+}
+
+@test "ydf package list-selections  --packages-dir, Should fail If packages-dir doesn't exist" {
+
+  run ydf package list-selections --packages-dir 'asdfadf324325623afddwg11'
+
+  assert_failure
+  assert_output "ERROR> Packages directory 'asdfadf324325623afddwg11' doesn't exist"
+}
+
+@test "ydf package list-selections, Should list selections" {
+
+  export E_YDF_PACKAGE_SERVICE_PACKAGES_DIR="${TEST_FIXTURES_DIR}/packages3"
+
+  run ydf package list-selections
+
+  assert_success
+  assert_output "selection1.pkgs
+selection2.pkgs"
+}
+
+@test "ydf package list-selections --packages-dir ..., Should list selections packages with" {
+
+  run ydf package list-selections --packages-dir "${TEST_FIXTURES_DIR}/packages3"
+
+  assert_success
+  assert_output "selection1.pkgs
+selection2.pkgs"
 }
