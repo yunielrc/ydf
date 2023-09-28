@@ -9,4 +9,4 @@ set -eu
 
 sudo pacman -Syu --noconfirm --needed yay
 
-yay -Sy --noconfirm --needed "${PKG_RUN_MANJARO_YAY[@]}"
+yay -Sy --noconfirm --needed "${PKG_RUN_MANJARO_PACMAN[@]}"
