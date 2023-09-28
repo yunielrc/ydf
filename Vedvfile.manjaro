@@ -1,8 +1,6 @@
-FROM admin@manjaro/manjaro-gnome-22.1.3-x86_64
+FROM admin@manjaro/manjaro-gnome-23.0.1-x86_64
 
-# ENV IMAGE_BUILDING=true # [BUG] (https://github.com/yunielrc/vedv/issues/54)
-RUN echo 'export IMAGE_BUILDING=true' | \
-  sudo tee -a /etc/profile.d/qw-env.sh
+ENV IMAGE_BUILDING=true
 
 WORKDIR /home/vedv/ydf
 

@@ -52,7 +52,7 @@ It's tested on the following OS:
 Runtime Dependencies:
 
 ```sh
-# SYSTEM: Linux manjaro-gnome 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
+# SYSTEM: Linux manjaro-gnome 6.5.3-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 12:21:35 UTC 2023 x86_64 GNU/Linux
 # PACMAN
 bash 5.1.016-3
 ```
@@ -60,7 +60,7 @@ bash 5.1.016-3
 Optional Dependencies:
 
 ```sh
-# SYSTEM: Linux manjaro-gnome 6.1.53-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 14:10:57 UTC 2023 x86_64 GNU/Linux
+# SYSTEM: Linux manjaro-gnome 6.5.3-1-MANJARO #1 SMP PREEMPT_DYNAMIC Wed Sep 13 12:21:35 UTC 2023 x86_64 GNU/Linux
 # PACMAN
 yay 12.1.3-1
 snapd 2.60.3-1

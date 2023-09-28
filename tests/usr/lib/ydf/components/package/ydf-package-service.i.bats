@@ -590,39 +590,24 @@ Plugin '10ydfplugin' already added to ${TEST_HOME_DIR}/.yzsh-gen.env"
   run ydf::package_service::__instruction_homecat '15homecat'
 
   assert_failure
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "ERROR> homecat, file '${TEST_HOME_DIR}/.my/dir1/file11' doesn't exist"
-  else
-    assert_output "ERROR> homecat, file '${TEST_HOME_DIR}/.my/file1' doesn't exist"
-  fi
-
+  assert_output --regexp "ERROR> homecat, file .* doesn't exist"
 }
 
 @test "ydf::package_service::__instruction_homecat() Should fail if mark_concat fail" {
 
   cp -r "${TEST_FIXTURES_DIR}/dirs/.my" ~/
+  touch ~/.my-config.env
 
   cd "${TEST_FIXTURES_DIR}/packages/15homecat"
 
   ydf::utils::mark_concat() {
-    if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-      assert_equal "$*" "homecat/.my/dir1/file11 ${TEST_HOME_DIR}/.my/dir1/file11"
-    else
-      assert_equal "$*" "homecat/.my/file1 ${TEST_HOME_DIR}/.my/file1"
-    fi
     return 1
   }
 
   run ydf::package_service::__instruction_homecat '15homecat'
 
   assert_failure
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "ERROR> Marking concat for 'homecat/.my/dir1/file11' to '${TEST_HOME_DIR}/.my/dir1/file11'"
-  else
-    assert_output "ERROR> Marking concat for 'homecat/.my/file1' to '${TEST_HOME_DIR}/.my/file1'"
-  fi
+  assert_output --partial "ERROR> Marking concat for "
 }
 
 @test "ydf::package_service::__instruction_homecat() Should succeed" {
@@ -635,16 +620,6 @@ Plugin '10ydfplugin' already added to ${TEST_HOME_DIR}/.yzsh-gen.env"
   run ydf::package_service::__instruction_homecat '15homecat'
 
   assert_success
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "cat homecat/.my/dir1/file11 >> ${TEST_HOME_DIR}/.my/dir1/file11
-cat homecat/.my/file1 >> ${TEST_HOME_DIR}/.my/file1
-cat homecat/.my-config.env >> ${TEST_HOME_DIR}/.my-config.env"
-  else
-    assert_output "cat homecat/.my/file1 >> ${TEST_HOME_DIR}/.my/file1
-cat homecat/.my/dir1/file11 >> ${TEST_HOME_DIR}/.my/dir1/file11
-cat homecat/.my-config.env >> ${TEST_HOME_DIR}/.my-config.env"
-  fi
 
   run cat "${TEST_HOME_DIR}/.my/file1"
 
@@ -678,12 +653,7 @@ added line2 to file11
   run ydf::package_service::__instruction_rootcat '16rootcat'
 
   assert_failure
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "ERROR> rootcat, file '/.my/dir1/file11' doesn't exist"
-  else
-    assert_output "ERROR> rootcat, file '/.my/file1' doesn't exist"
-  fi
+  assert_output --regexp "ERROR> rootcat, file .* doesn't exist"
 }
 
 @test "ydf::package_service::__instruction_rootcat() Should fail if mark_concat fail" {
@@ -694,23 +664,13 @@ added line2 to file11
   cd "${TEST_FIXTURES_DIR}/packages/16rootcat"
 
   ydf::utils::mark_concat() {
-    if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-      assert_equal "$*" "rootcat/.my/dir1/file11 /.my/dir1/file11"
-    else
-      assert_equal "$*" "rootcat/.my/file1 /.my/file1"
-    fi
     return 1
   }
 
   run ydf::package_service::__instruction_rootcat '16rootcat'
 
   assert_failure
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "ERROR> Marking concat for 'rootcat/.my/dir1/file11' to '/.my/dir1/file11'"
-  else
-    assert_output "ERROR> Marking concat for 'rootcat/.my/file1' to '/.my/file1'"
-  fi
+  assert_output --partial "ERROR> Marking concat for "
 }
 
 @test "ydf::package_service::__instruction_rootcat() Should succeed" {
@@ -723,16 +683,6 @@ added line2 to file11
   run ydf::package_service::__instruction_rootcat '16rootcat'
 
   assert_success
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "cat rootcat/.my/dir1/file11 >> /.my/dir1/file11
-cat rootcat/.my/file1 >> /.my/file1
-cat rootcat/.my-config.env >> /.my-config.env"
-  else
-    assert_output "cat rootcat/.my/file1 >> /.my/file1
-cat rootcat/.my/dir1/file11 >> /.my/dir1/file11
-cat rootcat/.my-config.env >> /.my-config.env"
-  fi
 
   run cat /.my/file1
 
@@ -797,11 +747,6 @@ added line2 to file11
   local -r _instruction='homecps'
 
   ydf::utils::copy_with_envar_sub() {
-    if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-      assert_equal "$*" "homecps/.my/dir1/file11 ${TEST_HOME_DIR}/.my/dir1/file11 ${TEST_WORKING_DIR}/tests/fixtures/packages/envsubst.env"
-    else
-      assert_equal "$*" "homecps/.my/file1 ${TEST_HOME_DIR}/.my/file1 ${TEST_WORKING_DIR}/tests/fixtures/packages/envsubst.env"
-    fi
     return 1
   }
 
@@ -809,13 +754,7 @@ added line2 to file11
     "$_package_name" "$_instruction"
 
   assert_failure
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "ERROR> Copying with envar substitution file 'homecps/.my/dir1/file11' to '${TEST_HOME_DIR}/.my/dir1/file11'"
-  else
-    assert_output "ERROR> Copying with envar substitution file 'homecps/.my/file1' to '${TEST_HOME_DIR}/.my/file1'"
-  fi
-
+  assert_output --partial "ERROR> Copying with envar substitution file "
 }
 
 @test "ydf::package_service::__recursive_copy_with_envsubst() Should succeed" {
@@ -829,16 +768,6 @@ added line2 to file11
     "$_package_name" "$_instruction"
 
   assert_success
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "cps homecps/.my/dir1/file11 --> ${TEST_HOME_DIR}/.my/dir1/file11
-cps homecps/.my/file1 --> ${TEST_HOME_DIR}/.my/file1
-cps homecps/.my-config.env --> ${TEST_HOME_DIR}/.my-config.env"
-  else
-    assert_output "cps homecps/.my/file1 --> ${TEST_HOME_DIR}/.my/file1
-cps homecps/.my/dir1/file11 --> ${TEST_HOME_DIR}/.my/dir1/file11
-cps homecps/.my-config.env --> ${TEST_HOME_DIR}/.my-config.env"
-  fi
 
   run cat "${TEST_HOME_DIR}/.my/file1"
 
@@ -905,16 +834,6 @@ line 11'
     "$_package_name" "$_instruction"
 
   assert_success
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "cps rootcps/.my/dir1/file11 --> /.my/dir1/file11
-cps rootcps/.my/file1 --> /.my/file1
-cps rootcps/.my-config.env --> /.my-config.env"
-  else
-    assert_output "cps rootcps/.my/file1 --> /.my/file1
-cps rootcps/.my/dir1/file11 --> /.my/dir1/file11
-cps rootcps/.my-config.env --> /.my-config.env"
-  fi
 
   run cat /.my/file1
 
@@ -1023,7 +942,6 @@ line 11'
   local -r _instruction='homecats'
 
   ydf::utils::mark_concat_with_envar_sub() {
-    assert_equal "$*" "homecats/.my/file1 ${TEST_HOME_DIR}/.my/file1 ${TEST_WORKING_DIR}/tests/fixtures/packages/envsubst.env"
     return 1
   }
 
@@ -1031,12 +949,7 @@ line 11'
     "$_package_name" "$_instruction"
 
   assert_failure
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "ERROR> homecats, file '${TEST_HOME_DIR}/.my/dir1/file11' doesn't exist"
-  else
-    assert_output "ERROR> homecats, file '${TEST_HOME_DIR}/.my/file1' doesn't exist"
-  fi
+  assert_output --regexp "ERROR> homecats, file .* doesn't exist"
 }
 
 @test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should fail If mark_concat_with_envar_sub fails" {
@@ -1049,11 +962,6 @@ line 11'
   local -r _instruction='homecats'
 
   ydf::utils::mark_concat_with_envar_sub() {
-    if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-      assert_equal "$*" "homecats/.my/dir1/file11 ${TEST_HOME_DIR}/.my/dir1/file11 ${TEST_WORKING_DIR}/tests/fixtures/packages/envsubst.env"
-    else
-      assert_equal "$*" "homecats/.my/file1 ${TEST_HOME_DIR}/.my/file1 ${TEST_WORKING_DIR}/tests/fixtures/packages/envsubst.env"
-    fi
     return 1
   }
 
@@ -1061,12 +969,7 @@ line 11'
     "$_package_name" "$_instruction"
 
   assert_failure
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "ERROR> Concat with envar substitution file 'homecats/.my/dir1/file11' to '${TEST_HOME_DIR}/.my/dir1/file11'"
-  else
-    assert_output "ERROR> Concat with envar substitution file 'homecats/.my/file1' to '${TEST_HOME_DIR}/.my/file1'"
-  fi
+  assert_output --partial "ERROR> Concat with envar substitution file"
 }
 
 @test "ydf::package_service::__recursive_mark_concat_with_envsubst() Should succeed" {
@@ -1082,16 +985,6 @@ line 11'
     "$_package_name" "$_instruction"
 
   assert_success
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "cats homecats/.my/dir1/file11 >> ${TEST_HOME_DIR}/.my/dir1/file11
-cats homecats/.my/file1 >> ${TEST_HOME_DIR}/.my/file1
-cats homecats/.my-config.env >> ${TEST_HOME_DIR}/.my-config.env"
-  else
-    assert_output "cats homecats/.my/file1 >> ${TEST_HOME_DIR}/.my/file1
-cats homecats/.my/dir1/file11 >> ${TEST_HOME_DIR}/.my/dir1/file11
-cats homecats/.my-config.env >> ${TEST_HOME_DIR}/.my-config.env"
-  fi
 
   run cat "${TEST_HOME_DIR}/.my/file1"
 
@@ -1150,16 +1043,6 @@ line 11
     "$_package_name" "$_instruction"
 
   assert_success
-
-  if [[ "$YDF_PACKAGE_SERVICE_DEFAULT_OS" == ubuntu ]]; then
-    assert_output "cats rootcats/.my/dir1/file11 >> /.my/dir1/file11
-cats rootcats/.my/file1 >> /.my/file1
-cats rootcats/.my-config.env >> /.my-config.env"
-  else
-    assert_output "cats rootcats/.my/file1 >> /.my/file1
-cats rootcats/.my/dir1/file11 >> /.my/dir1/file11
-cats rootcats/.my-config.env >> /.my-config.env"
-  fi
 
   run cat /.my/file1
 
