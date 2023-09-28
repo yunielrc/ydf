@@ -11,6 +11,8 @@
 
 <a href="https://www.producthunt.com/posts/ydf?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-ydf" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=416013&theme=light" alt="ydf - A&#0032;disruptive&#0032;dotfiles&#0032;manager&#0043; | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
+<img width=95%  src="media/ydf-packages.png" alt="ydf-packages">
+
 ## Table of Contents
 
 Click on the menu right before `README.md` as shown in the image below.
@@ -83,7 +85,7 @@ Clone the repository and switch to ydf directory
 git clone https://github.com/yunielrc/ydf.git && cd ydf
 ```
 
-Select the last stable version
+Select the latest stable version
 
 ```sh
 git checkout "$(git tag --sort='version:refname' | grep -Po '^v\d+\.\d+\.\d+$' | tail -n 1)"
@@ -199,12 +201,20 @@ These instructions are files that are going to be used by a tool. For example
 The `package1.plugin.zsh` is a plugin that is going to be installed inside the
 YZSH data directory and used by YZSH.
 
-There are 2 more `instructions` that only work for manjaro linux:
+These `instructions` only work for manjaro linux:
 
 ```sh
 package2
 ├── @pacman
 └── @yay
+```
+
+These `instructions` only work for ubuntu:
+
+```sh
+package3
+├── @apt
+└── @apt-get
 ```
 
 👉 If you want support for others package managers you can open an issue or
