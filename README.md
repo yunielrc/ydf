@@ -24,13 +24,13 @@ Click on the menu right before `README.md` as shown in the image below.
 ## About
 
 Are you tired of dealing with dotfiles of tools you are not using, are you tired
-of installing a bunch of messy, dirty, and unnecessary configs and executing an
+of installing a bunch of messy and dirty configs and executing an
 elephant script.
 
-This solution brings you a simple way to declare and install the tools you need along
-with its configurations, following the principles of high cohesion and low coupling.
-Turn the chaos to order, if you install the configuration, you install the tool
-because those belong to the same `package`.
+This solution brings you a simple way to declare and install idempotently the tools
+you need along with its configurations, following the principles of high cohesion
+and low coupling. Turn the chaos to order, if you install the configuration, you
+install the tool because those belong to the same `package`.
 
 With this solution you can create multiple selections of packages for your different
 needs, for example, you can create a `packages selection` for your laptop, desktop,
@@ -167,7 +167,7 @@ vim ~/.ydf.env
 A `package` is a directory containing files and directories in which some have
 a special meaning for the `interpreter`. ydf is an `interpreter`.
 
-### Which are the directories and files with special meaning?
+### What are the directories and files with special meaning?
 
 Here is an example of a `package` with 19 directories and files with special
 meaning, those are `instructions` that work on any linux distribution:
