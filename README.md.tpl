@@ -239,7 +239,7 @@ Here is an example of a `packages directory`:
 ├── ....              # package
 ├── envsubst.env      # substitution variables
 ├── pc-gaming.pkgs    # packages selection
-├── latop-work.pkgs   # packages selection
+├── laptop-work.pkgs   # packages selection
 └── ....              # packages selection
 ```
 
