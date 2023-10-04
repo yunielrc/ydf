@@ -9,11 +9,21 @@
   </a>
 
 **_A disruptive dotfiles manager+_**
+
+**_Avoid repetitive work and errors, focus on what matter_**
+
+**_Be ready to work in just a few minutes on your Fresh OS_**
+
+**_Declare your working environment and Automate its configuration_**
+
+**_New member on the team?, reproduce your colleague working environment and start working now_**
 </div>
 
 <a href="https://www.producthunt.com/posts/ydf?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-ydf" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=416013&theme=light" alt="ydf - A&#0032;disruptive&#0032;dotfiles&#0032;manager&#0043; | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
-<img width=95%  src="media/ydf-packages.png" alt="ydf-packages">
+<a href="https://github.com/yunielrc/.ydf-packages" target="_blank"><img width=95%  src="media/ydf-packages.png" alt="ydf-packages"></a>
+
+[**_A working environment declared in a simple directory structure_**](https://github.com/yunielrc/.ydf-packages)
 
 ## Table of Contents
 
@@ -246,8 +256,9 @@ You can check out some examples of `packages` at: `tests/fixtures/packages`
 
 ### What is a YDF Packages Directory
 
-A `packages directory` is a directory that contains a list of `packages` and the
-`envsubst.env` file, besides it can have one or more `packages selection` files.
+The `packages directory` is the declaration of your working environment. It's a
+directory that contains a list of `packages` and the `envsubst.env` file, besides
+it can have one or more `packages selection` files.
 
 Here is an example of a `packages directory`:
 
@@ -441,23 +452,23 @@ vim ~/.env
 
 #### Install dependencies for Manjaro
 
-The command below install optional and development dependencies for Manjaro
+The command below install development dependencies for Manjaro
 
 ```sh
-make install-opt-manjaro && make install-dev-manjaro
+make install-dev-manjaro
 ```
 
 #### Install dependencies for Ubuntu
 
-The command below install optional and development dependencies for Ubuntu
+The command below install development dependencies for Ubuntu
 
 ```sh
-make install-opt-ubuntu && make install-dev-ubuntu
+make install-dev-ubuntu
 ```
 
-#### Install on Any Linux Distro
+#### Install dependencies for Any Linux Distro
 
-For any other linux distribution install optional and development dependencies
+For any other linux distribution install development dependencies
 manually.
 
 #### Configure vedv
@@ -471,6 +482,9 @@ Check out: <https://github.com/yunielrc/vedv#configure>
 Write your code
 
 #### Run Tests
+
+All tests are run within a virtual machine, this ensures that your operating system
+will never be modified.
 
 The first time the image need to be downloaded and builded for development,
 this process take a while, below are shown the download and build time for the
