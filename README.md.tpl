@@ -238,7 +238,7 @@ The `packages directory` is the declaration of your working environment. It's a
 directory that contains a list of `packages` and the `envsubst.env` file, besides
 it can have one or more `packages selection` files.
 
-Here is an example of a `packages directory`:
+Below is shown the recommended approach of a `packages directory`:
 
 ```sh
 ~/.ydf-packages       # packages directory
@@ -250,11 +250,9 @@ Here is an example of a `packages directory`:
 ├── ....              # package
 ├── envsubst.env      # substitution variables
 ├── pc-gaming.pkgs    # packages selection
-├── laptop-work.pkgs   # packages selection
+├── laptop-work.pkgs  # packages selection
 └── ....              # packages selection
 ```
-
-👉 You can check out my `packages directory` at: <https://github.com/yunielrc/.ydf-packages>
 
 The `envsubst.env` file has the variables that are evaluated in the files inside
 of `Directory instructions` that end with `s`.
@@ -264,6 +262,42 @@ one per line.
 
 The `packages directory` is where the `interpreter` is going to look for
 `packages`, `envsubst.env` and `packages selection`.
+
+👉 You can check out my `packages directory` at: <https://github.com/yunielrc/.ydf-packages>
+
+Below is shown the approach of only one big `package` with all dotfiles inside,
+this is the classic approach used by the most well-known dotfiles managers:
+
+```sh
+~/.ydf-packages/all/homelnr
+├── .vedv.env
+├── .viminfo
+├── .vultr-cli.yaml
+├── .xinitrc
+├── .ydf.env
+├── .yzsh
+│   ├── aliases.zsh
+│   ├── environment.zsh
+│   └── .yzsh.env
+├── .zsh_plugins.zsh
+├── .zshrc
+└── ....
+```
+
+The advantages of this approach are:
+
+1. simplicity
+2. ease of creation
+
+The disadvantages of this approach are:
+
+1. it's not modular, so you can't make a custom pick of packages to install
+2. loss of the relationship between tool installation and configuration
+3. breaks the principle of high cohesion and low coupling
+4. no suitable for sharing, because #1
+5. no `packages selection`
+6. no `substitution variables`
+7. no instructions others than `homelnr`
 
 ## Usage
 
