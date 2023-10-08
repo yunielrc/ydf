@@ -79,6 +79,7 @@ ydf::__source_files() {
   for f in "${__YDF_COMPONENTS_DIR}/"*/*.bash; do source "$f"; done
 }
 
+# INITALIZE COMPONENTS
 ydf::__init_components() {
   ydf::utils::constructor "$_YDF_UTILS_NO_MSG"
 
@@ -88,7 +89,6 @@ ydf::__init_components() {
     "$_YDF_YZSH_GEN_CONFIG_FILE" \
     "$_YDF_PACKAGE_SERVICE_ENVSUBST_FILE" \
     "$_YDF_PACKAGE_SERVICE_PACKAGES_DIR"
-
 }
 
 # FUNCTIONS
@@ -112,13 +112,13 @@ HELPMSG
 
 # EVENTS
 
-ydf::__on_start() {
-  :
-}
+# ydf::__on_start() {
+#   :
+# }
 
-ydf::__on_exit() {
-  :
-}
+# ydf::__on_exit() {
+#   :
+# }
 
 #
 
@@ -136,6 +136,16 @@ ydf::run_cmd() {
       ydf::package_service::run_cmd "$@"
       return $?
       ;;
+    # repo)
+    #   shift
+    #   ydf::repository_service::run_cmd "$@"
+    #   return $?
+    #   ;;
+    # config)
+    #   shift
+    #   ydf::config_service::run_cmd "$@"
+    #   return $?
+    #   ;;
     *)
       err "Invalid command: ${1}\n"
       ydf::__help

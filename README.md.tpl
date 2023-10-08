@@ -16,7 +16,7 @@
 
 **_New member on the team?, reproduce your colleague working environment and start working now_**
 
-**_And the most important, this is a democratic project not a dictatorship, so you have the freedom to join to it and build the new features you need for the benefit of everyone_**
+**_You have the freedom to join to this project and build the new features you need_**
 
 </div>
 

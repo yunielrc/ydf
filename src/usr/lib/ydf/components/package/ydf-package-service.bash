@@ -709,8 +709,8 @@ ydf::package_service::install_one() {
 #
 # Arguments:
 #   os_name        string     operating system
-#   package_name   string     package name
 #   packages_dir   string     packages dir
+#   package_name   string     package name
 #
 # Output:
 #  writes installed package name to the stdout
