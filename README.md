@@ -17,6 +17,9 @@
 **_Declare your working environment and Automate its configuration_**
 
 **_New member on the team?, reproduce your colleague working environment and start working now_**
+
+**_And the most important, this is a democratic project not a dictatorship, so you have the freedom to join to it and build the new features you need for the benefit of everyone_**
+
 </div>
 
 <a href="https://www.producthunt.com/posts/ydf?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-ydf" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=416013&theme=light" alt="ydf - A&#0032;disruptive&#0032;dotfiles&#0032;manager&#0043; | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
@@ -315,11 +318,11 @@ The disadvantages of this approach are:
 
 1. it's not modular, so you can't make a custom pick of packages to install
 2. loss of the relationship between tool installation and configuration
-3. breaks the principle of high cohesion and low coupling
+3. it breaks the principle of high cohesion and low coupling
 4. no suitable for sharing, because #1
 5. no `packages selection`
 6. no `substitution variables`
-7. no instructions others than `homelnr`
+7. no instructions other than `homelnr`
 
 ## Usage
 
@@ -397,11 +400,24 @@ git push -u origin master
 
 ### Install packages
 
-When you reinstall your OS or on a new machine you can install all your
-packages with:
+When you reinstall your OS or on a new machine you can:
+
+Install packages from a `packages selection` file
 
 ```sh
 ydf package install <packages_selection>.pkgs
+```
+
+Install some packages
+
+```sh
+ydf package install <package1> <package2> ...
+```
+
+Install one package
+
+```sh
+ydf package install <package>
 ```
 
 👉 You can test the installation of the packages on a virtual machine before
