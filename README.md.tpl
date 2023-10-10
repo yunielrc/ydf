@@ -16,7 +16,7 @@
 
 **_New member on the team?, reproduce your colleague working environment and start working now_**
 
-**_You have the freedom to join to this project and build the new features you need_**
+**_You have the freedom to join to this project and create new features._**
 
 </div>
 
@@ -135,6 +135,7 @@ make install-tohome
 Instruction | Optional dependency
 ---------|----------
  `@snap` | snapd
+ `@flatpak` | flatpak
  `docker-compose.yml` | docker, docker-compose
  `@yay` | yay
  `*.plugin.zsh` | yzsh
@@ -186,7 +187,7 @@ package1
 |                        # those existing in home
 ├── rootcats/            # Evaluate variables in files and concatenates them with
 |                        # those existing in root
-├── dconf.ini            # Load dconf settings
+├── dconf.ini            # Load gnome dconf settings
 └── postinstall          # Script executed after all instructions
 ```
 
@@ -214,7 +215,7 @@ These instructions are files that are going to be used by a tool. For example
 The `package1.plugin.zsh` is a plugin that is going to be installed inside the
 YZSH data directory and used by YZSH.
 
-These `instructions` only work for manjaro linux:
+These `instructions` only work for archlinux, manjaro linux an others arch distros:
 
 ```sh
 package2
@@ -222,7 +223,7 @@ package2
 └── @yay
 ```
 
-These `instructions` only work for ubuntu:
+These `instructions` only work for debian, ubuntu and others debian distros:
 
 ```sh
 package3
@@ -338,7 +339,8 @@ Open the `packages directory` in your favorite code editor .
 code ~/.ydf-packages
 ```
 
-Create a `package` and add `instructions` to it.
+Create a `package` and add `instructions` to it. You can check out my `packages directory`
+at: <https://github.com/yunielrc/.ydf-packages>
 
 Add variables to the `~/.ydf-packages/envsubst.env` if apply.
 
