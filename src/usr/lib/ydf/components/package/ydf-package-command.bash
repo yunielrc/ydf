@@ -119,7 +119,7 @@ ydf::package_command::__install() {
       packages="$*"
 
       if [[ -f "${packages_dir}/${packages}" ]]; then
-        packages="$(ydf::utils::text_file_to_words "${packages_dir}/${packages}")" || $?
+        packages="$(ydf::utils::text_file_to_words "${packages_dir}/${packages}")" || return $?
       fi
 
       readonly packages
