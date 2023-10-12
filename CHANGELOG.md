@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/yunielrc/ydf/compare/v0.3.0...v0.3.1) (2023-10-12)
+
+
+### Bug Fixes
+
+* **package-command:** add return keywork right before exit code ([aee3388](https://github.com/yunielrc/ydf/commit/aee33883dd611cdd4ee99c90eec644fac2aedbde))
+
 ## [0.3.0](https://github.com/yunielrc/ydf/compare/v0.2.0...v0.3.0) (2023-09-28)
 
 
