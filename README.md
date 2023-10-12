@@ -26,7 +26,7 @@
 
 <a href="https://github.com/yunielrc/.ydf-packages" target="_blank"><img width=95%  src="media/ydf-packages.png" alt="ydf-packages"></a>
 
-[**_A working environment declared in a simple directory structure_**](https://github.com/yunielrc/.ydf-packages)
+👉 [**_A working environment declared in a simple directory structure_**](https://github.com/yunielrc/.ydf-packages)
 
 ## Table of Contents
 
@@ -58,9 +58,10 @@ versioning it with git.
 
 ## Tested OS
 
-It's tested on the following OS:
+It has been tested on the following linux distributions, click to show the dependencies:
 
-### Manjaro
+<details>
+  <summary><b>Manjaro</b></summary>
 
 Runtime Dependencies:
 
@@ -83,7 +84,10 @@ docker-compose 2.20.3-1
 yunielrc/yzsh
 ```
 
-### Ubuntu
+</details>
+
+<details>
+  <summary><b>Ubuntu</b></summary>
 
 Runtime Dependencies:
 
@@ -108,7 +112,9 @@ flatpak 1.14.4-1~flatpak1~22.04.1
 yunielrc/yzsh
 ```
 
-⚠️ It should work on any other linux distribution, but it has not been tested.
+</details>
+
+It should work on any other linux distribution, but it has not been tested.
 
 ## Install
 
@@ -287,7 +293,7 @@ The `packages selection` are plain text files that contains a list of `packages`
 one per line.
 
 The `packages directory` is where the `interpreter` is going to look for
-`packages`, `envsubst.env` and `packages selection`.
+`packages`, `substitution variables` and `packages selection`.
 
 👉 You can check out my `packages directory` at: <https://github.com/yunielrc/.ydf-packages>
 
@@ -317,7 +323,7 @@ The advantages of this approach are:
 
 The disadvantages of this approach are:
 
-1. it's not modular, so you can't make a custom pick of packages to install
+1. you can't make a custom pick of packages to install
 2. loss of the relationship between tool installation and configuration
 3. it breaks the principle of high cohesion and low coupling
 4. no suitable for sharing, because #1
