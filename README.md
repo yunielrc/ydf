@@ -51,8 +51,7 @@ servers, different operating systems, etc.
 
 Declaring your working environment give you some benefits: transparency and control
 over it, allowing you to easily reproduce it on a new machine or fresh OS, you can
-share it with others, so they can reproduce your working environment, you can
-versioning it with git.
+share it with others, so they can reproduce your working environment, you can version it with git.
 
 > What you write you can read, share, save and reproduce, it is simply there, it exists.
 
