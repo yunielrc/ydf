@@ -8,7 +8,7 @@
 
   </a>
 
-**_A disruptive dotfiles manager+_**
+**_A dotfiles manager+_**
 
 **_Avoid repetitive work and errors, focus on what matter_**
 
