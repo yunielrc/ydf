@@ -6,17 +6,13 @@
 
   </a>
 
-**_A disruptive dotfiles manager+_**
-
-**_Avoid repetitive work and errors, focus on what matter_**
+**_A dotfiles manager+_**
 
 **_Be ready to work in just a few minutes on your Fresh OS_**
 
 **_Declare your working environment and Automate its configuration_**
 
 **_New member on the team?, reproduce your colleague working environment and start working now_**
-
-**_You have the freedom to join to this project and create new features._**
 
 </div>
 
@@ -49,8 +45,7 @@ servers, different operating systems, etc.
 
 Declaring your working environment give you some benefits: transparency and control
 over it, allowing you to easily reproduce it on a new machine or fresh OS, you can
-share it with others, so they can reproduce your working environment, you can
-versioning it with git.
+share it with others, so they can reproduce your working environment, you can version it with git.
 
 > What you write you can read, share, save and reproduce, it is simply there, it exists.
 

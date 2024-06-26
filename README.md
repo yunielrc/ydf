@@ -10,15 +10,11 @@
 
 **_A dotfiles manager+_**
 
-**_Avoid repetitive work and errors, focus on what matter_**
-
 **_Be ready to work in just a few minutes on your Fresh OS_**
 
 **_Declare your working environment and Automate its configuration_**
 
 **_New member on the team?, reproduce your colleague working environment and start working now_**
-
-**_You have the freedom to join to this project and create new features._**
 
 </div>
 
