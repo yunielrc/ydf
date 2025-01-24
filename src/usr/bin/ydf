@@ -79,7 +79,7 @@ ydf::__source_files() {
   for f in "${__YDF_COMPONENTS_DIR}/"*/*.bash; do source "$f"; done
 }
 
-# INITALIZE COMPONENTS
+# INITIALIZE COMPONENTS
 ydf::__init_components() {
   ydf::utils::constructor "$_YDF_UTILS_NO_MSG"
 
